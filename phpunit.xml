@@ -11,7 +11,7 @@
          syntaxCheck="false">
 
     <testsuites>
-        <testsuite name="PXL CMS Package Test Suite">
+        <testsuite name="CMS Core Package Test Suite">
             <directory suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>

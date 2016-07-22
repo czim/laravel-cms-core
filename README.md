@@ -1,4 +1,4 @@
-# CMS for Laravel (v. 2) - Core
+# CMS for Laravel - Core
 
 Modular CMS Core, which should manage the basics of configuring, accessing and deferring to modules.
 
