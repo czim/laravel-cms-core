@@ -38,7 +38,17 @@ class BootChecker implements BootCheckerInterface
             return true;
         }
 
-        return $this->isCmsRequest();
+        return $this->isCmsWebRequest() || $this->isCmsApiRequest();
+    }
+
+    /**
+     * Returns whether the CMS should perform service providing for the API specifically.
+     *
+     * @return bool
+     */
+    public function shouldCmsApiRegister()
+    {
+        return $this->shouldCmsRegister() && $this->isCmsApiRequest();
     }
 
     /**
@@ -52,7 +62,7 @@ class BootChecker implements BootCheckerInterface
     }
 
     /**
-     * Returns whether the CMS middleware should be registered.
+     * Returns whether the CMS middleware should be registered at all.
      *
      * @return bool
      */
@@ -61,6 +71,26 @@ class BootChecker implements BootCheckerInterface
         return  $this->shouldCmsRegister()
             &&  ! $this->isConsole()
             &&  $this->isCmsMiddlewareEnabled();
+    }
+
+    /**
+     * Returns whether non-API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldLoadCmsWebMiddleware()
+    {
+        return $this->shouldLoadCmsMiddleware() && $this->isCmsWebRequest();
+    }
+
+    /**
+     * Returns whether API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldLoadCmsApiMiddleware()
+    {
+        return $this->shouldLoadCmsMiddleware() && $this->isCmsApiRequest();
     }
 
     /**
@@ -101,19 +131,42 @@ class BootChecker implements BootCheckerInterface
 
 
     /**
-     * Returns whether performing a request in the CMS's own context, based on its routing.
+     * Returns whether performing a request in the CMS's web context, based on its routing.
      *
      * @return bool
      */
-    protected function isCmsRequest()
+    protected function isCmsWebRequest()
     {
         if (app()->runningInConsole()) {
             return false;
         }
 
-        // This is only a CMS request if all the prefix segments match the actual route prefixes
+        return $this->requestRouteMatchesPrefix($this->getCmsRoutePrefix());
+    }
 
-        $prefixSegments = $this->splitPrefixSegments($this->getCmsRoutePrefix());
+    /**
+     * Returns whether performing a request to the CMS API, based on its routing.
+     *
+     * @return bool
+     */
+    protected function isCmsApiRequest()
+    {
+        if (app()->runningInConsole() || ! $this->isCmsApiEnabled()) {
+            return false;
+        }
+
+        return $this->requestRouteMatchesPrefix($this->getCmsApiRoutePrefix());
+    }
+
+    /**
+     * Returns whether a given route prefix matches the current request.
+     *
+     * @param string $prefix
+     * @return bool
+     */
+    protected function requestRouteMatchesPrefix($prefix)
+    {
+        $prefixSegments = $this->splitPrefixSegments($prefix);
         $request = request();
 
         foreach ($prefixSegments as $index => $segment) {
@@ -209,6 +262,14 @@ class BootChecker implements BootCheckerInterface
     /**
      * @return bool
      */
+    protected function isCmsApiEnabled()
+    {
+        return config('cms-api.enabled', true);
+    }
+
+    /**
+     * @return bool
+     */
     protected function isCmsMiddlewareEnabled()
     {
         return config('cms-core.middleware.enabled', true);
@@ -228,6 +289,14 @@ class BootChecker implements BootCheckerInterface
     protected function getCmsRoutePrefix()
     {
         return strtolower(config('cms-core.route.prefix'));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCmsApiRoutePrefix()
+    {
+        return strtolower(config('cms-api.route.prefix'));
     }
 
     /**

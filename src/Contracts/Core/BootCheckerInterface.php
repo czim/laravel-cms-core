@@ -12,6 +12,13 @@ interface BootCheckerInterface
     public function shouldCmsRegister();
 
     /**
+     * Returns whether the CMS should perform service providing for the API specifically.
+     *
+     * @return bool
+     */
+    public function shouldCmsApiRegister();
+
+    /**
      * Returns whether the CMS should commence booting.
      *
      * @return bool
@@ -24,6 +31,20 @@ interface BootCheckerInterface
      * @return bool
      */
     public function shouldLoadCmsMiddleware();
+
+    /**
+     * Returns whether non-API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldLoadCmsWebMiddleware();
+
+    /**
+     * Returns whether API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldLoadCmsApiMiddleware();
 
     /**
      * Marks the CMS as having fully registered.

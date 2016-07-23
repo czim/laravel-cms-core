@@ -226,6 +226,10 @@ class CmsCoreServiceProvider extends ServiceProvider
             realpath(dirname(__DIR__) . '/../config/cms-modules.php') => config_path('cms-modules.php'),
         ]);
 
+        $this->publishes([
+            realpath(dirname(__DIR__) . '/../config/cms-api.php') => config_path('cms-api.php'),
+        ]);
+
         return $this;
     }
 

@@ -12,6 +12,7 @@ use MyCLabs\Enum\Enum;
  */
 class Component extends Enum
 {
+    const API         = 'cms-api';
     const AUTH        = 'cms-auth';
     const BOOTCHECKER = 'cms-bootchecker';
     const CACHE       = 'cms-cache';

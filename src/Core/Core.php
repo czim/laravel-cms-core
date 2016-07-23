@@ -1,9 +1,9 @@
 <?php
 namespace Czim\CmsCore\Core;
 
+use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionInterface;
-use Monolog\Logger;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
@@ -35,6 +35,14 @@ class Core implements CoreInterface
     public function auth()
     {
         return $this->app[Component::AUTH];
+    }
+
+    /**
+     * @return ApiCoreInterface
+     */
+    public function api()
+    {
+        return $this->app[Component::API];
     }
 
     /**
@@ -156,6 +164,18 @@ class Core implements CoreInterface
     public function moduleConfig($key, $default = null)
     {
         return config('cms-modules.' . $key, $default);
+    }
+
+    /**
+     * Returns CMS configuration value for the API.
+     *
+     * @param string     $key
+     * @param null|mixed $default
+     * @return mixed
+     */
+    public function apiConfig($key, $default = null)
+    {
+        return config('cms-api.' . $key, $default);
     }
 
     /**

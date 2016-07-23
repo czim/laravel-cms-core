@@ -45,9 +45,18 @@ class MiddlewareServiceProvider extends ServiceProvider
         $this->kernel = $kernel;
         $this->core   = $core;
 
-        $this->removeGlobalMiddleware()
-             ->registerCmsGroupMiddleware()
-             ->registerRouteMiddleware();
+        $this->removeGlobalMiddleware();
+
+        if ($bootChecker->shouldLoadCmsWebMiddleware()) {
+
+            $this->registerCmsWebGroupMiddleware()
+                 ->registerWebRouteMiddleware();
+
+        } elseif ($bootChecker->shouldLoadCmsApiMiddleware()) {
+
+            $this->registerCmsApiGroupMiddleware()
+                 ->registerApiRouteMiddleware();
+        }
     }
 
 
@@ -75,23 +84,28 @@ class MiddlewareServiceProvider extends ServiceProvider
         return $this;
     }
 
+
+    // ------------------------------------------------------------------------------
+    //      Web (non-API)
+    // ------------------------------------------------------------------------------
+
     /**
      * Registers global middleware for the CMS
      *
      * @return $this
      */
-    protected function registerCmsGroupMiddleware()
+    protected function registerCmsWebGroupMiddleware()
     {
-        $this->router->middlewareGroup($this->getConfiguredGroupName(), []);
+        $this->router->middlewareGroup($this->getConfiguredWebGroupName(), []);
 
-        foreach ($this->getGlobalMiddleware() as $middleware) {
+        foreach ($this->getGlobalWebMiddleware() as $middleware) {
 
             // Don't add if the middleware is already globally enabled in the kernel
             if ($this->kernel->hasMiddleware($middleware)) {
                 continue;
             }
 
-            $this->router->pushMiddlewareToGroup($this->getConfiguredGroupName(), $middleware);
+            $this->router->pushMiddlewareToGroup($this->getConfiguredWebGroupName(), $middleware);
         }
 
         return $this;
@@ -102,9 +116,9 @@ class MiddlewareServiceProvider extends ServiceProvider
      *
      * @return $this
      */
-    protected function registerRouteMiddleware()
+    protected function registerWebRouteMiddleware()
     {
-        foreach ($this->getRouteMiddleware() as $key => $middleware) {
+        foreach ($this->getWebRouteMiddleware() as $key => $middleware) {
             $this->router->middleware($key, $middleware);
         }
 
@@ -116,10 +130,132 @@ class MiddlewareServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    protected function getGlobalMiddleware()
+    protected function getGlobalWebMiddleware()
+    {
+        return $this->filterMiddlewareForGlobal($this->getConfiguredWebMiddleware());
+    }
+
+    /**
+     * Returns list of middleware FQNs to load by their key, when defined for routes.
+     *
+     * @return string[]
+     */
+    protected function getWebRouteMiddleware()
+    {
+        return $this->filterMiddlewareForRoute($this->getConfiguredWebMiddleware());
+    }
+
+    /**
+     * Returns middleware defined as either key-value pairs or strings for web requests.
+     *
+     * @return string[]
+     */
+    protected function getConfiguredWebMiddleware()
+    {
+        return $this->core->config('middleware.load', []);
+    }
+
+    /**
+     * Returns the middleware group that all CMS web routes belongs to.
+     *
+     * @return string
+     */
+    protected function getConfiguredWebGroupName()
+    {
+        return $this->core->config('middleware.group', 'cms');
+    }
+
+    // ------------------------------------------------------------------------------
+    //      API
+    // ------------------------------------------------------------------------------
+
+    /**
+     * Registers global middleware for the CMS API.
+     *
+     * @return $this
+     */
+    protected function registerCmsApiGroupMiddleware()
+    {
+        $this->router->middlewareGroup($this->getConfiguredApiGroupName(), []);
+
+        foreach ($this->getGlobalApiMiddleware() as $middleware) {
+
+            // Don't add if the middleware is already globally enabled in the kernel
+            if ($this->kernel->hasMiddleware($middleware)) {
+                continue;
+            }
+
+            $this->router->pushMiddlewareToGroup($this->getConfiguredApiGroupName(), $middleware);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Registers route middleware for the CMS API.
+     *
+     * @return $this
+     */
+    protected function registerApiRouteMiddleware()
+    {
+        foreach ($this->getApiRouteMiddleware() as $key => $middleware) {
+            $this->router->middleware($key, $middleware);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns list of API middleware FQNs to load globally.
+     *
+     * @return string[]
+     */
+    protected function getGlobalApiMiddleware()
+    {
+        return $this->filterMiddlewareForGlobal($this->getConfiguredApiMiddleware());
+    }
+
+    /**
+     * Returns list of API middleware FQNs to load by their key, when defined for routes.
+     *
+     * @return string[]
+     */
+    protected function getApiRouteMiddleware()
+    {
+        return $this->filterMiddlewareForRoute($this->getConfiguredApiMiddleware());
+    }
+
+    /**
+     * Returns API middleware defined as either key-value pairs or strings.
+     *
+     * @return string[]
+     */
+    protected function getConfiguredApiMiddleware()
+    {
+        return $this->core->apiConfig('middleware.load', []);
+    }
+
+    /**
+     * Returns the middleware group that all CMS API routes belongs to.
+     *
+     * @return string
+     */
+    protected function getConfiguredApiGroupName()
+    {
+        return $this->core->apiConfig('middleware.group', 'cms-api');
+    }
+
+
+    /**
+     * Filters out any non-global middleware from an array of middleware definitions.
+     *
+     * @param array $middleware
+     * @return array
+     */
+    protected function filterMiddlewareForGlobal(array $middleware)
     {
         return array_filter(
-            $this->getConfiguredMiddleware(),
+            $middleware,
             function () {
                 $key = func_get_arg(1);
                 return is_integer($key);
@@ -129,14 +265,15 @@ class MiddlewareServiceProvider extends ServiceProvider
     }
 
     /**
-     * Returns list of middleware FQNs to load by their key, when defined for routes.
+     * Filters out any non-route middleware from an array of middleware definitions.
      *
-     * @return string[]
+     * @param array $middleware
+     * @return array
      */
-    protected function getRouteMiddleware()
+    protected function filterMiddlewareForRoute(array $middleware)
     {
         return array_filter(
-            $this->getConfiguredMiddleware(),
+            $middleware,
             function () {
                 $key = func_get_arg(1);
                 return ! is_integer($key);
@@ -144,25 +281,4 @@ class MiddlewareServiceProvider extends ServiceProvider
             ARRAY_FILTER_USE_BOTH
         );
     }
-
-    /**
-     * Returns middleware defined as either key-value pairs or strings.
-     *
-     * @return string[]
-     */
-    protected function getConfiguredMiddleware()
-    {
-        return $this->core->config('middleware.load', []);
-    }
-
-    /**
-     * Returns the middleware group that all CMS routes belongs to.
-     *
-     * @return string
-     */
-    protected function getConfiguredGroupName()
-    {
-        return $this->core->config('middleware.group', 'cms');
-    }
-
 }

@@ -86,6 +86,7 @@ return [
         Czim\CmsCore\Support\Enums\Component::CORE        => Czim\CmsCore\Core\Core::class,
         Czim\CmsCore\Support\Enums\Component::MODULES     => Czim\CmsCore\Modules\Manager\Manager::class,
         Czim\CmsCore\Support\Enums\Component::AUTH        => Czim\CmsAuth\Auth\Authenticator::class,
+        Czim\CmsCore\Support\Enums\Component::API         => Czim\CmsCore\Api\ApiCore::class,
         Czim\CmsCore\Support\Enums\Component::MENU        => Czim\CmsTheme\Menu\Menu::class,
     ],
 

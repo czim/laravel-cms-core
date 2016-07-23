@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Contracts\Core;
 
+use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Menu\MenuInterface;
@@ -14,6 +15,11 @@ interface CoreInterface extends StateInterface
      * @return AuthenticatorInterface
      */
     public function auth();
+
+    /**
+     * @return ApiCoreInterface
+     */
+    public function api();
 
     /**
      * @return CacheInterface
@@ -65,6 +71,15 @@ interface CoreInterface extends StateInterface
      * @return mixed
      */
     public function moduleConfig($key, $default = null);
+
+    /**
+     * Returns CMS configuration value for the API.
+     *
+     * @param string     $key
+     * @param null|mixed $default
+     * @return mixed
+     */
+    public function apiConfig($key, $default = null);
 
     /**
      * Generate a URL to a named CMS route. This ensures that the
