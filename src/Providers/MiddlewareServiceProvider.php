@@ -45,15 +45,35 @@ class MiddlewareServiceProvider extends ServiceProvider
         $this->kernel = $kernel;
         $this->core   = $core;
 
-        $this->registerCmsGroupMiddleware()
+        $this->removeGlobalMiddleware()
+             ->registerCmsGroupMiddleware()
              ->registerRouteMiddleware();
     }
 
 
     public function register()
     {
+
     }
 
+    /**
+     * Removes all global middleware defined for the App, if possible.
+     *
+     * Note that this requires the addition of a removeGlobalMiddleware()
+     * method on the App\Http\Kernel class.
+     *
+     * @see \App\Http\Kernel
+     *
+     * @return $this
+     */
+    protected function removeGlobalMiddleware()
+    {
+        if (method_exists($this->kernel, 'removeGlobalMiddleware')) {
+            $this->kernel->removeGlobalMiddleware();
+        }
+
+        return $this;
+    }
 
     /**
      * Registers global middleware for the CMS
