@@ -2,7 +2,6 @@
 namespace Czim\CmsCore\Providers;
 
 use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -46,6 +45,29 @@ class CmsCoreServiceProvider extends ServiceProvider
     // ------------------------------------------------------------------------------
     //      Registration
     // ------------------------------------------------------------------------------
+
+    /**
+     * @return $this
+     */
+    protected function registerConfig()
+    {
+        $this->mergeConfigFrom(
+            realpath(dirname(__DIR__) . '/../config/cms-core.php'),
+            'cms-core'
+        );
+
+        $this->mergeConfigFrom(
+            realpath(dirname(__DIR__) . '/../config/cms-modules.php'),
+            'cms-modules'
+        );
+
+        $this->mergeConfigFrom(
+            realpath(dirname(__DIR__) . '/../config/cms-api.php'),
+            'cms-api'
+        );
+
+        return $this;
+    }
 
     /**
      * Registers required checker to facilitate determining whether
@@ -140,24 +162,6 @@ class CmsCoreServiceProvider extends ServiceProvider
         foreach ($this->getCmsCore()->modules()->getServiceProviders() as $provider) {
             $this->app->register($provider);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function registerConfig()
-    {
-        $this->mergeConfigFrom(
-            realpath(dirname(__DIR__) . '/../config/cms-core.php'),
-            'cms-core'
-        );
-
-        $this->mergeConfigFrom(
-            realpath(dirname(__DIR__) . '/../config/cms-modules.php'),
-            'cms-modules'
-        );
 
         return $this;
     }
