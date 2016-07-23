@@ -2,6 +2,27 @@
 
 Modular CMS Core, which should manage the basics of configuring, accessing and deferring to modules.
 
+## Installation
+
+### Middleware
+
+To prevent conflicts with the Apps middleware, you may add the following method to your `App\Http\Kernel` class:
+
+```php
+    /**
+     * Removes all global middleware registered.
+     */
+    public function removeGlobalMiddleware()
+    {
+        $this->middleware = [];
+    }
+```
+
+While the CMS registers, it will automatically call this if it is available. This would make sure that neither the CMS nor the App end up with clashing middleware.
+
+You do not need this if you have no global middleware defined; group or route middleware are not affected by this and won't be problematic in any case.
+
+
 ## Configuration
 
 ### Database
