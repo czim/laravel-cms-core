@@ -90,30 +90,12 @@ class MigrationServiceProvider extends ServiceProvider
      */
     protected function registerMigrateCommands()
     {
-        $this->app->singleton('cms.commands.db-migrate', function(Application $app) {
-            return $app->make(MigrateCommand::class);
-        });
-
-        $this->app->singleton('cms.commands.db-migrate-install', function(Application $app) {
-            return $app->make(MigrateInstallCommand::class);
-        });
-
-        $this->app->singleton('cms.commands.db-migrate-refresh', function(Application $app) {
-            return $app->make(MigrateRefreshCommand::class);
-        });
-
-        $this->app->singleton('cms.commands.db-migrate-reset', function(Application $app) {
-            return $app->make(MigrateResetCommand::class);
-        });
-
-        $this->app->singleton('cms.commands.db-migrate-rollback', function(Application $app) {
-            return $app->make(MigrateRollbackCommand::class);
-        });
-
-        $this->app->singleton('cms.commands.db-migrate-status', function(Application $app) {
-            return $app->make(MigrateStatusCommand::class);
-        });
-
+        $this->app->singleton('cms.commands.db-migrate', MigrateCommand::class);
+        $this->app->singleton('cms.commands.db-migrate-install', MigrateInstallCommand::class);
+        $this->app->singleton('cms.commands.db-migrate-refresh', MigrateRefreshCommand::class);
+        $this->app->singleton('cms.commands.db-migrate-reset', MigrateResetCommand::class);
+        $this->app->singleton('cms.commands.db-migrate-rollback', MigrateRollbackCommand::class);
+        $this->app->singleton('cms.commands.db-migrate-status', MigrateStatusCommand::class);
 
         $this->commands([
             'cms.commands.db-migrate',
