@@ -79,7 +79,7 @@ return [
     |
     */
 
-    // default (main) module bindings to use
+    // Default (main) module bindings to use
     'bindings' => [
         Czim\CmsCore\Support\Enums\Component::BOOTCHECKER => Czim\CmsCore\Core\BootChecker::class,
         Czim\CmsCore\Support\Enums\Component::CACHE       => Czim\CmsCore\Core\Cache::class,
@@ -108,6 +108,8 @@ return [
         Czim\CmsCore\Providers\ViewServiceProvider::class,
         Czim\CmsAuth\Providers\CmsAuthServiceProvider::class,
         Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
+
+        Czim\CmsCore\Providers\Api\OAuthSetupServiceProvider::class,
     ],
 
     /*
