@@ -13,4 +13,13 @@ interface ApiCoreInterface
      */
     public function response($content, $statusCode = 200);
 
+    /**
+     * Returns API-formatted error response.
+     *
+     * @param mixed $content
+     * @param int   $statusCode
+     * @return mixed
+     */
+    public function error($content, $statusCode = 500);
+
 }

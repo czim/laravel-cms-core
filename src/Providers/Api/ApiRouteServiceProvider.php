@@ -91,7 +91,10 @@ class ApiRouteServiceProvider extends ServiceProvider
 
                 $this->router->group(
                     [
-                        'middleware' => [ CmsMiddleware::API_AUTHENTICATED ],
+                        'middleware' => [
+                            CmsMiddleware::API_AUTHENTICATED,
+                            CmsMiddleware::API_AUTH_OWNER,
+                        ],
                     ],
                     function (Router $router) {
 
@@ -119,8 +122,8 @@ class ApiRouteServiceProvider extends ServiceProvider
             ],
             function (Router $router) use ($auth) {
 
-                $router->post('login', $auth->getApiRouteLoginAction());
-                $router->get('logout', $auth->getApiRouteLogoutAction());
+                $router->{$this->getLoginMethod()}($this->getLoginPath(), $auth->getApiRouteLoginAction());
+                $router->{$this->getLogoutMethod()}($this->getLogoutPath(), $auth->getApiRouteLogoutAction());
             }
         );
     }
@@ -158,6 +161,38 @@ class ApiRouteServiceProvider extends ServiceProvider
     protected function getCmsMiddlewareGroup()
     {
         return $this->core->apiConfig('middleware.group');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLoginPath()
+    {
+        return $this->core->apiConfig('route.auth.path.login', 'login');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLogoutPath()
+    {
+        return $this->core->apiConfig('route.auth.path.logout', 'logout');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLoginMethod()
+    {
+        return $this->core->apiConfig('route.auth.method.login', 'post');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLogoutMethod()
+    {
+        return $this->core->apiConfig('route.auth.method.logout', 'post');
     }
 
 }

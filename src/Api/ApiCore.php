@@ -18,4 +18,15 @@ class ApiCore implements ApiCoreInterface
         return response()->json($content)->setStatusCode($statusCode);
     }
 
+    /**
+     * Returns API-formatted error response.
+     *
+     * @param mixed $content
+     * @param int   $statusCode
+     * @return mixed
+     */
+    public function error($content, $statusCode = 500)
+    {
+        return response()->json($content)->setStatusCode($statusCode);
+    }
 }

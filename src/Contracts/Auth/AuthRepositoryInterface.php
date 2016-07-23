@@ -7,6 +7,13 @@ interface AuthRepositoryInterface
 {
 
     /**
+     * Returns a user by their ID, if it exists.
+     *
+     * @param mixed $id
+     */
+    public function getUserById($id);
+
+    /**
      * Returns all CMS users.
      *
      * @param bool $withAdmin   include superadmins

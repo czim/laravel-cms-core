@@ -16,4 +16,5 @@ class CmsMiddleware extends Enum
     const PERMISSION    = 'cms\permission';
 
     const API_AUTHENTICATED = 'cms\api\auth';
+    const API_AUTH_OWNER    = 'cms\api\auth-owner';
 }

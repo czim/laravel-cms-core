@@ -33,6 +33,33 @@ interface UserAuthenticationInterface
     public function login($username, $password);
 
     /**
+     * Performs stateless login.
+     *
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public function stateless($username, $password);
+
+    /**
+     * Forces a user to be logged in without credentials verification.
+     *
+     * @param UserInterface $user
+     * @param bool          $remember
+     * @return bool
+     */
+    public function forceUser(UserInterface $user, $remember = true);
+
+    /**
+     * Forces a user to be logged in without credentials verification,
+     * without persistence, and without marking it as a login.
+     *
+     * @param UserInterface $user
+     * @return bool
+     */
+    public function forceUserStateless(UserInterface $user);
+
+    /**
      * @return bool
      */
     public function logout();

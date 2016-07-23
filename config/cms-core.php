@@ -110,9 +110,9 @@ return [
         Czim\CmsAuth\Providers\CmsAuthServiceProvider::class,
         Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
 
+        Czim\CmsAuth\Providers\Api\OAuthSetupServiceProvider::class,
         Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider::class,
         Czim\CmsCore\Providers\Api\ApiRouteServiceProvider::class,
-        Czim\CmsCore\Providers\Api\OAuthSetupServiceProvider::class,
     ],
 
     /*
@@ -139,14 +139,15 @@ return [
     |
     | Middleware to be active when the CMS is used may be defined here.
     | Use key-value pairs to add route middleware, or plain FQNs strings
-    | to set global/group middleware.
+    | to set global/group middleware. Note that this should only include
+    | web middleware -- the API has its own middleware & group.
     |
     */
 
     'middleware' => [
 
         // You can also disable all CMS middleware entirely, if you are feeling
-        // particularly adventurous.
+        // particularly adventurous. This also disables API middleware.
         'enabled' => true,
 
         // The middleware group that all CMS routes should belong to.
