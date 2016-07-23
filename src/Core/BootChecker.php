@@ -18,6 +18,20 @@ class BootChecker implements BootCheckerInterface
      */
     protected $booted = false;
 
+    /**
+     * Cached, minor optimization.
+     *
+     * @var bool|null
+     */
+    protected $shouldRegister;
+
+    /**
+     * Cached, minor optimization.
+     *
+     * @var bool|null
+     */
+    protected $registeredConsoleCommand;
+
 
     /**
      * Returns whether the CMS should perform any service providing.
@@ -26,19 +40,27 @@ class BootChecker implements BootCheckerInterface
      */
     public function shouldCmsRegister()
     {
+        if (null !== $this->shouldRegister) {
+            return $this->shouldRegister;
+        }
+
         if ( ! $this->isCmsEnabled()) {
+            $this->shouldRegister = false;
             return false;
         }
 
         if ($this->isConsole()) {
-            return $this->isCmsEnabledArtisanCommand();
+            $this->shouldRegister = $this->isCmsEnabledArtisanCommand();
+            return $this->shouldRegister;
         }
 
         if ($this->isCmsBeingUnitTested()) {
+            $this->shouldRegister = true;
             return true;
         }
 
-        return $this->isCmsWebRequest() || $this->isCmsApiRequest();
+        $this->shouldRegister = $this->isCmsWebRequest() || $this->isCmsApiRequest();
+        return $this->shouldRegister;
     }
 
     /**
@@ -222,7 +244,12 @@ class BootChecker implements BootCheckerInterface
      */
     protected function isCmsEnabledArtisanCommand()
     {
+        if (null !== $this->registeredConsoleCommand) {
+            return $this->registeredConsoleCommand;
+        }
+
         if ( ! $this->isConsole()) {
+            $this->registeredConsoleCommand = false;
             return false;
         }
 
@@ -231,6 +258,7 @@ class BootChecker implements BootCheckerInterface
         // If no command is given, the CMS will be loaded, to make
         // sure that its commands will appear in the Artisan list.
         if (empty($command)) {
+            $this->registeredConsoleCommand = true;
             return true;
         }
 
@@ -238,10 +266,12 @@ class BootChecker implements BootCheckerInterface
 
         foreach ($patterns as $pattern) {
             if ($command === $pattern || Str::is($pattern, $command)) {
+                $this->registeredConsoleCommand = true;
                 return true;
             }
         }
 
+        $this->registeredConsoleCommand = false;
         return false;
     }
 
