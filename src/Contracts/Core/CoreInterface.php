@@ -12,6 +12,11 @@ interface CoreInterface extends StateInterface
 {
 
     /**
+     * @return BootCheckerInterface
+     */
+    public function bootChecker();
+
+    /**
      * @return AuthenticatorInterface
      */
     public function auth();
@@ -83,7 +88,7 @@ interface CoreInterface extends StateInterface
 
     /**
      * Generate a URL to a named CMS route. This ensures that the
-     * route name starts with the configured route name prefix.
+     * route name starts with the configured web route name prefix.
      *
      * @param string $name
      * @param array  $parameters
@@ -93,7 +98,7 @@ interface CoreInterface extends StateInterface
     public function route($name, $parameters = [], $absolute = true);
 
     /**
-     * Prefixes a route name with the standard CMS prefix, if required.
+     * Prefixes a route name with the standard web CMS prefix, if required.
      *
      * @param string $name
      * @return string

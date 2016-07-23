@@ -7,7 +7,7 @@ return [
     | Enable CMS API
     |--------------------------------------------------------------------------
     |
-    | The API of the CMS may be disabled separately from the CMS itself
+    | The API of the CMS may be disabled separately from the CMS itself.
     |
     */
 
@@ -43,6 +43,7 @@ return [
     */
 
     'providers' => [
+
     ],
 
     /*
@@ -58,10 +59,6 @@ return [
 
     'middleware' => [
 
-        // You can also disable all API middleware entirely, if you are feeling
-        // particularly adventurous.
-        'enabled' => true,
-
         // The middleware group that all CMS API routes should belong to.
         'group' => 'cms-api',
 
@@ -70,11 +67,10 @@ return [
         'load' => [
             Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
 
-            Czim\CmsCore\Support\Enums\CmsMiddleware::AUTHENTICATED =>
+            Czim\CmsCore\Support\Enums\CmsMiddleware::API_AUTHENTICATED =>
                 Czim\CmsCore\Http\Middleware\Api\Authenticate::class,
             Czim\CmsCore\Support\Enums\CmsMiddleware::PERMISSION =>
                 Czim\CmsCore\Http\Middleware\CheckPermission::class,
-
         ],
     ],
 

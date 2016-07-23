@@ -45,6 +45,18 @@ if ( ! function_exists('cms_auth')) {
     }
 }
 
+if ( ! function_exists('cms_api')) {
+    /**
+     * Get the available CMS API Core instance.
+     *
+     * @return \Czim\CmsCore\Contracts\Api\ApiCoreInterface
+     */
+    function cms_api()
+    {
+        return app(\Czim\CmsCore\Support\Enums\Component::API);
+    }
+}
+
 if ( ! function_exists('cms_config')) {
     /**
      * Get / set the specified configuration value.

@@ -110,6 +110,8 @@ return [
         Czim\CmsAuth\Providers\CmsAuthServiceProvider::class,
         Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
 
+        Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider::class,
+        Czim\CmsCore\Providers\Api\ApiRouteServiceProvider::class,
         Czim\CmsCore\Providers\Api\OAuthSetupServiceProvider::class,
     ],
 
@@ -166,7 +168,6 @@ return [
                 Czim\CmsCore\Http\Middleware\RedirectIfAuthenticated::class,
             Czim\CmsCore\Support\Enums\CmsMiddleware::PERMISSION =>
                 Czim\CmsCore\Http\Middleware\CheckPermission::class,
-
         ],
     ],
 

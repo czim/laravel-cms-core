@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Core;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -27,6 +28,14 @@ class Core implements CoreInterface
     public function __construct(Application $app)
     {
         $this->app = $app;
+    }
+
+    /**
+     * @return BootCheckerInterface
+     */
+    public function bootChecker()
+    {
+        return $this->app[Component::BOOTCHECKER];
     }
 
     /**

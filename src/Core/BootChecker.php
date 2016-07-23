@@ -61,37 +61,6 @@ class BootChecker implements BootCheckerInterface
         return $this->registered;
     }
 
-    /**
-     * Returns whether the CMS middleware should be registered at all.
-     *
-     * @return bool
-     */
-    public function shouldLoadCmsMiddleware()
-    {
-        return  $this->shouldCmsRegister()
-            &&  ! $this->isConsole()
-            &&  $this->isCmsMiddlewareEnabled();
-    }
-
-    /**
-     * Returns whether non-API CMS middleware should be registered.
-     *
-     * @return bool
-     */
-    public function shouldLoadCmsWebMiddleware()
-    {
-        return $this->shouldLoadCmsMiddleware() && $this->isCmsWebRequest();
-    }
-
-    /**
-     * Returns whether API CMS middleware should be registered.
-     *
-     * @return bool
-     */
-    public function shouldLoadCmsApiMiddleware()
-    {
-        return $this->shouldLoadCmsMiddleware() && $this->isCmsApiRequest();
-    }
 
     /**
      * Marks the CMS as having fully registered.
@@ -127,6 +96,59 @@ class BootChecker implements BootCheckerInterface
     public function isCmsBooted()
     {
         return $this->booted;
+    }
+
+
+    /**
+     * Returns whether the CMS middleware should be registered at all.
+     *
+     * @return bool
+     */
+    public function shouldLoadCmsMiddleware()
+    {
+        return  $this->shouldCmsRegister()
+            &&  ! $this->isConsole()
+            &&  $this->isCmsMiddlewareEnabled();
+    }
+
+    /**
+     * Returns whether non-API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldLoadCmsWebMiddleware()
+    {
+        return $this->shouldLoadCmsMiddleware() && $this->isCmsWebRequest();
+    }
+
+    /**
+     * Returns whether API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldLoadCmsApiMiddleware()
+    {
+        return $this->shouldLoadCmsMiddleware() && $this->isCmsApiRequest();
+    }
+
+    /**
+     * Returns whether non-API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldRegisterCmsWebRoutes()
+    {
+        return $this->isCmsEnabledArtisanCommand() || $this->isCmsWebRequest();
+    }
+
+    /**
+     * Returns whether API CMS middleware should be registered.
+     *
+     * @return bool
+     */
+    public function shouldRegisterCmsApiRoutes()
+    {
+        return $this->isCmsEnabledArtisanCommand() || $this->isCmsApiRequest();
     }
 
 

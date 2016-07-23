@@ -285,10 +285,22 @@ class Manager implements ManagerInterface
      *
      * @param Router $router
      */
-    public function buildRoutes(Router $router)
+    public function buildWebRoutes(Router $router)
     {
         foreach ($this->modules as $module) {
-            $module->buildRoutes($router);
+            $module->buildWebRoutes($router);
+        }
+    }
+
+    /**
+     * Builds API routes for all modules given a router as context.
+     *
+     * @param Router $router
+     */
+    public function buildApiRoutes(Router $router)
+    {
+        foreach ($this->modules as $module) {
+            $module->buildApiRoutes($router);
         }
     }
 

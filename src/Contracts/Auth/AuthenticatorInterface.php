@@ -5,6 +5,7 @@ interface AuthenticatorInterface extends
     UserAuthenticationInterface,
     UserManagementInterface,
     AuthRepositoryInterface,
+    AuthApiRoutingInterface,
     AuthRoutingInterface
 {
 }

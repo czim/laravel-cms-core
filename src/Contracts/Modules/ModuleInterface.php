@@ -38,12 +38,20 @@ interface ModuleInterface
     public function getServiceProviders();
 
     /**
-     * Generates routes for the module given a contextual router instance.
+     * Generates web routes for the module given a contextual router instance.
      * Note that the module is responsible for ACL-checks, including route-based.
      *
      * @param Router $router
      */
-    public function buildRoutes(Router $router);
+    public function buildWebRoutes(Router $router);
+
+    /**
+     * Generates API routes for the module given a contextual router instance.
+     * Note that the module is responsible for ACL-checks, including route-based.
+     *
+     * @param Router $router
+     */
+    public function buildApiRoutes(Router $router);
 
     /**
      * @return null|array|AclPresenceInterface|AclPresenceInterface[]

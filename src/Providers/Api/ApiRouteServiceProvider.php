@@ -1,5 +1,5 @@
 <?php
-namespace Czim\CmsCore\Providers;
+namespace Czim\CmsCore\Providers\Api;
 
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Contracts\Http\Kernel;
@@ -8,14 +8,14 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Support\Enums\CmsMiddleware;
-use Czim\CmsCore\Support\Enums\NamedRoute;
 
 /**
- * Class RouteServiceProvider
+ * Class ApiRouteServiceProvider
  *
- * Web routes provider. Note that the API routes are handled separately.
+ * Register this even when the API is not registered, so that the API routes may be cached
+ * along with the rest.
  */
-class RouteServiceProvider extends ServiceProvider
+class ApiRouteServiceProvider extends ServiceProvider
 {
 
     /**
@@ -47,7 +47,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(Router $router, Kernel $kernel, CoreInterface $core)
     {
         // If we don't need the web routes, skip booting entirely
-        if ( ! $core->bootChecker()->shouldRegisterCmsWebRoutes()) {
+        if ( ! $core->bootChecker()->shouldRegisterCmsApiRoutes()) {
             return;
         }
 
@@ -91,11 +91,10 @@ class RouteServiceProvider extends ServiceProvider
 
                 $this->router->group(
                     [
-                        'middleware' => [ CmsMiddleware::AUTHENTICATED ],
+                        'middleware' => [ CmsMiddleware::API_AUTHENTICATED ],
                     ],
                     function (Router $router) {
 
-                        $this->buildHomeRoute($router);
                         $this->buildRoutesForModules($router);
                     }
                 );
@@ -106,20 +105,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Builds up route for the home page of the CMS.
-     *
-     * @param Router $router
-     */
-    protected function buildHomeRoute(Router $router)
-    {
-        $action = $this->normalizeRouteAction($this->getDefaultHomeAction());
-
-        // Guarantee that the home route has the expected name
-        $router->get('/', array_set($action, 'as', NamedRoute::HOME));
-    }
-
-    /**
-     * Builds up routes for authorization in the given router context.
+     * Builds up routes for API authorization in the given router context.
      *
      * @param Router $router
      */
@@ -133,14 +119,8 @@ class RouteServiceProvider extends ServiceProvider
             ],
             function (Router $router) use ($auth) {
 
-                $router->get('login',  $auth->getRouteLoginAction());
-                $router->post('login', $auth->getRouteLoginPostAction());
-                $router->get('logout', $auth->getRouteLogoutAction());
-
-                $router->get('password/email',          $auth->getRoutePasswordEmailGetAction());
-                $router->post('password/email',         $auth->getRoutePasswordEmailPostAction());
-                $router->get('password/reset/{token?}', $auth->getRoutePasswordResetGetAction());
-                $router->post('password/reset',         $auth->getRoutePasswordResetPostAction());
+                $router->post('login', $auth->getApiRouteLoginAction());
+                $router->get('logout', $auth->getApiRouteLogoutAction());
             }
         );
     }
@@ -152,19 +132,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function buildRoutesForModules(Router $router)
     {
-        $this->core->modules()->buildWebRoutes($router);
-    }
-
-
-    /**
-     * Normalizes a given string/array route action to array format.
-     *
-     * @param mixed $action
-     * @return array
-     */
-    protected function normalizeRouteAction($action)
-    {
-        return is_array($action) ? $action : [ 'uses' => $action ];
+        $this->core->modules()->buildApiRoutes($router);
     }
 
 
@@ -173,7 +141,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function getCmsPrefix()
     {
-        return $this->core->config('route.prefix');
+        return $this->core->apiConfig('route.prefix');
     }
 
     /**
@@ -181,7 +149,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function getCmsNamePrefix()
     {
-        return $this->core->config('route.name-prefix');
+        return $this->core->apiConfig('route.name-prefix');
     }
 
     /**
@@ -189,17 +157,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function getCmsMiddlewareGroup()
     {
-        return $this->core->config('middleware.group');
-    }
-
-    /**
-     * Returns the default action to bind to the root /.
-     *
-     * @return string|array
-     */
-    protected function getDefaultHomeAction()
-    {
-        return $this->core->config('route.default');
+        return $this->core->apiConfig('middleware.group');
     }
 
 }
