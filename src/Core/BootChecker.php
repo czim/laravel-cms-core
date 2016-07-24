@@ -179,7 +179,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    protected function isCmsWebRequest()
+    public function isCmsWebRequest()
     {
         if (app()->runningInConsole()) {
             return false;
@@ -193,7 +193,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    protected function isCmsApiRequest()
+    public function isCmsApiRequest()
     {
         if (app()->runningInConsole() || ! $this->isCmsApiEnabled()) {
             return false;

@@ -84,4 +84,18 @@ interface BootCheckerInterface
      */
     public function shouldRegisterCmsApiRoutes();
 
+    /**
+     * Returns whether a CMS web request is running.
+     *
+     * @return bool
+     */
+    public function isCmsWebRequest();
+
+    /**
+     * Returns whether a CMS API request is running.
+     *
+     * @return bool
+     */
+    public function isCmsApiRequest();
+
 }
