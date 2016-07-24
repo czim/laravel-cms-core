@@ -11,16 +11,16 @@ class CheckPermission
 {
 
     /**
-     * @var AuthenticatorInterface
+     * @var CoreInterface
      */
-    protected $auth;
+    protected $core;
 
     /**
-     * @param AuthenticatorInterface $auth
+     * @param CoreInterface $core
      */
-    public function __construct(AuthenticatorInterface $auth)
+    public function __construct(CoreInterface $core)
     {
-        $this->auth = $auth;
+        $this->core = $core;
     }
 
     /**
@@ -34,17 +34,22 @@ class CheckPermission
     public function handle($request, Closure $next, $permission = null)
     {
         if (    $permission
-            &&  ! $this->auth->admin()
-            &&  ! $this->auth->can($permission)
+            &&  ! $this->core->auth()->admin()
+            &&  ! $this->core->auth()->can($permission)
         ) {
+
+            if ($this->core->bootChecker()->isCmsApiRequest()) {
+                return $this->core->api()->error('Permission denied', 403);
+            }
+
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Permission denied.', 403);
-            } else {
-                /** @var CoreInterface $core */
-                $core = app(Component::CORE);
-
-                return redirect()->route( $core->prefixRoute(NamedRoute::HOME) );
             }
+
+            /** @var CoreInterface $core */
+            $core = app(Component::CORE);
+
+            return redirect()->route( $core->prefixRoute(NamedRoute::HOME) );
         }
 
         return $next($request);
