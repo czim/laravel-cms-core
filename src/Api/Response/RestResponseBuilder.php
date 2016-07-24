@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Api\Response;
 use Czim\CmsCore\Contracts\Api\Response\ResponseBuilderInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Exception;
+use Illuminate\Contracts\Support\Arrayable;
 
 class RestResponseBuilder implements ResponseBuilderInterface
 {
@@ -74,8 +75,29 @@ class RestResponseBuilder implements ResponseBuilderInterface
         }
 
         return response()
-            ->json($content)
+            ->json($this->normalizeErrorResponse($content))
             ->setStatusCode($statusCode);
+    }
+
+    /**
+     * Normalizes error response to array.
+     *
+     * @param mixed $content
+     * @return array
+     */
+    protected function normalizeErrorResponse($content)
+    {
+        if ($content instanceof Arrayable) {
+            $content = $content->toArray();
+        }
+
+        if (is_array($content)) {
+            return $content;
+        }
+
+        return [
+            'message' => $content,
+        ];
     }
 
     /**
