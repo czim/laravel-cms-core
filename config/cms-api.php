@@ -91,18 +91,36 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Debugging & Testing
+    | Response Builder
     |--------------------------------------------------------------------------
     |
-    | For local development, debugging options may be used to disable API
-    | authentication. Note that this will ONLY work in 'local' environment.
+    | The CMS builds API responses through a central converter class, that
+    | takes content data and prepares correctly formatted (json) responses.
     |
     */
 
-    'disable-local-auth' => false,
+    'response-builder' => Czim\CmsCore\Api\Response\RestResponseBuilder::class,
 
-    // A user may be faked by setting their ID in the header set here.
-    // This can only be done locally, when disable-local-auth is set to true.
-    'debug-user-header' => 'debug-user',
+    /*
+    |--------------------------------------------------------------------------
+    | Debugging & Testing
+    |--------------------------------------------------------------------------
+    |
+    | For local development, debugging options may be used to change API
+    | authentication and exception handling.
+    |
+    */
+
+    'debug' => [
+        // Disable authentication entirely. Note that this will ONLY work in 'local' env.
+        'disable-local-auth' => false,
+
+        // A user may be faked by setting their ID in the header set here.
+        // This can only be done locally, when disable-local-auth is set to true.
+        'debug-user-header' => 'debug-user',
+
+        // Add debug & trace information about exceptions in local environment
+        'local-exception-trace' => true,
+    ],
 
 ];

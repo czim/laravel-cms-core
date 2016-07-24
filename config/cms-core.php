@@ -271,6 +271,22 @@ return [
 
     'exceptions' => [
         'handler' => Czim\CmsCore\Exceptions\Handler::class,
+
+        // List of exception FQNs which should not be reported for the CMS
+        'dont-report' => [
+            League\OAuth2\Server\Exception\AccessDeniedException::class,
+            League\OAuth2\Server\Exception\InvalidClientException::class,
+            League\OAuth2\Server\Exception\InvalidCredentialsException::class,
+            League\OAuth2\Server\Exception\InvalidGrantException::class,
+            League\OAuth2\Server\Exception\InvalidRequestException::class,
+            League\OAuth2\Server\Exception\InvalidRefreshException::class,
+            League\OAuth2\Server\Exception\InvalidScopeException::class,
+            League\OAuth2\Server\Exception\OAuthException::class,
+            League\OAuth2\Server\Exception\UnauthorizedClientException::class,
+            League\OAuth2\Server\Exception\UnsupportedGrantTypeException::class,
+            League\OAuth2\Server\Exception\UnsupportedResponseTypeException::class,
+            LucaDegasperi\OAuth2Server\Exceptions\NoActiveAccessTokenException::class,
+        ],
     ],
 
     /*
