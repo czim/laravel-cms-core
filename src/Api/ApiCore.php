@@ -2,9 +2,24 @@
 namespace Czim\CmsCore\Api;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Api\Response\ResponseBuilderInterface;
 
 class ApiCore implements ApiCoreInterface
 {
+
+    /**
+     * @var ResponseBuilderInterface
+     */
+    protected $builder;
+
+    /**
+     * @param ResponseBuilderInterface $builder
+     */
+    public function __construct(ResponseBuilderInterface $builder)
+    {
+        $this->builder = $builder;
+    }
+
 
     /**
      * Returns API-formatted response based on given content.
@@ -15,7 +30,7 @@ class ApiCore implements ApiCoreInterface
      */
     public function response($content, $statusCode = 200)
     {
-        return response()->json($content)->setStatusCode($statusCode);
+        return $this->builder->response($content, $statusCode);
     }
 
     /**
@@ -27,6 +42,7 @@ class ApiCore implements ApiCoreInterface
      */
     public function error($content, $statusCode = 500)
     {
-        return response()->json($content)->setStatusCode($statusCode);
+        return $this->builder->error($content, $statusCode);
     }
+
 }
