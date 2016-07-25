@@ -22,6 +22,24 @@ interface UserManagementInterface
      */
     public function deleteUser($username);
 
+    /**
+     * Sets a new password for an existing CMS user.
+     *
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public function updatePassword($username, $password);
+
+    /**
+     * Updates a CMS user's (extra) data.
+     *
+     * @param string $username
+     * @param array $data
+     * @return bool
+     */
+    public function updateUser($username, array $data);
+
 
     // ------------------------------------------------------------------------------
     //      Roles

@@ -19,12 +19,26 @@ interface UserInterface
     public function isAdmin();
 
     /**
+     * Returns all roles for the user.
+     *
+     * @return string[]
+     */
+    public function getAllRoles();
+
+    /**
      * Returns whether the user has the given role.
      *
      * @param string $role
      * @return bool
      */
     public function hasRole($role);
+
+    /**
+     * Returns all permissions for the user, whether by role or for the user itself.
+     *
+     * @return string[]
+     */
+    public function getAllPermissions();
 
     /**
      * Returns whether the user has the given permission.

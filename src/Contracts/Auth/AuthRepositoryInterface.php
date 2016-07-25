@@ -10,8 +10,17 @@ interface AuthRepositoryInterface
      * Returns a user by their ID, if it exists.
      *
      * @param mixed $id
+     * @return UserInterface|null
      */
     public function getUserById($id);
+
+    /**
+     * Returns a user by their username/email, if it exists.
+     *
+     * @param string $username
+     * @return UserInterface|null
+     */
+    public function getUserByUserName($username);
 
     /**
      * Returns all CMS users.
