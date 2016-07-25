@@ -74,6 +74,19 @@ if ( ! function_exists('cms_config')) {
     }
 }
 
+if ( ! function_exists('cms_mw_permission')) {
+    /**
+     * Returns CMS middleware definition for a given permission
+     *
+     * @param string $permission
+     * @return string
+     */
+    function cms_mw_permission($permission)
+    {
+        return \Czim\CmsCore\Support\Enums\CmsMiddleware::PERMISSION . ':' . $permission;
+    }
+}
+
 //if ( ! function_exists('cms_asset')) {
 //    /**
 //     * Generate an asset path for the CMS.
