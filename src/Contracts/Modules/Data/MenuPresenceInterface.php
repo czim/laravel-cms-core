@@ -37,6 +37,13 @@ interface MenuPresenceInterface extends DataObjectInterface
     public function action();
 
     /**
+     * Returns route parameters for route type.
+     *
+     * @return array
+     */
+    public function parameters();
+
+    /**
      * Returns required permissions to see or use the action.
      * Null if no permissions required.
      *

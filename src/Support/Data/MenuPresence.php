@@ -13,16 +13,19 @@ use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
 {
     protected $attributes = [
-        'children' => [],
+        'parameters' => [],
+        'children'   => [],
     ];
 
     protected $rules = [
-        'id'       => 'string',
-        'type'     => 'required|string',
-        'label'    => 'string',
-        'image'    => 'string',
-        'children' => 'array',
-        'html'     => 'string',
+        'id'         => 'string',
+        'type'       => 'required|string',
+        'label'      => 'string',
+        'action'     => 'string',
+        'parameters' => 'array',
+        'image'      => 'string',
+        'children'   => 'array',
+        'html'       => 'string',
     ];
 
     /**
@@ -57,13 +60,23 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     }
 
     /**
-     * Returns link or route action, depending on type.
+     * Returns link or route, depending on type.
      *
      * @return null|string|array
      */
     public function action()
     {
         return $this->getAttribute('action');
+    }
+
+    /**
+     * Returns route parameters for route actions.
+     *
+     * @return array
+     */
+    public function parameters()
+    {
+        return $this->getAttribute('parameters');
     }
 
     /**
