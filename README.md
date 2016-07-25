@@ -46,5 +46,8 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 - [All Contributors][link-contributors]
 
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
 [link-contributors]: ../../contributors
