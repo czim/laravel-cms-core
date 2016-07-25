@@ -29,6 +29,9 @@ return [
         // The route prefix to use for all CMS routes
         'prefix' => 'cms-api',
 
+        // Prefix all route names with this
+        'name-prefix' => 'cms-api::',
+
         'auth' => [
             // The login/logut endpoints, f.i. in: /cms-api/auth/<path>
             'path' => [
