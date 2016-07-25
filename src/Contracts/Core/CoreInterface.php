@@ -105,4 +105,23 @@ interface CoreInterface extends StateInterface
      */
     public function prefixRoute($name);
 
+    /**
+     * Generate a URL to a named CMS API route. This ensures that the
+     * route name starts with the configured API route name prefix.
+     *
+     * @param string $name
+     * @param array  $parameters
+     * @param bool   $absolute
+     * @return string
+     */
+    public function apiRoute($name, $parameters = [], $absolute = true);
+
+    /**
+     * Prefixes a route name with the standard web CMS API prefix, if required.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function prefixApiRoute($name);
+
 }
