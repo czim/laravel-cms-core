@@ -5,6 +5,7 @@ use Czim\CmsCore\Contracts\Api\Response\ResponseBuilderInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Exception\HttpResponseException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RestResponseBuilder implements ResponseBuilderInterface
@@ -66,10 +67,14 @@ class RestResponseBuilder implements ResponseBuilderInterface
      */
     protected function makeErrorResponse($content, $statusCode)
     {
+        $data = null;
 
         if ($content instanceof Exception) {
 
-            if (method_exists($content, 'getStatusCode')) {
+            if ($content instanceof HttpResponseException) {
+                $statusCode = $content->getResponse()->getStatusCode();
+                $data       = json_decode($content->getResponse()->getContent(), true);
+            } elseif (method_exists($content, 'getStatusCode')) {
                 $statusCode = $content->getStatusCode();
             } elseif (property_exists($content, 'httpStatusCode')) {
                 $statusCode = $content->httpStatusCode;
@@ -79,57 +84,34 @@ class RestResponseBuilder implements ResponseBuilderInterface
         }
 
         return response()
-            ->json($this->normalizeErrorResponse($content))
+            ->json($this->normalizeErrorResponse($content, $data))
             ->setStatusCode($statusCode);
     }
 
     /**
      * Normalizes error response to array.
      *
-     * @param mixed $content
+     * @param mixed       $content
+     * @param null|array  $data     extra data to provide in the error message
      * @return array
      */
-    protected function normalizeErrorResponse($content)
+    protected function normalizeErrorResponse($content, $data = null)
     {
         if ($content instanceof Arrayable) {
             $content = $content->toArray();
         }
 
-        if (is_array($content)) {
-            return $content;
+        if ( ! is_array($content)) {
+            $content = [
+                'message' => $content,
+            ];
         }
 
-        return [
-            'message' => $content,
-        ];
-    }
-
-    protected function getStandardMessageForStatusCode($code)
-    {
-        if ( ! $code) {
-            return null;
+        if (null !== $data) {
+            $content['data'] = $data;
         }
 
-        switch ($code) {
-
-            case 404:
-                return 'Not Found';
-
-            case 403:
-                return "Forbidden";
-
-            case 401:
-                return "Unauthorized";
-
-            case 400:
-                return "Bad Request";
-
-            case 500:
-                return 'Server Whoops';
-
-            default:
-                return null;
-        }
+        return $content;
     }
 
     /**
@@ -178,6 +160,43 @@ class RestResponseBuilder implements ResponseBuilderInterface
                 );
             }, $e->getTrace()),
         ];
+    }
+
+    /**
+     * Returns standard message to use for a given HTTP status code.
+     *
+     * @param int $code
+     * @return null|string
+     */
+    protected function getStandardMessageForStatusCode($code)
+    {
+        if ( ! $code) {
+            return null;
+        }
+
+        switch ($code) {
+
+            case 422:
+                return 'Unprocessable Entity';
+
+            case 404:
+                return 'Not Found';
+
+            case 403:
+                return "Forbidden";
+
+            case 401:
+                return "Unauthorized";
+
+            case 400:
+                return "Bad Request";
+
+            case 500:
+                return 'Server Whoops';
+
+            default:
+                return null;
+        }
     }
 
 }
