@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Contracts\Core;
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
-use Czim\CmsCore\Contracts\Menu\MenuInterface;
+use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -37,7 +37,7 @@ interface CoreInterface extends StateInterface
     public function modules();
 
     /**
-     * @return MenuInterface
+     * @return MenuRepositoryInterface
      */
     public function menu();
 

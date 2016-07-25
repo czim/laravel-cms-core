@@ -2,7 +2,7 @@
 namespace Czim\CmsCore\Http\ViewComposers;
 
 use Illuminate\Contracts\View\View;
-use Czim\CmsCore\Contracts\Menu\MenuInterface;
+use Czim\CmsTheme\Contracts\Menu\MenuInterface;
 
 class TopComposer
 {
