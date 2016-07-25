@@ -5,6 +5,7 @@ use Czim\CmsCore\Contracts\Api\Response\ResponseBuilderInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RestResponseBuilder implements ResponseBuilderInterface
 {
@@ -65,13 +66,16 @@ class RestResponseBuilder implements ResponseBuilderInterface
      */
     protected function makeErrorResponse($content, $statusCode)
     {
+
         if ($content instanceof Exception) {
 
-            if (property_exists($content, 'httpStatusCode')) {
+            if (method_exists($content, 'getStatusCode')) {
+                $statusCode = $content->getStatusCode();
+            } elseif (property_exists($content, 'httpStatusCode')) {
                 $statusCode = $content->httpStatusCode;
             }
 
-            $content = $this->formatExceptionError($content);
+            $content = $this->formatExceptionError($content, $this->getStandardMessageForStatusCode($statusCode));
         }
 
         return response()
@@ -100,31 +104,67 @@ class RestResponseBuilder implements ResponseBuilderInterface
         ];
     }
 
+    protected function getStandardMessageForStatusCode($code)
+    {
+        if ( ! $code) {
+            return null;
+        }
+
+        switch ($code) {
+
+            case 404:
+                return 'Not Found';
+
+            case 403:
+                return "Forbidden";
+
+            case 401:
+                return "Unauthorized";
+
+            case 400:
+                return "Bad Request";
+
+            case 500:
+                return 'Server Whoops';
+
+            default:
+                return null;
+        }
+    }
+
     /**
      * Formats an exception as a standardized error response.
      *
-     * @param Exception $e
+     * @param Exception   $e
+     * @param null|string $fallbackMessage  message to use if exception has none
      * @return mixed
      */
-    protected function formatExceptionError(Exception $e)
+    protected function formatExceptionError(Exception $e, $fallbackMessage = null)
     {
         if (app()->isLocal() && $this->core->apiConfig('debug.local-exception-trace', true)) {
-            return $this->formatExceptionErrorForLocal($e);
+            return $this->formatExceptionErrorForLocal($e, $fallbackMessage);
         }
 
+        $message = $e->getMessage() ?: $fallbackMessage;
+
         return [
-            'message' => $e->getMessage(),
+            'message' => $message,
         ];
     }
 
     /**
-     * @param Exception $e
+     * Formats an exception as a standardized error response for local environment only.
+     *
+     * @param Exception   $e
+     * @param null|string $fallbackMessage  message to use if exception has none
      * @return mixed
      */
-    protected function formatExceptionErrorForLocal(Exception $e)
+    protected function formatExceptionErrorForLocal(Exception $e, $fallbackMessage = null)
     {
+        $message = $e->getMessage() ?: $fallbackMessage;
+
         return [
-            'message' => $e->getMessage(),
+            'message' => $message,
             'code'    => $e->getCode(),
             'file'    => $e->getFile(),
             'line'    => $e->getLine(),

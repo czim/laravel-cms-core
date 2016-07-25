@@ -31,11 +31,35 @@ interface AuthRepositoryInterface
     public function getUsersForRole($role, $withAdmin = false);
 
     /**
+     * Returns whether a given role exists.
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function roleExists($role);
+
+    /**
      * Returns all roles known by the authenticator.
      *
      * @return string[]
      */
     public function getAllRoles();
+
+    /**
+     * Returns whether a role is currently used at all.
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function roleInUse($role);
+
+    /**
+     * Returns whether a permission with the given (exact) name is currently used at all.
+     *
+     * @param $permission
+     * @return bool
+     */
+    public function permissionInUse($permission);
 
     /**
      * Returns all permissions known by the authenticator.

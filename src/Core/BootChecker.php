@@ -70,7 +70,8 @@ class BootChecker implements BootCheckerInterface
      */
     public function shouldCmsApiRegister()
     {
-        return $this->shouldCmsRegister() && $this->isCmsApiRequest();
+        return $this->shouldCmsRegister()
+            && ($this->isCmsApiRequest() || $this->isCmsEnabledArtisanCommand());
     }
 
     /**
