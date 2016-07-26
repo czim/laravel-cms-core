@@ -2,11 +2,18 @@
 namespace Czim\CmsCore\Api\Response;
 
 use Czim\CmsCore\Contracts\Api\Response\ResponseBuilderInterface;
+use Czim\CmsCore\Contracts\Api\Response\TransformContainerInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Exception;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Exception\HttpResponseException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use League\Fractal\Manager as FractalManager;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use League\Fractal\Resource\Collection as FractalCollection;
+use League\Fractal\Resource\Item as FractalItem;
+use League\Fractal\Serializer\DataArraySerializer;
+use League\Fractal\TransformerAbstract;
 
 class RestResponseBuilder implements ResponseBuilderInterface
 {
@@ -17,11 +24,40 @@ class RestResponseBuilder implements ResponseBuilderInterface
     protected $core;
 
     /**
-     * @param CoreInterface $core
+     * @var FractalManager
      */
-    public function __construct(CoreInterface $core)
+    protected $fractalManager;
+
+    /**
+     * FQN for the Fractal data serializer to use
+     *
+     * @var string
+     */
+    protected $fractalSerializer = DataArraySerializer::class;
+
+
+    /**
+     * @param CoreInterface  $core
+     * @param FractalManager $manager
+     */
+    public function __construct(CoreInterface $core, FractalManager $manager)
     {
-        $this->core = $core;
+        $this->core           = $core;
+        $this->fractalManager = $manager;
+
+        $this->initializeFractal();
+    }
+
+    /**
+     * Prepares Fractal manager for processing.
+     *
+     * @return $this
+     */
+    protected function initializeFractal()
+    {
+        $this->fractalManager->setSerializer(app($this->fractalSerializer));
+
+        return $this;
     }
 
 
@@ -52,12 +88,79 @@ class RestResponseBuilder implements ResponseBuilderInterface
     }
 
     /**
+     * Converts raw content to the desired output format.
+     *
      * @param mixed $content
      * @return mixed
      */
     protected function convertContent($content)
     {
+        if ($content instanceof TransformContainerInterface) {
+            return $this->transformContent($content);
+        }
+
         return $content;
+    }
+
+    /**
+     * Transforms content wrapped in a transform container.
+     *
+     * @param TransformContainerInterface $container
+     * @return mixed
+     */
+    protected function transformContent(TransformContainerInterface $container)
+    {
+        if (null === $container->getTransformer()) {
+            return $container->getContent();
+        }
+
+        $transformer = $this->makeTransformerInstance($container->getTransformer());
+        $content     = $container->getContent();
+
+        if ($container->isCollection()) {
+
+            // Detect pagination and convert apply it for Fractal
+            $paginator   = null;
+
+            if ($content instanceof Paginator) {
+                $paginator = $content;
+                $content   = $content->items();
+            }
+
+            /** @var FractalCollection $resource */
+            $resource = app(FractalCollection::class, [ $content, $transformer ]);
+
+            if ($paginator) {
+                $resource->setPaginator(new IlluminatePaginatorAdapter($paginator));
+            }
+
+        } else {
+            /** @var FractalItem $resource */
+            $resource = app(FractalItem::class, [ $content, $transformer ]);
+        }
+
+        return $this->fractalManager->createData($resource)->toArray();
+    }
+
+    /**
+     * Makes an instance of a fractal transformer.
+     *
+     * @param string|TransformerAbstract $transformerClass
+     * @return TransformerAbstract
+     */
+    protected function makeTransformerInstance($transformerClass)
+    {
+        if ($transformerClass instanceof TransformerAbstract) {
+            return $transformerClass;
+        }
+
+        $instance = app($transformerClass);
+
+        if ( ! ($instance instanceof TransformerAbstract)) {
+            throw new \UnexpectedValueException("{$transformerClass} is not a TransformerAbstract");
+        }
+
+        return $instance;
     }
 
     /**
