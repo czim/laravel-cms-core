@@ -13,7 +13,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*|5.1.*",
         "myclabs/php-enum": "^1.4",
-        "czim/laravel-dataobject": "^1.0"
+        "czim/laravel-dataobject": "^1.0",
+        "league/fractal": "^0.13.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
