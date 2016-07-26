@@ -131,7 +131,8 @@ class MenuRepository implements MenuRepositoryInterface
         $this->alternativePresences = new Collection;
 
         $this->loadMenuGroupStructure()
-             ->loadMenuModules();
+             ->loadMenuModules()
+             ->filterEmptyGroups();
     }
 
     /**
@@ -237,6 +238,75 @@ class MenuRepository implements MenuRepositoryInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Removes any empty groups from the compiled menu trees.
+     *
+     * @return $this
+     */
+    protected function filterEmptyGroups()
+    {
+        // Grouped
+        $remove = [];
+        foreach ($this->menuGroups as $key => $presence) {
+            if ( ! $this->filterNestedEmptyGroups($presence)) {
+                $remove[] = $key;
+            }
+        }
+        $this->menuGroups->forget($remove);
+
+        // Ungrouped
+        $remove = [];
+        foreach ($this->menuUngrouped as $key => $presence) {
+            if ( ! $this->filterNestedEmptyGroups($presence)) {
+                $remove[] = $key;
+            }
+        }
+        $this->menuGroups->forget($remove);
+
+        // Alternative presences should be left as is, to be determined
+        // by whatever front-end implementation they may get.
+
+        return $this;
+    }
+
+    /**
+     * Removes any empty group children from a tree structure, returning
+     * the number of non-group entries.
+     *
+     * @param MenuPresenceInterface $presence
+     * @return int  the number of children found on the levels below
+     */
+    protected function filterNestedEmptyGroups(MenuPresenceInterface $presence)
+    {
+        if ($presence['type'] !== MenuPresenceType::GROUP) {
+            return 1;
+        }
+
+        if ( ! $presence['children'] || ! count($presence['children'])) {
+            return 0;
+        }
+
+        $remove   = [];
+        $children = $presence['children'];
+        $nonGroupCount = 0;
+
+        foreach ($children as $key => $childPresence) {
+            if ( ! $this->filterNestedEmptyGroups($childPresence)) {
+                $remove[] = $key;
+            }
+
+            $nonGroupCount++;
+        }
+
+        foreach ($remove as $key) {
+            unset($children[$key]);
+        }
+
+        $presence->setChildren($children);
+
+        return $nonGroupCount;
     }
 
     /**
