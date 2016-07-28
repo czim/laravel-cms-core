@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Providers\Api;
 
+use Czim\CmsCore\Http\Controllers\Api\ModulesController;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Application;
@@ -98,6 +99,7 @@ class ApiRouteServiceProvider extends ServiceProvider
                     ],
                     function (Router $router) {
 
+                        $this->buildRoutesForMetaData($router);
                         $this->buildRoutesForModules($router);
                     }
                 );
@@ -124,6 +126,32 @@ class ApiRouteServiceProvider extends ServiceProvider
 
                 $router->{$this->getLoginMethod()}($this->getLoginPath(), $auth->getApiRouteLoginAction());
                 $router->{$this->getLogoutMethod()}($this->getLogoutPath(), $auth->getApiRouteLogoutAction());
+            }
+        );
+    }
+
+    /**
+     * Builds up routes for accessing meta-data about the CMS and its modules.
+     *
+     * @param Router $router
+     */
+    protected function buildRoutesForMetaData(Router $router)
+    {
+        $router->group(
+            [
+                'prefix' => 'meta',
+            ],
+            function (Router $router) {
+
+                $router->get('modules', [
+                    'as'   => 'modules.index',
+                    'uses' => ModulesController::class . '@index',
+                ]);
+
+                $router->get('modules/{key}', [
+                    'as'   =>'modules.show',
+                    'uses' => ModulesController::class . '@show',
+                ]);
             }
         );
     }
