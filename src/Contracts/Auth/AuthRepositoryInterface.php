@@ -48,6 +48,12 @@ interface AuthRepositoryInterface
     public function roleExists($role);
 
     /**
+     * @param string $role
+     * @return RoleInterface
+     */
+    public function getRole($role);
+
+    /**
      * Returns all roles known by the authenticator.
      *
      * @return string[]
