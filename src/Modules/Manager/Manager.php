@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Modules\Manager;
 
+use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
@@ -17,6 +18,11 @@ class Manager implements ManagerInterface
      * @var CoreInterface
      */
     protected $core;
+
+    /**
+     * @var AclRepositoryInterface
+     */
+    protected $acl;
 
     /**
      * Active CMS modules.
@@ -41,11 +47,13 @@ class Manager implements ManagerInterface
 
 
     /**
-     * @param CoreInterface $core
+     * @param CoreInterface          $core
+     * @param AclRepositoryInterface $acl
      */
-    public function __construct(CoreInterface $core)
+    public function __construct(CoreInterface $core, AclRepositoryInterface $acl)
     {
         $this->core = $core;
+        $this->acl  = $acl;
     }
 
 
@@ -313,6 +321,31 @@ class Manager implements ManagerInterface
         foreach ($this->modules as $module) {
             $module->mapApiRoutes($router);
         }
+    }
+
+    /**
+     * Returns all permissions required by loaded modules.
+     *
+     * @return string[]
+     */
+    public function getAllPermissions()
+    {
+        $this->acl->initialize();
+
+        return $this->acl->getAllPermissions();
+    }
+
+    /**
+     * Returns all permissions required by a single loaded module.
+     *
+     * @param string $key
+     * @return string[]
+     */
+    public function getModulePermissions($key)
+    {
+        $this->acl->initialize();
+
+        return $this->acl->getModulePermissions($key);
     }
 
 }

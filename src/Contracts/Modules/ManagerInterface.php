@@ -72,6 +72,21 @@ interface ManagerInterface
     public function mapApiRoutes(Router $router);
 
     /**
+     * Returns all permissions required by loaded modules.
+     *
+     * @return string[]
+     */
+    public function getAllPermissions();
+
+    /**
+     * Returns all permissions required by a single loaded module.
+     *
+     * @param string $key
+     * @return string[]
+     */
+    public function getModulePermissions($key);
+
+    /**
      * Returns module manager version number.
      *
      * @return string
