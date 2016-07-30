@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Menu;
 
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
@@ -375,7 +376,7 @@ class MenuRepository implements MenuRepositoryInterface
 
             $data = [ $data ];
 
-        } elseif (is_array($data) && ! $this->arrayIsAssociative($data)) {
+        } elseif (is_array($data) && ! Arr::isAssoc($data)) {
 
             $presences = [];
 
@@ -576,21 +577,6 @@ class MenuRepository implements MenuRepositoryInterface
         // otherwise it is too complicated and fuzzy for now.
 
         return $newPresence;
-    }
-
-    /**
-     * Returns whether an array is associative (has non-integer keys).
-     *
-     * @param array $array
-     * @return bool
-     */
-    protected function arrayIsAssociative(array $array)
-    {
-        return count(
-            array_filter(array_keys($array), function ($key) {
-                return ! is_integer($key);
-            })
-        ) > 0;
     }
 
 }
