@@ -210,9 +210,12 @@ class MenuRepository implements MenuRepositoryInterface
 
             foreach ($this->normalizeMenuPresence($presencesForModule) as $presence) {
 
-                if ( ! $this->shouldMenuPresenceBeShown($presence)) {
+                $presence = $this->filterUnpermittedFromPresence($presence);
+
+                if ( ! $presence) {
                     continue;
                 }
+
 
                 if ($this->isMenuPresenceAlternative($presence)) {
                     // If a menu presence is deemed 'alternative', it should not
@@ -307,6 +310,39 @@ class MenuRepository implements MenuRepositoryInterface
         $presence->setChildren($children);
 
         return $nonGroupCount;
+    }
+
+    /**
+     * Removes any (nested) actions that are not permissible.
+     * If the entire presence is not allowed, returns null.
+     *
+     * @param MenuPresenceInterface $presence
+     * @return MenuPresenceInterface|null
+     */
+    protected function filterUnpermittedFromPresence(MenuPresenceInterface $presence)
+    {
+        if ( ! $this->shouldMenuPresenceBeShown($presence)) {
+            return null;
+        }
+
+        $children = $presence->children();
+
+        if ( ! $children) {
+            return $presence;
+        }
+
+        $presence->setChildren(
+            array_filter(
+                array_map(
+                    function ($childPresence) {
+                        return $this->filterUnpermittedFromPresence($childPresence);
+                    },
+                    $children
+                )
+            )
+        );
+
+        return $presence;
     }
 
     /**
