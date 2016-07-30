@@ -30,6 +30,18 @@ class Core implements CoreInterface
         $this->app = $app;
     }
 
+
+    /**
+     * Returns CMS Core version number.
+     *
+     * @return string
+     */
+    public function version()
+    {
+        return '0.0.1';
+    }
+
+
     /**
      * @return BootCheckerInterface
      */
@@ -240,4 +252,5 @@ class Core implements CoreInterface
 
         return starts_with($name, $prefix) ? $name : $prefix . $name;
     }
+
 }

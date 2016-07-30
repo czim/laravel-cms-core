@@ -50,6 +50,17 @@ class Manager implements ManagerInterface
 
 
     /**
+     * Returns module manager version number.
+     *
+     * @return string
+     */
+    public function version()
+    {
+        return '0.0.1';
+    }
+
+
+    /**
      * Starts initialization, collection and registration of modules.
      * This prepares the manager for further requests.
      *

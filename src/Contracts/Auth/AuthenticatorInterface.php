@@ -8,4 +8,12 @@ interface AuthenticatorInterface extends
     AuthApiRoutingInterface,
     AuthRoutingInterface
 {
+
+    /**
+     * Returns Authenticator component version number.
+     *
+     * @return string
+     */
+    public function version();
+
 }

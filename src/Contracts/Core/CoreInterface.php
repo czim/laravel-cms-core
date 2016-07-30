@@ -124,4 +124,11 @@ interface CoreInterface extends StateInterface
      */
     public function prefixApiRoute($name);
 
+    /**
+     * Returns CMS Core version number.
+     *
+     * @return string
+     */
+    public function version();
+
 }

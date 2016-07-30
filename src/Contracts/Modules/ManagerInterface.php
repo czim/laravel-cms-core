@@ -71,4 +71,11 @@ interface ManagerInterface
      */
     public function buildApiRoutes(Router $router);
 
+    /**
+     * Returns module manager version number.
+     *
+     * @return string
+     */
+    public function version();
+
 }
