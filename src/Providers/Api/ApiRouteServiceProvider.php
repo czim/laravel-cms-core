@@ -143,14 +143,32 @@ class ApiRouteServiceProvider extends ServiceProvider
             ],
             function (Router $router) {
 
+                // Menu information
+
+                $router->get('menu', [
+                    'as'   => 'menu.index',
+                    'uses' => $this->core->apiConfig('controllers.menu') . '@index',
+                ]);
+
+                // Module information
+
+                $moduleController = $this->core->apiConfig('controllers.modules');
+
                 $router->get('modules', [
                     'as'   => 'modules.index',
-                    'uses' => ModulesController::class . '@index',
+                    'uses' => $moduleController . '@index',
                 ]);
 
                 $router->get('modules/{key}', [
                     'as'   =>'modules.show',
-                    'uses' => ModulesController::class . '@show',
+                    'uses' => $moduleController . '@show',
+                ]);
+
+                // CMS version
+
+                $router->get('version', [
+                    'as'   => 'version.index',
+                    'uses' => $this->core->apiConfig('controllers.version') . '@index',
                 ]);
             }
         );

@@ -106,6 +106,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Controllers
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the controllers that the API should use for its meta
+    | information routes.
+    |
+    */
+
+    'controllers' => [
+        'menu'    => Czim\CmsCore\Http\Controllers\Api\MenuController::class,
+        'modules' => Czim\CmsCore\Http\Controllers\Api\ModulesController::class,
+        'version' => Czim\CmsCore\Http\Controllers\Api\VersionController::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Debugging & Testing
     |--------------------------------------------------------------------------
     |
