@@ -76,4 +76,14 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
     {
         return (bool) $this->getAttribute('translated');
     }
+
+    /**
+     * Replace the permissions entirely.
+     *
+     * @param mixed $permissions
+     */
+    public function setPermissions($permissions)
+    {
+        $this->setAttribute('permissions', $permissions);
+    }
 }

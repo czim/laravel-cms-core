@@ -42,4 +42,11 @@ interface AclPresenceInterface extends DataObjectInterface
      */
     public function translated();
 
+    /**
+     * Replace the permissions entirely.
+     *
+     * @param mixed $permissions
+     */
+    public function setPermissions($permissions);
+
 }
