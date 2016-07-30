@@ -11,11 +11,6 @@ class ModulesController extends Controller
 {
 
     /**
-     * @var CoreInterface
-     */
-    protected $core;
-
-    /**
      * @var ManagerInterface
      */
     protected $modules;
@@ -26,7 +21,8 @@ class ModulesController extends Controller
      */
     public function __construct(CoreInterface $core, ManagerInterface $modules)
     {
-        $this->core    = $core;
+        parent::__construct($core);
+
         $this->modules = $modules;
     }
 
