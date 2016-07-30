@@ -13,6 +13,7 @@ use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
 {
     protected $attributes = [
+        'translated' => false,
         'parameters' => [],
         'children'   => [],
     ];
@@ -21,6 +22,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
         'id'         => 'string',
         'type'       => 'required|string',
         'label'      => 'string',
+        'translated' => 'boolean',
         'action'     => 'string',
         'parameters' => 'array',
         'image'      => 'string',
@@ -98,6 +100,16 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     public function label()
     {
         return $this->getAttribute('label');
+    }
+
+    /**
+     * Returns wether the label() is a translation key.
+     *
+     * @return bool
+     */
+    public function translated()
+    {
+        return (bool) $this->getAttribute('translated');
     }
 
     /**

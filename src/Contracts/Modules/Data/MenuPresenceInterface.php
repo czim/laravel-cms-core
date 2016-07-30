@@ -59,6 +59,13 @@ interface MenuPresenceInterface extends DataObjectInterface
     public function label();
 
     /**
+     * Returns wether the label() is a translation key.
+     *
+     * @return bool
+     */
+    public function translated();
+
+    /**
      * Returns icon or image reference for display purposes.
      *
      * @return string
