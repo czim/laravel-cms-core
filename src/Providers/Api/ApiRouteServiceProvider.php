@@ -1,7 +1,6 @@
 <?php
 namespace Czim\CmsCore\Providers\Api;
 
-use Czim\CmsCore\Http\Controllers\Api\ModulesController;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Application;
