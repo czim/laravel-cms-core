@@ -16,6 +16,7 @@ class ModuleTransformer extends TransformerAbstract
         return [
             'id'          => $module->getKey(),
             'name'        => $module->getName(),
+            'version'     => $module->getVersion(),
             'class'       => $module->getAssociatedClass(),
             'links'       => [
                 [

@@ -24,6 +24,13 @@ interface ModuleInterface
     public function getName();
 
     /**
+     * Returns release or version number of module.
+     *
+     * @return string|null
+     */
+    public function getVersion();
+
+    /**
      * Returns the FQN for a class mainly associated with this module.
      *
      * @return string|null
