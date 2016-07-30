@@ -162,6 +162,7 @@ return [
             Illuminate\Session\Middleware\StartSession::class,
             Illuminate\View\Middleware\ShareErrorsFromSession::class,
             Czim\CmsCore\Http\Middleware\VerifyCsrfToken::class,
+            Czim\CmsCore\Http\Middleware\InitializeMenu::class,
 
             Czim\CmsCore\Support\Enums\CmsMiddleware::AUTHENTICATED =>
                 Czim\CmsCore\Http\Middleware\Authenticate::class,
