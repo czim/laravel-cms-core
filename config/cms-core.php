@@ -88,6 +88,7 @@ return [
         Czim\CmsCore\Support\Enums\Component::AUTH        => Czim\CmsAuth\Auth\Authenticator::class,
         Czim\CmsCore\Support\Enums\Component::API         => Czim\CmsCore\Api\ApiCore::class,
         Czim\CmsCore\Support\Enums\Component::MENU        => Czim\CmsCore\Menu\MenuRepository::class,
+        Czim\CmsCore\Support\Enums\Component::ACL         => Czim\CmsCore\Auth\AclRepository::class,
     ],
 
     /*

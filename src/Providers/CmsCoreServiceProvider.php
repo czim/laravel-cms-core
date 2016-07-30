@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Providers;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\AliasLoader;
@@ -107,6 +108,7 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->app->singleton(Component::CACHE, $this->getCoreConfig('bindings.' . Component::CACHE));
         $this->app->singleton(Component::API, $this->getCoreConfig('bindings.' . Component::API));
         $this->app->singleton(Component::MENU, $this->getCoreConfig('bindings.' . Component::MENU));
+        $this->app->singleton(Component::ACL, $this->getCoreConfig('bindings.' . Component::ACL));
 
         $this->app->bind(CoreInterface::class, Component::CORE);
         $this->app->bind(AuthenticatorInterface::class, Component::AUTH);
@@ -114,6 +116,7 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->app->bind(CacheInterface::class, Component::CACHE);
         $this->app->bind(ApiCoreInterface::class, Component::API);
         $this->app->bind(MenuRepositoryInterface::class, Component::MENU);
+        $this->app->bind(AclRepositoryInterface::class, Component::ACL);
 
         return $this;
     }

@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Core;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionInterface;
@@ -88,6 +89,14 @@ class Core implements CoreInterface
     public function menu()
     {
         return $this->app[Component::MENU];
+    }
+
+    /**
+     * @return AclRepositoryInterface
+     */
+    public function acl()
+    {
+        return $this->app[Component::ACL];
     }
 
     /**

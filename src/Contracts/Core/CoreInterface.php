@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Contracts\Core;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
@@ -40,6 +41,11 @@ interface CoreInterface extends StateInterface
      * @return MenuRepositoryInterface
      */
     public function menu();
+
+    /**
+     * @return AclRepositoryInterface
+     */
+    public function acl();
 
     /**
      * With any parameters set, will record a CMS log entry.
