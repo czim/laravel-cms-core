@@ -152,7 +152,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function buildRoutesForModules(Router $router)
     {
-        $this->core->modules()->buildWebRoutes($router);
+        $this->core->modules()->mapWebRoutes($router);
     }
 
 

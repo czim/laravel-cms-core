@@ -60,7 +60,7 @@ class SimpleTestModuleWithServiceProviders implements ModuleInterface
      *
      * @param Router $router
      */
-    public function buildWebRoutes(Router $router)
+    public function mapWebRoutes(Router $router)
     {
     }
 
@@ -70,7 +70,7 @@ class SimpleTestModuleWithServiceProviders implements ModuleInterface
      *
      * @param Router $router
      */
-    public function buildApiRoutes(Router $router)
+    public function mapApiRoutes(Router $router)
     {
     }
 

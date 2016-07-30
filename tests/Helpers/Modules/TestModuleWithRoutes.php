@@ -56,7 +56,7 @@ class TestModuleWithRoutes implements ModuleInterface
      *
      * @param Router $router
      */
-    public function buildWebRoutes(Router $router)
+    public function mapWebRoutes(Router $router)
     {
         $router->get('test', 'SomeController@index');
         $router->post('test', 'SomeController@store');
@@ -68,7 +68,7 @@ class TestModuleWithRoutes implements ModuleInterface
      *
      * @param Router $router
      */
-    public function buildApiRoutes(Router $router)
+    public function mapApiRoutes(Router $router)
     {
         $router->get('test', 'SomeApiController@index');
         $router->post('test', 'SomeApiController@store');

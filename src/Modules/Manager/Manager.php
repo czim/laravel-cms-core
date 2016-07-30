@@ -296,10 +296,10 @@ class Manager implements ManagerInterface
      *
      * @param Router $router
      */
-    public function buildWebRoutes(Router $router)
+    public function mapWebRoutes(Router $router)
     {
         foreach ($this->modules as $module) {
-            $module->buildWebRoutes($router);
+            $module->mapWebRoutes($router);
         }
     }
 
@@ -308,10 +308,10 @@ class Manager implements ManagerInterface
      *
      * @param Router $router
      */
-    public function buildApiRoutes(Router $router)
+    public function mapApiRoutes(Router $router)
     {
         foreach ($this->modules as $module) {
-            $module->buildApiRoutes($router);
+            $module->mapApiRoutes($router);
         }
     }
 

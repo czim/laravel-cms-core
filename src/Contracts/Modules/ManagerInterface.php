@@ -62,14 +62,14 @@ interface ManagerInterface
      *
      * @param Router $router
      */
-    public function buildWebRoutes(Router $router);
+    public function mapWebRoutes(Router $router);
 
     /**
      * Builds API routes for all modules given a router as context.
      *
      * @param Router $router
      */
-    public function buildApiRoutes(Router $router);
+    public function mapApiRoutes(Router $router);
 
     /**
      * Returns module manager version number.

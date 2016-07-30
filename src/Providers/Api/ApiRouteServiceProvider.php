@@ -180,7 +180,7 @@ class ApiRouteServiceProvider extends ServiceProvider
      */
     protected function buildRoutesForModules(Router $router)
     {
-        $this->core->modules()->buildApiRoutes($router);
+        $this->core->modules()->mapApiRoutes($router);
     }
 
 

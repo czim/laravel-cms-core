@@ -185,7 +185,7 @@ class ManagerTest extends TestCase
         $router->expects($this->once())->method('get')->with('test', 'SomeController@index');
         $router->expects($this->once())->method('post')->with('test', 'SomeController@store');
 
-        $manager->buildWebRoutes($router);
+        $manager->mapWebRoutes($router);
     }
 
     /**
@@ -201,7 +201,7 @@ class ManagerTest extends TestCase
         $router->expects($this->once())->method('get')->with('test', 'SomeApiController@index');
         $router->expects($this->once())->method('post')->with('test', 'SomeApiController@store');
 
-        $manager->buildApiRoutes($router);
+        $manager->mapApiRoutes($router);
     }
 
     /**
