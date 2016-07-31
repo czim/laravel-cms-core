@@ -215,6 +215,39 @@ class ManagerTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    function it_returns_permissions_for_all_modules_from_the_acl_repository()
+    {
+        $mockAcl = $this->getMockAcl();
+
+        $mockAcl->expects($this->once())
+                ->method('getAllPermissions')
+                ->willReturn(['test']);
+
+        $manager = new Manager($this->getMockCore(), $mockAcl);
+
+        $this->assertEquals(['test'], $manager->getAllPermissions());
+    }
+
+    /**
+     * @test
+     */
+    function it_returns_permissions_for_a_module_from_the_acl_repository()
+    {
+        $mockAcl = $this->getMockAcl();
+
+        $mockAcl->expects($this->once())
+            ->method('getModulePermissions')
+            ->with('testing')
+            ->willReturn(['test']);
+
+        $manager = new Manager($this->getMockCore(), $mockAcl);
+
+        $this->assertEquals(['test'], $manager->getModulePermissions('testing'));
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|CoreInterface
      */
     protected function getMockCore()
