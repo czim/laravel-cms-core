@@ -1,5 +1,5 @@
 <?php
-namespace Czim\CmsCore\Test\Modules;
+namespace Czim\CmsCore\Test\Auth;
 
 use Czim\CmsCore\Auth\AclRepository;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
