@@ -92,4 +92,14 @@ class TestModuleWithRoutes implements ModuleInterface
         return null;
     }
 
+    /**
+     * Returns release or version number of module.
+     *
+     * @return string|null
+     */
+    public function getVersion()
+    {
+        return '1.0.0';
+    }
+
 }

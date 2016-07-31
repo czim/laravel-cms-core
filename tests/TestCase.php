@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Czim\CmsCore\Auth\AclRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Providers\CmsCoreServiceProvider;
@@ -40,6 +41,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
                 Component::CORE        => \Czim\CmsCore\Core\Core::class,
                 Component::MODULES     => \Czim\CmsCore\Modules\Manager\Manager::class,
                 Component::AUTH        => \Czim\CmsAuth\Auth\Authenticator::class,
+                Component::ACL         => \Czim\CmsCore\Auth\AclRepository::class,
                 Component::MENU        => 'mock-cms-menu',
                 Component::AUTH        => 'mock-cms-auth',
         ]);
