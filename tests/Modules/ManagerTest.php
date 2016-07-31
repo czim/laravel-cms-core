@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test\Modules;
 
+use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Modules\Manager\Manager;
@@ -21,7 +22,7 @@ class ManagerTest extends TestCase
      */
     function it_initializes_succesfully()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize();
     }
@@ -31,7 +32,7 @@ class ManagerTest extends TestCase
      */
     function it_loads_configured_modules_on_initialization()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize();
 
@@ -48,7 +49,7 @@ class ManagerTest extends TestCase
      */
     function it_initializes_with_injected_module_array_without_loading_configured_modules()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize([ SimpleAssociatedTestModule::class ]);
 
@@ -63,7 +64,7 @@ class ManagerTest extends TestCase
      */
     function it_returns_loaded_modules_by_key()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize();
 
@@ -75,7 +76,7 @@ class ManagerTest extends TestCase
      */
     function it_returns_loaded_modules_by_associated_class()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize();
 
@@ -87,7 +88,7 @@ class ManagerTest extends TestCase
      */
     function it_returns_false_when_getting_unloaded_module_by_key()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize();
 
@@ -99,7 +100,7 @@ class ManagerTest extends TestCase
      */
     function it_returns_false_when_getting_unloaded_module_by_associated_class()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize();
 
@@ -111,7 +112,7 @@ class ManagerTest extends TestCase
      */
     function it_returns_whether_a_module_is_loaded_by_key()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize();
 
@@ -125,7 +126,7 @@ class ManagerTest extends TestCase
      */
     function it_throws_an_exception_if_the_same_module_key_is_encountered_more_than_once()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize([
             SimpleTestModule::class,
@@ -138,7 +139,7 @@ class ManagerTest extends TestCase
      */
     function it_returns_service_providers_defined_by_modules()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize([ SimpleTestModuleWithServiceProviders::class ]);
 
@@ -156,7 +157,7 @@ class ManagerTest extends TestCase
      */
     function it_does_not_return_the_same_service_provider_more_than_once()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize([
             SimpleTestModuleWithServiceProviders::class,
@@ -177,7 +178,7 @@ class ManagerTest extends TestCase
      */
     function it_builds_web_routes_for_loaded_modules_on_a_given_router()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize([ TestModuleWithRoutes::class ]);
 
@@ -193,7 +194,7 @@ class ManagerTest extends TestCase
      */
     function it_builds_api_routes_for_loaded_modules_on_a_given_router()
     {
-        $manager = new Manager($this->getMockCore());
+        $manager = $this->makeManager();
 
         $manager->initialize([ TestModuleWithRoutes::class ]);
 
@@ -231,6 +232,14 @@ class ManagerTest extends TestCase
     }
 
     /**
+     * @return Manager
+     */
+    protected function makeManager()
+    {
+        return new Manager($this->getMockCore(), $this->getMockAcl());
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|Router
      */
     protected function getMockRouter()
@@ -240,4 +249,12 @@ class ManagerTest extends TestCase
             ->getMock();
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|AclRepositoryInterface
+     */
+    protected function getMockAcl()
+    {
+        return $this->getMockBuilder(AclRepositoryInterface::class)
+            ->getMock();
+    }
 }
