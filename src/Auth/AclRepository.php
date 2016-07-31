@@ -8,7 +8,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
-use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 
 class AclRepository implements AclRepositoryInterface
 {
@@ -145,7 +144,7 @@ class AclRepository implements AclRepositoryInterface
         $this->modulePermissions = [];
 
         $this->loadAclModules()
-            ->collapsePermissions();
+             ->collapsePermissions();
     }
 
     /**
@@ -193,7 +192,7 @@ class AclRepository implements AclRepositoryInterface
      */
     protected function normalizeAclPresence($data)
     {
-        if ($data instanceof MenuPresenceInterface) {
+        if ($data instanceof AclPresenceInterface) {
 
             $data = [$data];
 
@@ -256,13 +255,14 @@ class AclRepository implements AclRepositoryInterface
 
                 $flatPermissions = $presence->permissions();
 
-                $this->permissions                    = array_merge($this->permissions, $flatPermissions);
+                $this->permissions                   = array_merge($this->permissions, $flatPermissions);
                 $this->modulePermissions[$moduleKey] = array_merge($this->modulePermissions[$moduleKey], $flatPermissions);
             }
         }
 
+        $this->permissions = array_unique($this->permissions);
+
         return $this;
     }
-
 
 }
