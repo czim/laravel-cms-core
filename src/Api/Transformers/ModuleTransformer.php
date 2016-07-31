@@ -14,7 +14,7 @@ class ModuleTransformer extends TransformerAbstract
     public function transform(ModuleInterface $module)
     {
         return [
-            'id'          => $module->getKey(),
+            'key'         => $module->getKey(),
             'name'        => $module->getName(),
             'version'     => $module->getVersion(),
             'class'       => $module->getAssociatedClass(),
