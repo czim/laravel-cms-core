@@ -280,7 +280,7 @@ class MenuRepository implements MenuRepositoryInterface
      * the number of non-group entries.
      *
      * @param MenuPresenceInterface $presence
-     * @return int  the number of children found on the levels below
+     * @return int  the number of non-group children found on the levels below
      */
     protected function filterNestedEmptyGroups(MenuPresenceInterface $presence)
     {
@@ -292,13 +292,14 @@ class MenuRepository implements MenuRepositoryInterface
             return 0;
         }
 
-        $remove   = [];
-        $children = $presence['children'];
+        $remove        = [];
+        $children      = $presence['children'];
         $nonGroupCount = 0;
 
         foreach ($children as $key => $childPresence) {
             if ( ! $this->filterNestedEmptyGroups($childPresence)) {
                 $remove[] = $key;
+                continue;
             }
 
             $nonGroupCount++;
