@@ -121,6 +121,36 @@ class MenuRepositoryTest extends TestCase
     /**
      * @test
      */
+    function it_leaves_presences_ungrouped_without_error_if_a_configured_group_key_is_unknown()
+    {
+        $this->menuGroupsConfig = $this->getTestGroupConfig();
+
+        $this->menuModulesConfig = [
+            'test-a' => [
+                'group' => 'non-existent-group',
+            ],
+        ];
+
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(),
+        ]);
+
+        $menu = $this->makeMenuRepository();
+        $menu->initialize();
+
+        $grouped   = $menu->getMenuGroups();
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertInstanceOf(Collection::class, $grouped);
+        $this->assertCount(0, $grouped);
+
+        $this->assertInstanceOf(Collection::class, $ungrouped);
+        $this->assertCount(1, $ungrouped);
+    }
+
+    /**
+     * @test
+     */
     function it_does_not_retrieve_empty_groups()
     {
         $this->menuGroupsConfig = $this->getTestGroupConfig();
@@ -133,7 +163,98 @@ class MenuRepositoryTest extends TestCase
         $this->assertCount(0, $grouped);
     }
 
+    /**
+     * @test
+     */
+    function it_normalizes_an_array_of_presences_for_a_module()
+    {
+        $this->modules = collect([
+            'test-e' => $this->getMockModuleWitPresencesInArray(),
+        ]);
 
+        $menu = $this->makeMenuRepository();
+        $menu->initialize();
+
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertInstanceOf(Collection::class, $ungrouped);
+        $this->assertCount(2, $ungrouped);
+        $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
+        $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->last());
+    }
+    
+    /**
+     * @test
+     */
+    function it_normalizes_nested_presences()
+    {
+        $this->modules = collect([
+            'test-f' => $this->getMockModuleWithNestedPresences(),
+        ]);
+
+        $menu = $this->makeMenuRepository();
+        $menu->initialize();
+
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertInstanceOf(Collection::class, $ungrouped);
+        $this->assertCount(1, $ungrouped);
+        $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
+
+        $children = $ungrouped->first()->children();
+
+        $this->assertCount(2, $children);
+        $this->assertInstanceOf(MenuPresenceInterface::class, $children[0]);
+        $this->assertInstanceOf(MenuPresenceInterface::class, $children[1]);
+    }
+
+    /**
+     * @test
+     */
+    function it_includes_presences_with_permissions_that_the_logged_in_user_has()
+    {
+        $this->modules = collect([
+            'test-c' => $this->getMockModuleWithPermissions(),
+        ]);
+
+        $auth = $this->getMockAuth();
+
+        $auth->method('can')
+             ->with(['can.do.something', 'can.do.more'])
+             ->willReturn(true);
+
+        $menu = new MenuRepository($this->getMockCore(), $auth);
+        $menu->initialize();
+
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertInstanceOf(Collection::class, $ungrouped);
+        $this->assertCount(1, $ungrouped);
+        $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
+    }
+
+    /**
+     * @test
+     */
+    function it_excludes_presences_that_are_not_permitted_for_the_logged_in_user()
+    {
+        $this->modules = collect([
+            'test-c' => $this->getMockModuleWithPermissions(),
+        ]);
+
+        $auth = $this->getMockAuth();
+
+        $auth->method('can')
+             ->willReturn(false);
+
+        $menu = new MenuRepository($this->getMockCore(), $auth);
+        $menu->initialize();
+
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertInstanceOf(Collection::class, $ungrouped);
+        $this->assertCount(0, $ungrouped);
+    }
 
     
     // ------------------------------------------------------------------------------
@@ -216,8 +337,8 @@ class MenuRepositoryTest extends TestCase
              ->method('getMenuPresence')
              ->willReturn(
                  new MenuPresence([
-                     'id'   => 'test-a',
-                     'type' => MenuPresenceType::ACTION,
+                     'id'    => 'test-a',
+                     'type'  => MenuPresenceType::ACTION,
                      'label' => 'something',
                  ])
              );
@@ -235,10 +356,89 @@ class MenuRepositoryTest extends TestCase
         $mock->expects($this->once())
             ->method('getMenuPresence')
             ->willReturn([
-                'id'   => 'test-b',
-                'type' => MenuPresenceType::ACTION,
-                'label' => 'something',
+                'id'     => 'test-b',
+                'type'   => MenuPresenceType::ACTION,
+                'label'  => 'something',
                 'action' => 'test',
+            ]);
+
+        return $mock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     */
+    protected function getMockModuleWithPermissions()
+    {
+        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+
+        $mock->expects($this->once())
+            ->method('getMenuPresence')
+            ->willReturn([
+                'id'          => 'test-c',
+                'type'        => MenuPresenceType::ACTION,
+                'label'       => 'something',
+                'action'      => 'test',
+                'permissions' => ['can.do.something', 'can.do.more'],
+            ]);
+
+        return $mock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     */
+    protected function getMockModuleWitPresencesInArray()
+    {
+        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+
+        $mock->expects($this->once())
+            ->method('getMenuPresence')
+            ->willReturn([
+                [
+                    'id'     => 'test-p',
+                    'type'   => MenuPresenceType::ACTION,
+                    'label'  => 'something',
+                    'action' => 'test',
+                ],
+                [
+                    'id'     => 'test-q',
+                    'type'   => MenuPresenceType::ACTION,
+                    'label'  => 'something',
+                    'action' => 'test',
+                ],
+            ]);
+
+        return $mock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     */
+    protected function getMockModuleWithNestedPresences()
+    {
+        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+
+        $mock->expects($this->once())
+            ->method('getMenuPresence')
+            ->willReturn([
+                'id'       => 'test-d',
+                'type'     => MenuPresenceType::GROUP,
+                'label'    => 'some group',
+                'children' => [
+                    [
+                        'id'     => 'test-x',
+                        'type'   => MenuPresenceType::ACTION,
+                        'label'  => 'something',
+                        'action' => 'test',
+                    ],
+                    [
+                        'id'     => 'test-y',
+                        'type'   => MenuPresenceType::ACTION,
+                        'label'  => 'something',
+                        'action' => 'test',
+                    ],
+                ]
             ]);
 
         return $mock;
