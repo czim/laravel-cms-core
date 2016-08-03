@@ -199,10 +199,13 @@ class MenuRepository implements MenuRepositoryInterface
             // use it. Otherwise load the menu's own presence.
             // Normalize single & plural presences for each module.
 
+            if ($this->isConfiguredModulePresenceDisabled($module)) {
+                continue;
+            }
+
             $configuredPresencesForModule = $this->getConfiguredModulePresence($module);
             $presencesForModule = $module->getMenuPresence();
             $presencesForModule = $this->mergeNormalizedMenuPresences($presencesForModule, $configuredPresencesForModule);
-
 
             // If a module has no presence, skip it
             if ( ! $presencesForModule) {
