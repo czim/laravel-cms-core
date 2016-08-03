@@ -63,6 +63,25 @@ class AclRepositoryTest extends TestCase
     /**
      * @test
      */
+    function it_retrieves_acl_presences_defined_by_module_as_an_array_of_arrays()
+    {
+        $acl = new AclRepository($this->getMockCore(
+            new Collection([
+                'test-c' => $this->getMockModuleWithMultiplePresencesInArray(),
+            ])
+        ));
+
+        $presences = $acl->getAclPresences();
+
+        $this->assertInstanceOf(Collection::class, $presences);
+        $this->assertCount(2, $presences);
+        $this->assertInstanceOf(AclPresenceInterface::class, $presences->first());
+        $this->assertInstanceOf(AclPresenceInterface::class, $presences->last());
+    }
+
+    /**
+     * @test
+     */
     function it_retrieves_combined_acl_presences_defined_by_modules()
     {
         $acl = new AclRepository($this->getMockCore(
@@ -252,6 +271,39 @@ class AclRepositoryTest extends TestCase
                     'test.permission.show',
                     'test.permission.delete',
                     'test.other-permission.show',
+                ],
+            ]);
+
+        return $mock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     */
+    protected function getMockModuleWithMultiplePresencesInArray()
+    {
+        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+
+        $mock->expects($this->once())
+            ->method('getAclPresence')
+            ->willReturn([
+                [
+                    'id'   => 'test-b',
+                    'type' => AclPresenceType::GROUP,
+                    'label' => 'something',
+                    'permissions' => [
+                        'test.permission.show',
+                        'test.permission.delete',
+                        'test.other-permission.show',
+                    ],
+                ],
+                [
+                    'id'   => 'test-c',
+                    'type' => AclPresenceType::GROUP,
+                    'label' => 'something-more',
+                    'permissions' => [
+                        'test.permission.create',
+                    ],
                 ],
             ]);
 
