@@ -111,12 +111,57 @@ class MenuRepositoryTest extends TestCase
         $grouped   = $menu->getMenuGroups();
         $ungrouped = $menu->getMenuUngrouped();
 
-        $this->assertInstanceOf(Collection::class, $grouped);
-        $this->assertCount(1, $grouped);
-        $this->assertInstanceOf(MenuPresenceInterface::class, $grouped->first());
-
-        $this->assertInstanceOf(Collection::class, $ungrouped);
         $this->assertCount(0, $ungrouped);
+
+        $this->assertCount(1, $grouped);
+        $this->assertEquals('top-level-group', $grouped->first()->id());
+        $this->assertCount(1, $grouped->first()->children(), "Top level group should have 1 child");
+
+        $childOfTopGroup = head($grouped->first()->children());
+
+        $this->assertEquals('nested-group', $childOfTopGroup->id(), "Child of top level group should be nested group");
+        $this->assertCount(1, $childOfTopGroup->children(), "Nested group should have 1 child");
+
+        $childOfNestedGroup = head($childOfTopGroup->children());
+
+        $this->assertEquals('test-a', $childOfNestedGroup->id(), "Child of nested group should be the assigned presence");
+    }
+
+    /**
+     * @test
+     */
+    function it_groups_menu_presence_according_to_configured_group_structure_as_string_only_config_value()
+    {
+        $this->menuGroupsConfig = $this->getTestGroupConfig();
+
+        $this->menuModulesConfig = [
+            'test-a' => 'nested-group',
+        ];
+
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(),
+        ]);
+
+        $menu = $this->makeMenuRepository();
+        $menu->initialize();
+
+        $grouped   = $menu->getMenuGroups();
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertCount(0, $ungrouped);
+
+        $this->assertCount(1, $grouped);
+        $this->assertEquals('top-level-group', $grouped->first()->id());
+        $this->assertCount(1, $grouped->first()->children(), "Top level group should have 1 child");
+
+        $childOfTopGroup = head($grouped->first()->children());
+
+        $this->assertEquals('nested-group', $childOfTopGroup->id(), "Child of top level group should be nested group");
+        $this->assertCount(1, $childOfTopGroup->children(), "Nested group should have 1 child");
+
+        $childOfNestedGroup = head($childOfTopGroup->children());
+
+        $this->assertEquals('test-a', $childOfNestedGroup->id(), "Child of nested group should be the assigned presence");
     }
 
     /**
