@@ -63,6 +63,7 @@ class MenuRepositoryTest extends TestCase
         $this->assertInstanceOf(Collection::class, $ungrouped);
         $this->assertCount(1, $ungrouped);
         $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
+        $this->assertEquals('test-a', $ungrouped->first()->id());
 
         $this->assertInstanceOf(Collection::class, $grouped);
         $this->assertCount(0, $grouped);
@@ -141,10 +142,7 @@ class MenuRepositoryTest extends TestCase
         $grouped   = $menu->getMenuGroups();
         $ungrouped = $menu->getMenuUngrouped();
 
-        $this->assertInstanceOf(Collection::class, $grouped);
         $this->assertCount(0, $grouped);
-
-        $this->assertInstanceOf(Collection::class, $ungrouped);
         $this->assertCount(1, $ungrouped);
     }
 
@@ -177,7 +175,6 @@ class MenuRepositoryTest extends TestCase
 
         $ungrouped = $menu->getMenuUngrouped();
 
-        $this->assertInstanceOf(Collection::class, $ungrouped);
         $this->assertCount(2, $ungrouped);
         $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
         $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->last());
@@ -197,7 +194,6 @@ class MenuRepositoryTest extends TestCase
 
         $ungrouped = $menu->getMenuUngrouped();
 
-        $this->assertInstanceOf(Collection::class, $ungrouped);
         $this->assertCount(1, $ungrouped);
         $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
 
@@ -228,7 +224,6 @@ class MenuRepositoryTest extends TestCase
 
         $ungrouped = $menu->getMenuUngrouped();
 
-        $this->assertInstanceOf(Collection::class, $ungrouped);
         $this->assertCount(1, $ungrouped);
         $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
     }
@@ -252,8 +247,67 @@ class MenuRepositoryTest extends TestCase
 
         $ungrouped = $menu->getMenuUngrouped();
 
-        $this->assertInstanceOf(Collection::class, $ungrouped);
         $this->assertCount(0, $ungrouped);
+    }
+
+    /**
+     * @test
+     */
+    function it_allows_disabling_of_module_presences_by_setting_presence_to_false_in_module_configuration()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(false),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-a' => [
+                // overrule presence to disable it
+                'presence' => false,
+            ],
+        ];
+
+        $menu = $this->makeMenuRepository();
+        $menu->initialize();
+
+        $grouped   = $menu->getMenuGroups();
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertCount(0, $ungrouped);
+        $this->assertCount(0, $grouped);
+    }
+
+    /**
+     * @test
+     */
+    function it_allows_overriding_of_module_presence_data_by_setting_values_in_module_configuration()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(false),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-a' => [
+                // overrule presence to disable it
+                'presence' => [
+                    'id'     => 'test-overruled',
+                    'type'   => MenuPresenceType::ACTION,
+                    'label'  => 'something',
+                    'action' => 'test',
+                ],
+            ],
+        ];
+
+        $menu = $this->makeMenuRepository();
+        $menu->initialize();
+
+        $grouped   = $menu->getMenuGroups();
+        $ungrouped = $menu->getMenuUngrouped();
+
+        $this->assertCount(1, $ungrouped);
+        $this->assertInstanceOf(MenuPresenceInterface::class, $ungrouped->first());
+        $this->assertEquals('test-overruled', $ungrouped->first()->id(), "Presence should be overruled");
+
+        $this->assertCount(0, $grouped);
     }
 
     
@@ -325,15 +379,16 @@ class MenuRepositoryTest extends TestCase
     }
 
     /**
+     * @param bool $expected    whether the menu presence call is expected
      * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
      */
-    protected function getMockModuleWithPresenceInstance()
+    protected function getMockModuleWithPresenceInstance($expected = true)
     {
         $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
 
         $mock->method('getKey')->willReturn('test-a');
 
-        $mock->expects($this->once())
+        $mock->expects($expected ? $this->once() : $this->any())
              ->method('getMenuPresence')
              ->willReturn(
                  new MenuPresence([
