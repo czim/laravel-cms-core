@@ -7,6 +7,7 @@ use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Modules\Manager\Manager;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleAssociatedTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
+use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithSameServiceProvider;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithServiceProviders;
 use Czim\CmsCore\Test\Helpers\Modules\TestModuleWithRoutes;
@@ -16,6 +17,16 @@ use Illuminate\Support\Collection;
 
 class ManagerTest extends TestCase
 {
+
+    /**
+     * @test
+     */
+    function it_returns_its_version_number()
+    {
+        $manager = $this->makeManager();
+
+        $this->assertRegExp('#^\d+\.\d+\.\d+$#', $manager->version());
+    }
 
     /**
      * @test
@@ -62,12 +73,27 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
+    function it_loads_modules_generated_by_a_module_generator()
+    {
+        $manager = $this->makeManager();
+
+        $manager->initialize([
+            SimpleTestModuleGenerator::class,
+        ]);
+
+        $this->assertInstanceOf(ModuleInterface::class, $manager->get('associated-test-module'));
+    }
+
+    /**
+     * @test
+     */
     function it_returns_loaded_modules_by_key()
     {
         $manager = $this->makeManager();
 
         $manager->initialize();
 
+        $this->assertInstanceOf(ModuleInterface::class, $manager->get('test-module'));
         $this->assertInstanceOf(ModuleInterface::class, $manager->get('associated-test-module'));
     }
 
