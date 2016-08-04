@@ -5,12 +5,14 @@ use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Modules\Manager\Manager;
+use Czim\CmsCore\Test\Helpers\MockApiBootChecker;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleAssociatedTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithSameServiceProvider;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithServiceProviders;
 use Czim\CmsCore\Test\Helpers\Modules\TestModuleWithRoutes;
+use Czim\CmsCore\Test\Helpers\NonInstantiableInterface;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
@@ -282,6 +284,47 @@ class ManagerTest extends TestCase
 
         $this->assertEquals(['test'], $manager->getModulePermissions('testing'));
     }
+
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    function it_throws_an_exception_when_trying_to_load_a_nonexistant_class()
+    {
+        $manager = $this->makeManager();
+
+        $manager->initialize([
+            'Does\\NotExist',
+        ]);
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    function it_throws_an_exception_when_trying_to_load_a_noninstantiable_class()
+    {
+        $manager = $this->makeManager();
+
+        $manager->initialize([
+            NonInstantiableInterface::class,
+        ]);
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    function it_throws_an_exception_when_trying_to_load_an_invalid_module_class()
+    {
+        $manager = $this->makeManager();
+
+        $manager->initialize([
+            MockApiBootChecker::class,
+        ]);
+    }
+
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|CoreInterface
