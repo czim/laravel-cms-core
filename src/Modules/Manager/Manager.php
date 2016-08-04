@@ -216,7 +216,7 @@ class Manager implements ManagerInterface
      */
     protected function sortModules()
     {
-        $this->modules->sortBy(function (ModuleInterface $module) {
+        $this->modules = $this->modules->sortBy(function (ModuleInterface $module) {
             return $module->getName();
         });
 
