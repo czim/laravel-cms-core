@@ -208,10 +208,20 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    function it_sorts_the_service_providers()
+    function it_sorts_the_modules_by_name()
     {
-        // todo.. how should it actually sort them?
-        $this->markTestIncomplete();
+        $manager = $this->makeManager();
+
+        $manager->initialize([
+            SimpleTestModuleWithServiceProviders::class,
+            SimpleTestModule::class,
+        ]);
+
+        $modules = $manager->getModules();
+
+        $this->assertCount(2, $modules);
+        $this->assertEquals('test-module', $modules->first()->getKey());
+        $this->assertEquals('test-module-with-service-providers', $modules->last()->getKey());
     }
 
     /**
