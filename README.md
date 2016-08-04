@@ -2,6 +2,10 @@
 
 Modular CMS Core, which should manage the basics of configuring, accessing and deferring to modules.
 
+## API Documentation
+
+The documentation for the API endpoints provided by the core may be found here: https://czim.github.io/laravel-cms-core
+
 ## Installation
 
 ### Middleware
