@@ -15,6 +15,14 @@ class Manager implements ManagerInterface
 {
 
     /**
+     * The module manager version.
+     *
+     * @var string
+     */
+    const VERSION = '0.0.1';
+
+
+    /**
      * @var CoreInterface
      */
     protected $core;
@@ -64,7 +72,7 @@ class Manager implements ManagerInterface
      */
     public function version()
     {
-        return '0.0.1';
+        return static::VERSION;
     }
 
 

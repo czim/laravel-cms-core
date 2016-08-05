@@ -16,7 +16,17 @@ use Psr\Log\LoggerInterface;
 
 class Core implements CoreInterface
 {
+
+    /**
+     * The CMS Core version.
+     *
+     * @var string
+     */
+    const VERSION = '0.0.1';
+
+
     use StateRepositoryTrait;
+
 
     /**
      * @var Application
@@ -39,7 +49,7 @@ class Core implements CoreInterface
      */
     public function version()
     {
-        return '0.0.1';
+        return static::VERSION;
     }
 
 
