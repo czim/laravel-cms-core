@@ -104,6 +104,7 @@ return [
 
     'providers' => [
         Czim\CmsCore\Providers\LogServiceProvider::class,
+        Czim\CmsCore\Providers\EventServiceProvider::class,
         Czim\CmsCore\Providers\RouteServiceProvider::class,
         Czim\CmsCore\Providers\MiddlewareServiceProvider::class,
         Czim\CmsCore\Providers\MigrationServiceProvider::class,
