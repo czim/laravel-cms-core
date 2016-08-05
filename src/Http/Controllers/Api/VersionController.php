@@ -26,9 +26,21 @@ class VersionController extends Controller
     protected function getVersions()
     {
         return [
-            'core'    => $this->core->version(),
-            'auth'    => $this->core->auth()->version(),
-            'modules' => $this->core->modules()->version(),
+            [
+                'id'      => 1,
+                'name'    => 'core',
+                'version' => $this->core->version(),
+            ],
+            [
+                'id'      => 2,
+                'name'    => 'auth',
+                'version' => $this->core->auth()->version(),
+            ],
+            [
+                'id'      => 3,
+                'name'    => 'module-manager',
+                'version' => $this->core->modules()->version(),
+            ],
         ];
     }
 
@@ -39,7 +51,7 @@ class VersionController extends Controller
      * @param bool  $collection
      * @return TransformContainer
      */
-    protected function makeContainer($data, $collection = false)
+    protected function makeContainer($data, $collection = true)
     {
         return new TransformContainer([
             'content'     => $data,

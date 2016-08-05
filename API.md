@@ -9,7 +9,7 @@ CMS Meta information API endpoints.
 
 CMS main component versions.
 
-# Version [/version]
+# Versions [/versions]
 
 ## Retrieve list of versions [GET]
 
@@ -18,11 +18,23 @@ Retrieves version strings (should be semantic) for the CMS core and its main com
 + Response 200 (application/json)
 
         {
-            "data": {
-                "core": "0.0.1",
-                "auth": "0.0.1",
-                "modules": "0.0.1"
-            }
+            "data": [
+                {
+                    "id": 1,
+                    "name": "core",
+                    "version": "0.0.1"
+                },
+                {
+                    "id": 2,
+                    "name": "auth",
+                    "version": "0.0.1"
+                },
+                {
+                    "id": 3,
+                    "name": "module-manager",
+                    "version": "0.0.1"
+                }
+            ]
         }
 
 

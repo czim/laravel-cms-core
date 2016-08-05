@@ -165,8 +165,8 @@ class ApiRouteServiceProvider extends ServiceProvider
 
                 // CMS version
 
-                $router->get('version', [
-                    'as'   => 'version.index',
+                $router->get('versions', [
+                    'as'   => 'versions.index',
                     'uses' => $this->core->apiConfig('controllers.version') . '@index',
                 ]);
             }
