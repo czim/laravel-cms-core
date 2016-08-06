@@ -7,10 +7,11 @@ class EventServiceProvider extends ServiceProvider
 {
 
     /**
-     * The event handler mappings for the application.
-     *
-     * @var array
+     * {@inheritdoc}
      */
-    protected $listen = [];
+    public function register()
+    {
+        $this->listen = config('cms-core.events', []);
+    }
 
 }
