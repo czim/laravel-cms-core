@@ -5,7 +5,6 @@ use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Modules\Manager\Manager;
-use Czim\CmsCore\Test\Helpers\MockApiBootChecker;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleAssociatedTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
@@ -321,7 +320,7 @@ class ManagerTest extends TestCase
         $manager = $this->makeManager();
 
         $manager->initialize([
-            MockApiBootChecker::class,
+            \Czim\CmsCore\Test\Helpers\Core\MockApiBootChecker::class,
         ]);
     }
 
