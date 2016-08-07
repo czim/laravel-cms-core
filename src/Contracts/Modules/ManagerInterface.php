@@ -51,13 +51,6 @@ interface ManagerInterface
     public function getModules();
 
     /**
-     * Returns list of service providers for all active modules.
-     *
-     * @return string[]
-     */
-    public function getServiceProviders();
-
-    /**
      * Builds web routes for all modules given a router as context.
      *
      * @param Router $router

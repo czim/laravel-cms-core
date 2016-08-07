@@ -38,7 +38,6 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->registerCoreComponents()
              ->registerExceptionHandler()
              ->registerConfiguredServiceProviders()
-             ->registerModuleServiceProviders()
              ->registerConfiguredAliases()
              ->finalizeRegistration();
     }
@@ -142,20 +141,6 @@ class CmsCoreServiceProvider extends ServiceProvider
         $providers = $this->getCoreConfig('providers', []);
 
         foreach ($providers as $provider) {
-            $this->app->register($provider);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Registers any service providers defined for modules.
-     *
-     * @return $this
-     */
-    protected function registerModuleServiceProviders()
-    {
-        foreach ($this->getCmsCore()->modules()->getServiceProviders() as $provider) {
             $this->app->register($provider);
         }
 

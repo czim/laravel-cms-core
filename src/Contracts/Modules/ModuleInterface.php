@@ -38,13 +38,6 @@ interface ModuleInterface
     public function getAssociatedClass();
 
     /**
-     * Returns a list of FQNs for service providers that should always be registered.
-     *
-     * @return string[]
-     */
-    public function getServiceProviders();
-
-    /**
      * Generates web routes for the module given a contextual router instance.
      * Note that the module is responsible for ACL-checks, including route-based.
      *

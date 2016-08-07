@@ -288,26 +288,6 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Returns list of service providers for all active modules.
-     *
-     * @return string[]
-     */
-    public function getServiceProviders()
-    {
-        if (empty($this->modules)) {
-            return [];
-        }
-
-        $providers = [];
-
-        foreach ($this->modules as $module) {
-            $providers = array_merge($providers, $module->getServiceProviders());
-        }
-
-        return array_unique($providers);
-    }
-
-    /**
      * Builds routes for all modules given a router as context.
      *
      * @param Router $router
