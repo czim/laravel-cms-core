@@ -160,45 +160,6 @@ class ManagerTest extends TestCase
             SimpleTestModule::class,
         ]);
     }
-    
-    /**
-     * @test
-     */
-    function it_returns_service_providers_defined_by_modules()
-    {
-        $manager = $this->makeManager();
-
-        $manager->initialize([ SimpleTestModuleWithServiceProviders::class ]);
-
-        $exampleModule = new SimpleTestModuleWithServiceProviders();
-
-        $this->assertEquals(
-            $exampleModule->getServiceProviders(),
-            $manager->getServiceProviders(),
-            'Manager should return the same service providers as the module'
-        );
-    }
-
-    /**
-     * @test
-     */
-    function it_does_not_return_the_same_service_provider_more_than_once()
-    {
-        $manager = $this->makeManager();
-
-        $manager->initialize([
-            SimpleTestModuleWithServiceProviders::class,
-            SimpleTestModuleWithSameServiceProvider::class,
-        ]);
-
-        $exampleModule = new SimpleTestModuleWithServiceProviders();
-
-        $this->assertEquals(
-            $exampleModule->getServiceProviders(),
-            $manager->getServiceProviders(),
-            'Manager should not return more than two service providers'
-        );
-    }
 
     /**
      * @test

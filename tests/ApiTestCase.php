@@ -1,6 +1,8 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Illuminate\Foundation\Application;
+
 abstract class ApiTestCase extends WebTestCase
 {
 
@@ -27,8 +29,10 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * Binds inert middleware to standard API middleware not included in this package.
+     *
+     * @param Application $app
      */
-    protected function bindNullMiddleware($app)
+    protected function bindNullMiddleware(Application $app)
     {
         $app->bind(
             \Czim\CmsAuth\Http\Middleware\Api\OAuthMiddleware::class,
