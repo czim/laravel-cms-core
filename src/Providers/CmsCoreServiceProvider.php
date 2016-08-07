@@ -38,7 +38,6 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->registerCoreComponents()
              ->registerExceptionHandler()
              ->registerConfiguredServiceProviders()
-             ->initializeModuleManager()
              ->registerModuleServiceProviders()
              ->registerConfiguredAliases()
              ->finalizeRegistration();
@@ -129,18 +128,6 @@ class CmsCoreServiceProvider extends ServiceProvider
     protected function registerExceptionHandler()
     {
         $this->app->bind(ExceptionHandler::class, $this->getCoreConfig('exceptions.handler'));
-
-        return $this;
-    }
-
-    /**
-     * Initializes the module manager, after which module information is available.
-     *
-     * @return $this
-     */
-    protected function initializeModuleManager()
-    {
-        $this->getCmsCore()->modules()->initialize();
 
         return $this;
     }
