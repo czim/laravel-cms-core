@@ -6,7 +6,7 @@ use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Psr\Log\LoggerInterface;
 
 interface CoreInterface extends StateInterface
@@ -33,7 +33,7 @@ interface CoreInterface extends StateInterface
     public function cache();
 
     /**
-     * @return ManagerInterface
+     * @return ModuleManagerInterface
      */
     public function modules();
 

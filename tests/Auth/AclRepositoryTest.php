@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Test\Auth;
 use Czim\CmsCore\Auth\AclRepository;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\Data\AclPresenceInterface;
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Support\Data\AclPresence;
 use Czim\CmsCore\Support\Enums\AclPresenceType;
@@ -204,11 +204,11 @@ class AclRepositoryTest extends TestCase
 
     /**
      * @param null|Collection $modules
-     * @return ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockModuleManager($modules = null)
     {
-        $mock = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $mock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
 
         $modules = $modules ?: new Collection;
 

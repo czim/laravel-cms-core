@@ -17,7 +17,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        // todo remove after fixing package config
         $app['config']->set('cms-modules.modules', []);
 
         // Load the CMS even when unit testing
@@ -49,7 +48,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
                 Component::BOOTCHECKER => $this->getTestBootCheckerBinding(),
                 Component::CACHE       => \Czim\CmsCore\Core\Cache::class,
                 Component::CORE        => \Czim\CmsCore\Core\Core::class,
-                Component::MODULES     => \Czim\CmsCore\Modules\Manager\Manager::class,
+                Component::MODULES     => \Czim\CmsCore\Modules\ModuleManager::class,
                 Component::AUTH        => \Czim\CmsAuth\Auth\Authenticator::class,
                 Component::API         => \Czim\CmsCore\Api\ApiCore::class,
                 Component::ACL         => \Czim\CmsCore\Auth\AclRepository::class,

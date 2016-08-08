@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Test\Helpers\Modules;
 use Czim\CmsCore\Contracts\Modules\Data\AclPresenceInterface;
 use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
-use Czim\CmsCore\Modules\Manager\Manager;
+use Czim\CmsCore\Modules\ModuleManager;
 use Illuminate\Routing\Router;
 
 class SimpleTestModuleWithSameServiceProvider implements ModuleInterface

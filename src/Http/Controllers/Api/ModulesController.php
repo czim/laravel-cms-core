@@ -4,22 +4,22 @@ namespace Czim\CmsCore\Http\Controllers\Api;
 use Czim\CmsCore\Api\Response\TransformContainer;
 use Czim\CmsCore\Api\Transformers\ModuleTransformer;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Http\Controllers\Controller;
 
 class ModulesController extends Controller
 {
 
     /**
-     * @var ManagerInterface
+     * @var ModuleManagerInterface
      */
     protected $modules;
 
     /**
-     * @param CoreInterface    $core
-     * @param ManagerInterface $modules
+     * @param CoreInterface          $core
+     * @param ModuleManagerInterface $modules
      */
-    public function __construct(CoreInterface $core, ManagerInterface $modules)
+    public function __construct(CoreInterface $core, ModuleManagerInterface $modules)
     {
         parent::__construct($core);
 

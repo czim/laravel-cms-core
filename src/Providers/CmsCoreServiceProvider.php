@@ -11,7 +11,7 @@ use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Events\CmsHasBooted;
 use Czim\CmsCore\Events\CmsHasRegistered;
 use Czim\CmsCore\Support\Enums\Component;
@@ -110,7 +110,7 @@ class CmsCoreServiceProvider extends ServiceProvider
 
         $this->app->bind(CoreInterface::class, Component::CORE);
         $this->app->bind(AuthenticatorInterface::class, Component::AUTH);
-        $this->app->bind(ManagerInterface::class, Component::MODULES);
+        $this->app->bind(ModuleManagerInterface::class, Component::MODULES);
         $this->app->bind(CacheInterface::class, Component::CACHE);
         $this->app->bind(ApiCoreInterface::class, Component::API);
         $this->app->bind(MenuRepositoryInterface::class, Component::MENU);

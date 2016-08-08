@@ -1,7 +1,7 @@
 <?php
 namespace Czim\CmsCore\Providers;
 
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Support\Enums\Component;
 
@@ -16,7 +16,7 @@ class ModuleManagerServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        /** @var ManagerInterface $manager */
+        /** @var ModuleManagerInterface $manager */
         $manager = app(Component::MODULES);
 
         $manager->initialize();

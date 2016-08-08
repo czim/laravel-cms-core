@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Test\Helpers\Modules;
 use Czim\CmsCore\Contracts\Modules\Data\AclPresenceInterface;
 use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
-use Czim\CmsCore\Modules\Manager\Manager;
+use Czim\CmsCore\Modules\ModuleManager;
 use Illuminate\Routing\Router;
 
 class SimpleAssociatedTestModule implements ModuleInterface
@@ -38,7 +38,7 @@ class SimpleAssociatedTestModule implements ModuleInterface
      */
     public function getAssociatedClass()
     {
-        return Manager::class;
+        return ModuleManager::class;
     }
 
     /**

@@ -10,7 +10,7 @@ use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Support\Enums\Component;
 use Psr\Log\LoggerInterface;
 
@@ -86,7 +86,7 @@ class Core implements CoreInterface
     }
 
     /**
-     * @return ManagerInterface
+     * @return ModuleManagerInterface
      */
     public function modules()
     {

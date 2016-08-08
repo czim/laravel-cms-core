@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Test\Modules;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
-use Czim\CmsCore\Modules\Manager\Manager;
+use Czim\CmsCore\Modules\ModuleManager;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleAssociatedTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
@@ -16,7 +16,7 @@ use Czim\CmsCore\Test\TestCase;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
 
-class ManagerTest extends TestCase
+class ModuleManagerTest extends TestCase
 {
 
     /**
@@ -107,7 +107,7 @@ class ManagerTest extends TestCase
 
         $manager->initialize();
 
-        $this->assertInstanceOf(ModuleInterface::class, $manager->getByAssociatedClass(Manager::class));
+        $this->assertInstanceOf(ModuleInterface::class, $manager->getByAssociatedClass(ModuleManager::class));
     }
 
     /**
@@ -223,7 +223,7 @@ class ManagerTest extends TestCase
                 ->method('getAllPermissions')
                 ->willReturn(['test']);
 
-        $manager = new Manager($this->getMockCore(), $mockAcl);
+        $manager = new ModuleManager($this->getMockCore(), $mockAcl);
 
         $this->assertEquals(['test'], $manager->getAllPermissions());
     }
@@ -240,7 +240,7 @@ class ManagerTest extends TestCase
             ->with('testing')
             ->willReturn(['test']);
 
-        $manager = new Manager($this->getMockCore(), $mockAcl);
+        $manager = new ModuleManager($this->getMockCore(), $mockAcl);
 
         $this->assertEquals(['test'], $manager->getModulePermissions('testing'));
     }
@@ -304,11 +304,11 @@ class ManagerTest extends TestCase
     }
 
     /**
-     * @return Manager
+     * @return ModuleManager
      */
     protected function makeManager()
     {
-        return new Manager($this->getMockCore(), $this->getMockAcl());
+        return new ModuleManager($this->getMockCore(), $this->getMockAcl());
     }
 
     /**

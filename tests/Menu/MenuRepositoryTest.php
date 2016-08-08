@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Test\Menu;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Menu\MenuRepository;
 use Czim\CmsCore\Support\Data\MenuPresence;
@@ -398,11 +398,11 @@ class MenuRepositoryTest extends TestCase
 
     /**
      * @param null|Collection $modules
-     * @return ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockModuleManager($modules = null)
     {
-        $mock = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $mock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
 
         $modules = $modules ?: new Collection;
 

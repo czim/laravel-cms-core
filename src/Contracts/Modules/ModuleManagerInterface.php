@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Contracts\Modules;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
 
-interface ManagerInterface
+interface ModuleManagerInterface
 {
 
     /**

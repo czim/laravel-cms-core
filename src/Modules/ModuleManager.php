@@ -1,5 +1,5 @@
 <?php
-namespace Czim\CmsCore\Modules\Manager;
+namespace Czim\CmsCore\Modules;
 
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -8,10 +8,10 @@ use Illuminate\Support\Collection;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleGeneratorInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
-use Czim\CmsCore\Contracts\Modules\ManagerInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use ReflectionException;
 
-class Manager implements ManagerInterface
+class ModuleManager implements ModuleManagerInterface
 {
 
     /**
