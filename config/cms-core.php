@@ -140,8 +140,8 @@ return [
     | Aliases
     |--------------------------------------------------------------------------
     |
-    | The CMS can have its own aliases. It is inadvisable to creat conflicts
-    | with application aliases, but it makes sense to create aliases that
+    | The CMS can have its own aliases. It is inadvisable to create conflicts
+    | with application aliases, but it makes sense to set aliases that
     | are only available in the CMS context; you can do that here.
     |
     */
