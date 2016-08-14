@@ -17,6 +17,13 @@ interface ModuleManagerInterface
     public function initialize(array $modules = null);
 
     /**
+     * Returns whether the module manager was initialized.
+     *
+     * @return bool
+     */
+    public function isInitialized();
+
+    /**
      * Returns whether a module with the given key is active.
      *
      * @param string $key

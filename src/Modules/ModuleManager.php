@@ -53,6 +53,13 @@ class ModuleManager implements ModuleManagerInterface
      */
     protected $associatedClassIndex;
 
+    /**
+     * Whether the module manager has been initialized.
+     *
+     * @var bool
+     */
+    protected $initialized = false;
+
 
     /**
      * @param CoreInterface          $core
@@ -85,6 +92,8 @@ class ModuleManager implements ModuleManagerInterface
      */
     public function initialize(array $modules = null)
     {
+        if ($this->initialized) return $this;
+
         if (is_array($modules)) {
             $this->moduleClasses = $modules;
         } else {
@@ -95,7 +104,19 @@ class ModuleManager implements ModuleManagerInterface
              ->sortModules()
              ->populateAssociatedClassIndex();
 
+        $this->initialized = true;
+
         return $this;
+    }
+
+    /**
+     * Returns whether the module manager was initialized.
+     *
+     * @return bool
+     */
+    public function isInitialized()
+    {
+        return $this->initialized;
     }
 
     /**
