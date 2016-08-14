@@ -1,7 +1,6 @@
 <?php
 namespace Czim\CmsCore\Support\Data;
 
-use Czim\DataObject\AbstractDataObject;
 use Czim\CmsCore\Contracts\Modules\Data\AclPresenceInterface;
 
 /**
