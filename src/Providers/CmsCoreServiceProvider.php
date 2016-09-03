@@ -4,6 +4,8 @@ namespace Czim\CmsCore\Providers;
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
+use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
+use Czim\CmsCore\Support\Localization\LocaleRepository;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -39,6 +41,7 @@ class CmsCoreServiceProvider extends ServiceProvider
              ->registerExceptionHandler()
              ->registerConfiguredServiceProviders()
              ->registerConfiguredAliases()
+             ->registerInterfaceBindings()
              ->finalizeRegistration();
     }
 
@@ -165,6 +168,18 @@ class CmsCoreServiceProvider extends ServiceProvider
         foreach ($aliases as $alias => $binding) {
             $aliasLoader->alias($alias, $binding);
         }
+
+        return $this;
+    }
+
+    /**
+     * Registers standard interface bindings.
+     *
+     * @return $this
+     */
+    protected function registerInterfaceBindings()
+    {
+        $this->app->singleton(LocaleRepositoryInterface::class, LocaleRepository::class);
 
         return $this;
     }
