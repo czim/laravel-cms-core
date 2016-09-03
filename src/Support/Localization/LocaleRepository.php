@@ -47,6 +47,17 @@ class LocaleRepository implements LocaleRepositoryInterface
     }
 
     /**
+     * Returns whether a locale is valid & available.
+     *
+     * @param string $locale
+     * @return bool
+     */
+    public function isAvailable($locale)
+    {
+        return in_array($locale, $this->getAvailable());
+    }
+
+    /**
      * Returns locales provided by mcamara's localization package, if any.
      *
      * @return string[]|false   false if package not used, or no locales configured

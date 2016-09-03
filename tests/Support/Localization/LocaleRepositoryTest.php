@@ -72,6 +72,17 @@ class LocaleRepositoryTest extends TestCase
         $this->assertTrue($repository->isLocalized(), "Double locale should nbe isLocalized");
     }
 
+    /**
+     * @test
+     */
+    function it_returns_whether_a_locale_is_available()
+    {
+        $repository = $this->makeLocaleRepository();
+        
+        $this->assertTrue($repository->isAvailable('nl'));
+        $this->assertFalse($repository->isAvailable('it'));
+    }
+
 
     /**
      * @return LocaleRepository

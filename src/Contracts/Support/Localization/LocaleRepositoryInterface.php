@@ -23,4 +23,12 @@ interface LocaleRepositoryInterface
      */
     public function isLocalized();
 
+    /**
+     * Returns whether a locale is valid & available.
+     *
+     * @param string $locale
+     * @return bool
+     */
+    public function isAvailable($locale);
+
 }
