@@ -1,6 +1,8 @@
 <?php
 namespace Czim\CmsCore\Providers;
 
+use Czim\CmsCore\Http\ViewComposers\LocaleComposer;
+use Czim\CmsCore\Http\ViewComposers\TopComposer;
 use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Http\ViewComposers\MenuComposer;
@@ -41,7 +43,12 @@ class ViewServiceProvider extends ServiceProvider
 
         view()->composer(
             $this->core->config('views.top'),
-            MenuComposer::class
+            TopComposer::class
+        );
+
+        view()->composer(
+            $this->core->config('views.locale-switch'),
+            LocaleComposer::class
         );
 
         return $this;

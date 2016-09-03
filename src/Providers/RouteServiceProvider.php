@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Providers;
 
+use Czim\CmsCore\Http\Controllers\LocaleController;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Application;
@@ -96,6 +97,7 @@ class RouteServiceProvider extends ServiceProvider
                     function (Router $router) {
 
                         $this->buildHomeRoute($router);
+                        $this->buildMetaRoutes($router);
                         $this->buildRoutesForModules($router);
                     }
                 );
@@ -116,6 +118,28 @@ class RouteServiceProvider extends ServiceProvider
 
         // Guarantee that the home route has the expected name
         $router->get('/', array_set($action, 'as', NamedRoute::HOME));
+    }
+
+    /**
+     * Builds up routes for meta functionality of the CMS (such as localization).
+     *
+     * @param Router $router
+     */
+    protected function buildMetaRoutes(Router $router)
+    {
+        $router->group(
+            [
+                'prefix' => 'meta',
+            ],
+            function (Router $router) {
+
+                $router->post('set-locale', [
+                    'as'   => NamedRoute::LOCALE_SET,
+                    'uses' => LocaleController::class . '@setLocale',
+                ]);
+            }
+        );
+
     }
 
     /**

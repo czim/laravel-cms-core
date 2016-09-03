@@ -1,10 +1,24 @@
 <?php
 namespace Czim\CmsCore\Support\Localization;
 
+use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
 
 class LocaleRepository implements LocaleRepositoryInterface
 {
+    /**
+     * @var CoreInterface
+     */
+    protected $core;
+
+    /**
+     * @param CoreInterface $core
+     */
+    public function __construct(CoreInterface $core)
+    {
+        $this->core = $core;
+    }
+
 
     /**
      * Returns the default locale.
@@ -13,7 +27,7 @@ class LocaleRepository implements LocaleRepositoryInterface
      */
     public function getDefault()
     {
-        return config('app.locale') ?: config('app.fallback_locale');
+        return $this->core->config('locale.default') ?: config('app.locale') ?: config('app.fallback_locale');
     }
 
     /**
@@ -21,6 +35,13 @@ class LocaleRepository implements LocaleRepositoryInterface
      */
     public function getAvailable()
     {
+        // If explicitly set in CMS config, this overrules all else
+        $configLocales = $this->core->config('locale.available');
+
+        if (is_array($configLocales)) {
+            return $configLocales;
+        }
+
         // Check if the localization package is used, and get locales from it
         $localizationLocales = $this->getLocalesForMcamaraLocalization();
 

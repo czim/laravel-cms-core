@@ -15,4 +15,5 @@ class NamedRoute extends Enum
     const AUTH_LOGOUT         = 'auth-logout';
     const AUTH_PASSWORD_EMAIL = 'auth-password-email';
     const AUTH_PASSWORD_RESET = 'auth-password-reset';
+    const LOCALE_SET          = 'locale-set';
 }

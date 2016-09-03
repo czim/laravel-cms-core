@@ -16,6 +16,30 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Localization
+    |--------------------------------------------------------------------------
+    |
+    | The CMS will follow the application's configuration for handling
+    | localization and determining available locales. You can override
+    | those values here.
+    |
+    */
+
+    'locale' => [
+
+        // Leave null to use application default
+        'default' => null,
+
+        // Leave null to use localization package (or fallback locale) settings
+        'available' => null,
+
+        // If enabled, will set the locale based on the request (if not session-defined yet)
+        'request-based' => true,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Routing
     |--------------------------------------------------------------------------
     |
@@ -183,6 +207,7 @@ return [
             Illuminate\View\Middleware\ShareErrorsFromSession::class,
             Czim\CmsCore\Http\Middleware\VerifyCsrfToken::class,
             Czim\CmsCore\Http\Middleware\InitializeMenu::class,
+            Czim\CmsCore\Http\Middleware\SetLocale::class,
 
             Czim\CmsCore\Support\Enums\CmsMiddleware::AUTHENTICATED =>
                 Czim\CmsCore\Http\Middleware\Authenticate::class,
@@ -208,6 +233,8 @@ return [
         'menu'   => 'cms::layout.menu',
         'top'    => 'cms::layout.top',
         'login'  => 'cms::auth.login',
+
+        'locale-switch' => 'cms::layout.partials.locale-switch',
     ],
 
     /*
