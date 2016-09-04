@@ -1,10 +1,11 @@
 <?php
 namespace Czim\CmsCore\Support\Data;
 
+use Czim\CmsCore\Contracts\Support\Data\DataClearInterface;
 use Czim\DataObject\AbstractDataObject as CzimAbstractDataObject;
 use Czim\DataObject\Contracts\DataObjectInterface;
 
-abstract class AbstractDataObject extends CzimAbstractDataObject
+abstract class AbstractDataObject extends CzimAbstractDataObject implements DataClearInterface
 {
 
     /**
@@ -116,6 +117,22 @@ abstract class AbstractDataObject extends CzimAbstractDataObject
         }
 
         $this[$key] = $mergeValue;
+    }
+
+    /**
+     * Clears the attributes.
+     *
+     * Note that this does not reset defaults, but clears them.
+     *
+     * @return $this
+     */
+    public function clear()
+    {
+        foreach ($this->getKeys() as $key) {
+            $this->attributes[ $key ] = null;
+        }
+
+        return $this;
     }
 
 }
