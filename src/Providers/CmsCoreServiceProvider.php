@@ -3,20 +3,20 @@ namespace Czim\CmsCore\Providers;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
-use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
-use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
-use Czim\CmsCore\Support\Localization\LocaleRepository;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
+use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
+use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
 use Czim\CmsCore\Events\CmsHasBooted;
 use Czim\CmsCore\Events\CmsHasRegistered;
 use Czim\CmsCore\Support\Enums\Component;
+use Czim\CmsCore\Support\Localization\LocaleRepository;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\ServiceProvider;
 
 class CmsCoreServiceProvider extends ServiceProvider
 {
