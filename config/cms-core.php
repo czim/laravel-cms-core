@@ -283,7 +283,6 @@ return [
         'patterns' => [
             'cms:*',
             'help',
-            'migrate*',
             'route:*',
             'tinker',
             'vendor:*',
