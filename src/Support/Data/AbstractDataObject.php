@@ -103,10 +103,17 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
     {
         $current = $this[$key];
 
-        if ($current instanceof DataObjectInterface && property_exists($current, 'merge')) {
+        if ($current instanceof DataObjectInterface && method_exists($current, 'merge')) {
+
+            $class = get_class($current);
 
             if (is_array($mergeValue)) {
-                $mergeValue = new static($mergeValue);
+                $mergeValue = new $class($mergeValue);
+            }
+
+            // If we have nothing to merge with, don't bother
+            if (null === $mergeValue) {
+                return;
             }
 
             $mergeValue = $current->merge($mergeValue);
