@@ -6,6 +6,14 @@ Modular CMS Core, which should manage the basics of configuring, accessing and d
 
 The documentation for the API endpoints provided by the core may be found here: https://czim.github.io/laravel-cms-core
 
+## Version Compatibility
+
+ Laravel  | Package 
+:---------|:--------
+ 5.1.x    | 0.9.x
+ 5.2.x    | 0.9.x
+ 5.3.x    | 1.3.x
+
 ## Installation
 
 ### Middleware
