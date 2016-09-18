@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Exceptions;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Support\Enums\Component;
 use Exception;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -35,11 +36,11 @@ class Handler extends ExceptionHandler
     /**
      * Create a new exception handler instance.
      *
-     * @param LoggerInterface $log
+     * @param Container $container
      */
-    public function __construct(LoggerInterface $log)
+    public function __construct(Container $container)
     {
-        parent::__construct($log);
+        parent::__construct($container);
 
         $this->mergeConfiguredDontReportExceptions();
     }
@@ -60,8 +61,7 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
-     * @return void
+     * @param Exception $e
      */
     public function report(Exception $e)
     {
@@ -74,7 +74,7 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param  Exception  $e
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
