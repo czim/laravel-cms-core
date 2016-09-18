@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Console\Commands;
 
 use Illuminate\Database\Console\Migrations\StatusCommand;
+use Illuminate\Support\Collection;
 
 class MigrateStatusCommand extends StatusCommand
 {
@@ -21,23 +22,20 @@ class MigrateStatusCommand extends StatusCommand
         // exists! Otherwise, how could the table be found in the correct place?
         $this->migrator->setConnection($this->determineConnection());
 
-        if ( ! $this->migrator->repositoryExists()) {
-            return $this->error('No CMS migrations found.');
+        if (! $this->migrator->repositoryExists()) {
+            return $this->error('No migrations found.');
         }
 
-        if (! is_null($path = $this->input->getOption('path'))) {
-            $path = $this->laravel->basePath().'/'.$path;
-        } else {
-            $path = $this->getMigrationPath();
-        }
+        $this->migrator->setConnection($this->option('database'));
 
         $ran = $this->migrator->getRepository()->getRan();
 
-        $migrations = [];
-
-        foreach ($this->getAllMigrationFiles($path) as $migration) {
-            $migrations[] = in_array($migration, $ran) ? ['<info>Y</info>', $migration] : ['<fg=red>N</fg=red>', $migration];
-        }
+        $migrations = Collection::make($this->getAllMigrationFiles())
+            ->map(function ($migration) use ($ran) {
+                return in_array($this->migrator->getMigrationName($migration), $ran)
+                    ? ['<info>Y</info>', $this->migrator->getMigrationName($migration)]
+                    : ['<fg=red>N</fg=red>', $this->migrator->getMigrationName($migration)];
+            });
 
         if (count($migrations) > 0) {
             $this->table(['Ran?', 'CMS Migration'], $migrations);

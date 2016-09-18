@@ -1,9 +1,9 @@
 <?php
 namespace Czim\CmsCore\Console\Commands;
 
-use Illuminate\Database\Console\Migrations\MigrateCommand as LaravelMigrateCommand;
+use Illuminate\Database\Console\Migrations\RollbackCommand as LaravelMigrateRollbackCommand;
 
-class MigrateRollbackCommand extends LaravelMigrateCommand
+class MigrateRollbackCommand extends LaravelMigrateRollbackCommand
 {
     use CmsMigrationContextTrait;
 
@@ -23,9 +23,12 @@ class MigrateRollbackCommand extends LaravelMigrateCommand
 
         $this->migrator->setConnection($this->determineConnection());
 
-        $pretend = $this->input->getOption('pretend');
-
-        $this->migrator->rollback($pretend);
+        $this->migrator->rollback(
+            $this->getMigrationPaths(), [
+                'pretend' => $this->option('pretend'),
+                'step'    => (int) $this->option('step'),
+            ]
+        );
 
         // Once the migrator has run we will grab the note output and send it out to
         // the console screen, since the migrator itself functions without having

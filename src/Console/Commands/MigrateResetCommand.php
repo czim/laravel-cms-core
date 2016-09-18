@@ -23,15 +23,14 @@ class MigrateResetCommand extends ResetCommand
 
         $this->migrator->setConnection($this->determineConnection());
 
-        if (! $this->migrator->repositoryExists()) {
-            $this->output->writeln('<comment>Migration table not found.</comment>');
-
+        if ( ! $this->migrator->repositoryExists()) {
+            $this->comment('Migration table not found.');
             return;
         }
 
-        $pretend = $this->input->getOption('pretend');
-
-        $this->migrator->reset($pretend);
+        $this->migrator->reset(
+            $this->getMigrationPaths(), $this->option('pretend')
+        );
 
         // Once the migrator has run we will grab the note output and send it out to
         // the console screen, since the migrator itself functions without having

@@ -50,6 +50,21 @@ trait CmsMigrationContextTrait
     }
 
     /**
+     * Overridden to block internal migrator paths.
+     *
+     * @inheritdoc
+     */
+    protected function getMigrationPaths()
+    {
+        if ($this->input->hasOption('path') && $this->option('path')) {
+            return [app()->basePath() . '/' . $this->option('path')];
+        }
+
+        // Do not use the migrator paths.
+        return [ $this->getMigrationPath() ];
+    }
+
+    /**
      * @return CoreInterface
      */
     protected function getCore()

@@ -32,9 +32,9 @@ class MigrateInstallCommand extends InstallCommand
     }
 
     /**
-     * Execute the console command.
+     * Overridden for setSource parameter connection only.
      *
-     * @return void
+     * @inheritdoc
      */
     public function fire()
     {
