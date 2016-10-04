@@ -62,7 +62,8 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
                 foreach ($this->attributes[$key] as &$item) {
 
                     if ( ! is_a($item, $dataObjectClass)) {
-                        $item = new $dataObjectClass( (array) $item);
+                        /** @var DataObjectInterface $item */
+                        $item = new $dataObjectClass($item->toArray());
                     }
                 }
             }
