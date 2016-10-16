@@ -13,6 +13,8 @@ interface LocaleRepositoryInterface
 
     /**
      * Determines and returns the available locales for the application.
+     *
+     * @return string[]
      */
     public function getAvailable();
 
