@@ -7,6 +7,7 @@ use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
+use Czim\CmsCore\Contracts\Core\NotifierInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
@@ -110,6 +111,7 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->app->singleton(Component::API, $this->getCoreConfig('bindings.' . Component::API));
         $this->app->singleton(Component::MENU, $this->getCoreConfig('bindings.' . Component::MENU));
         $this->app->singleton(Component::ACL, $this->getCoreConfig('bindings.' . Component::ACL));
+        $this->app->singleton(Component::NOTIFIER, $this->getCoreConfig('bindings.' . Component::NOTIFIER));
 
         $this->app->bind(CoreInterface::class, Component::CORE);
         $this->app->bind(AuthenticatorInterface::class, Component::AUTH);
@@ -118,6 +120,7 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->app->bind(ApiCoreInterface::class, Component::API);
         $this->app->bind(MenuRepositoryInterface::class, Component::MENU);
         $this->app->bind(AclRepositoryInterface::class, Component::ACL);
+        $this->app->bind(NotifierInterface::class, Component::NOTIFIER);
 
         return $this;
     }

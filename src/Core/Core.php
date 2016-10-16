@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Core;
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
+use Czim\CmsCore\Contracts\Core\NotifierInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -12,6 +13,7 @@ use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Support\Enums\Component;
+use Illuminate\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
 class Core implements CoreInterface
@@ -110,6 +112,14 @@ class Core implements CoreInterface
     }
 
     /**
+     * @return NotifierInterface
+     */
+    public function notifier()
+    {
+        return $this->app[Component::NOTIFIER];
+    }
+
+    /**
      * With any parameters set, will record a CMS log entry.
      * Without parameters returns the CMS Logger instance.
      *
@@ -180,6 +190,16 @@ class Core implements CoreInterface
     public function db()
     {
         return $this->app['db']->connection($this->config('database.driver'));
+    }
+
+    /**
+     * Returns the session interface that the CMS uses.
+     *
+     * @return SessionInterface
+     */
+    public function session()
+    {
+        return $this->app['session']->driver($this->config('session.driver'));
     }
 
     /**

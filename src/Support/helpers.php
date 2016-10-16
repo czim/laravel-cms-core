@@ -87,6 +87,20 @@ if ( ! function_exists('cms_mw_permission')) {
     }
 }
 
+if ( ! function_exists('cms_flash')) {
+    /**
+     * Set a CMS flash message
+     *
+     * @param string      $message
+     * @param null|string $level
+     */
+    function cms_flash($message, $level = null)
+    {
+        return app(\Czim\CmsCore\Support\Enums\Component::NOTIFIER)
+            ->flash($message, $level);
+    }
+}
+
 //if ( ! function_exists('cms_asset')) {
 //    /**
 //     * Generate an asset path for the CMS.

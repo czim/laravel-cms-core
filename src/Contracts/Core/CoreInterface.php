@@ -7,6 +7,7 @@ use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
+use Illuminate\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
 interface CoreInterface extends StateInterface
@@ -48,6 +49,11 @@ interface CoreInterface extends StateInterface
     public function acl();
 
     /**
+     * @return NotifierInterface
+     */
+    public function notifier();
+
+    /**
      * With any parameters set, will record a CMS log entry.
      * Without parameters returns the CMS Logger instance.
      *
@@ -64,6 +70,13 @@ interface CoreInterface extends StateInterface
      * @return ConnectionInterface
      */
     public function db();
+
+    /**
+     * Returns the session interface that the CMS uses.
+     *
+     * @return SessionInterface
+     */
+    public function session();
 
     /**
      * Returns CMS configuration value.

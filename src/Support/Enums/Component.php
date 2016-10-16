@@ -21,4 +21,5 @@ class Component extends Enum
     const LOG         = 'cms-log';
     const MENU        = 'cms-menu';
     const MODULES     = 'cms-modules';
+    const NOTIFIER    = 'cms-notifier';
 }
