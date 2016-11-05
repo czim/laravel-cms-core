@@ -5,10 +5,12 @@ use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Support\Enums\Component;
 use Exception;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use League\OAuth2\Server\Exception\OAuthException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -93,12 +95,62 @@ class Handler extends ExceptionHandler
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param Exception                $e
+     * @param Exception                $exception
      * @return mixed
      */
-    protected function renderCmsWebException($request, Exception $e)
+    protected function renderCmsWebException($request, Exception $exception)
     {
-        return parent::render($request, $e);
+        if ($request->ajax()) {
+            return $this->renderAjaxException($exception);
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    /**
+     * @param Exception $exception
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function renderAjaxException(Exception $exception)
+    {
+        $statusCode = $this->getStatusCodeFromException($exception);
+        $message    = $exception->getMessage();
+
+        if ($exception instanceof HttpResponseException) {
+            $message = $exception->getResponse()->getStatusCode();
+        }
+
+        return response()
+            ->json(
+                [
+                    'code'    => $statusCode,
+                    'message' => $message,
+                ],
+                $statusCode
+            );
+    }
+
+    /**
+     * Returns the status code for a given exception.
+     *
+     * @param Exception $exception
+     * @return int
+     */
+    protected function getStatusCodeFromException(Exception $exception)
+    {
+        if ($exception instanceof OAuthException) {
+            return $exception->httpStatusCode;
+        }
+
+        if ($exception instanceof HttpResponseException) {
+            return $statusCode = $exception->getResponse()->getStatusCode();
+        }
+
+        if (method_exists($exception, 'getStatusCode')) {
+            return $exception->getStatusCode();
+        }
+
+        return 500;
     }
 
     /**
