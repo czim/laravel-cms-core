@@ -18,7 +18,6 @@ return [
     */
 
     'modules' => [
-        App\Modules\TestModule::class,
     ],
 
     /*
