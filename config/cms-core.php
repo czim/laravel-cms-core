@@ -301,6 +301,16 @@ return [
     */
 
     'log' => [
+
+        // Whether to write to a separate log file for the CMS.
+        // If this is set to false, the standard laravel log will be used.
+        'separate' => true,
+
+        // If using a separate log, the (path or) file to write to,
+        // relative to the storage/logs directory.
+        'file' => 'cms',
+
+        // Minimal log level to write log lines for
         'threshold' => Monolog\Logger::INFO,
     ],
 
