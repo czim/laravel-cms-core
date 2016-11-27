@@ -10,12 +10,20 @@ class CmsFormatterDecorator implements FormatterInterface
      */
     protected $formatter;
 
+    /**
+     * @var string
+     */
     protected $formatterPrefix = '[CMS] ';
 
+
+    /**
+     * @param FormatterInterface $formatter
+     */
     public function __construct(FormatterInterface $formatter)
     {
         $this->formatter = $formatter;
     }
+
 
     /**
      * Formats a log record.
@@ -33,7 +41,7 @@ class CmsFormatterDecorator implements FormatterInterface
 
             $formattedRecord = [
                 $channel,
-                $this->formatterPrefix.$message,
+                $this->formatterPrefix . $message,
                 $backtrace,
                 $loglevel,
             ];
