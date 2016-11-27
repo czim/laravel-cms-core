@@ -79,7 +79,7 @@ php artisan vendor:publish
 Add model configuration files with names identical to the models in the `App\Cms\Models\` namespace.  
 This only needs to be done if you want to overrule CMS defaults for a given model.
 
-You can find [more information about model configuration here](https://github.com/czim/laravel-cms-models/documentation/ModelConfiguration.md).  
+You can find [more information about model configuration here](https://github.com/czim/laravel-cms-models/blob/master/documentation/ModelConfiguration.md).  
 
 
 ## Set up an admin account
@@ -119,5 +119,5 @@ Be advised that this action should be accessible/usable by all logged in users.
 
 Further information about configuring and tweaking the CMS:
 
-- [Model configuration files](https://github.com/czim/laravel-cms-models/documentation/ModelConfiguration.md)
-- [Models module strategies](https://github.com/czim/laravel-cms-models/documentation/Strategies.md)
+- [Model configuration files](https://github.com/czim/laravel-cms-models/blob/master/documentation/ModelConfiguration.md)
+- [Models module strategies](https://github.com/czim/laravel-cms-models/blob/master/documentation/Strategies.md)
