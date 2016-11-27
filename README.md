@@ -32,11 +32,24 @@ At the top level, the CMS is modular and component-based, making it easy to add,
 
 ## Core
 
-This is the Modular CMS Core, which manages the basics of configuring, accessing and deferring to modules.
+This is the Modular CMS Core, which manages the basics of configuring, accessing and deferring to modules.  
+
+
+## Documentation
+
+The CMS core is not a stand-alone package. Some components and modules are required to start using it.
+
+You can find more information here:
+
+- [Standard installation guide](documentation/StandardInstallation.md)
+
+For an example installation of this CMS, check out the [Laravel CMS Example repository](https://github.com/czim/laravel-cms-example). 
+
 
 ## API Documentation
 
 The documentation for the API endpoints provided by the core may be found here: https://czim.github.io/laravel-cms-core
+
 
 ## Version Compatibility
 
