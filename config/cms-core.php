@@ -310,6 +310,12 @@ return [
         // relative to the storage/logs directory.
         'file' => 'cms',
 
+        // Whether to split files over days, rather than use a single log file.
+        'daily' => true,
+
+        // If set, limits that amount of (daily) files kept as history by the logger.
+        'max_files' => null,
+
         // Minimal log level to write log lines for
         'threshold' => Monolog\Logger::INFO,
     ],

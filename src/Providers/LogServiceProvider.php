@@ -70,7 +70,12 @@ class LogServiceProvider extends ServiceProvider
     {
         $path = 'logs/' . ltrim($this->getCore()->config('log.file', 'cms'), '/');
 
-        $writer->useDailyFiles(storage_path($path));
+        if ($this->getCore()->config('log.daily')) {
+            $writer->useDailyFiles(
+                storage_path($path),
+                (int) $this->getCore()->config('log.max_files')
+            );
+        }
 
         foreach ($writer->getMonolog()->getHandlers() as $handler) {
 
