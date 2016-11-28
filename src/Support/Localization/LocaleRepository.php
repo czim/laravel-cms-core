@@ -51,6 +51,13 @@ class LocaleRepository implements LocaleRepositoryInterface
             return $localizationLocales;
         }
 
+        // Alternatively, check if translatable package locales are available
+        $localizationLocales = $this->getLocalesForTranslatable();
+
+        if ($localizationLocales) {
+            return $localizationLocales;
+        }
+
         // Fallback is to check whether the default locale is equal to the fallback locale
         // If it isn't, we still have two locales to provide, otherwise localization is disabled.
         return array_unique([
@@ -95,4 +102,21 @@ class LocaleRepository implements LocaleRepositoryInterface
 
         return array_keys($locales);
     }
+
+    /**
+     * Returns locales configured for translatable package, if any.
+     *
+     * @return string[]|false   false if package not used, or no locales configured
+     */
+    protected function getLocalesForTranslatable()
+    {
+        $locales = config('translatable.locales', false);
+
+        if ( ! is_array($locales)) {
+            return false;
+        }
+
+        return $locales;
+    }
+
 }
