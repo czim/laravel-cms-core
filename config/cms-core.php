@@ -146,6 +146,7 @@ return [
         Czim\CmsCore\Providers\EventServiceProvider::class,
         Czim\CmsCore\Providers\MiddlewareServiceProvider::class,
         Czim\CmsCore\Providers\MigrationServiceProvider::class,
+        Czim\CmsCore\Providers\TranslationServiceProvider::class,
         Czim\CmsCore\Providers\ViewServiceProvider::class,
         Czim\CmsAuth\Providers\CmsAuthServiceProvider::class,
         Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
