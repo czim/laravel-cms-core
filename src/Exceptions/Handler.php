@@ -4,7 +4,6 @@ namespace Czim\CmsCore\Exceptions;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Support\Enums\Component;
 use Exception;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -37,11 +36,11 @@ class Handler extends ExceptionHandler
     /**
      * Create a new exception handler instance.
      *
-     * @param Container $container
+     * @param LoggerInterface $log
      */
-    public function __construct(Container $container)
+    public function __construct(LoggerInterface $log)
     {
-        parent::__construct($container);
+        parent::__construct($log);
 
         $this->mergeConfiguredDontReportExceptions();
     }
