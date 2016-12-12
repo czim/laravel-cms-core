@@ -88,7 +88,6 @@ interface MenuPresenceInterface extends DataObjectInterface
      * Adds a child to the end of the child list.
      *
      * @param MenuPresenceInterface $presence
-     * @return mixed
      */
     public function addChild(MenuPresenceInterface $presence);
 
@@ -96,7 +95,6 @@ interface MenuPresenceInterface extends DataObjectInterface
      * Adds a child to the front of the child list.
      *
      * @param MenuPresenceInterface $presence
-     * @return mixed
      */
     public function shiftChild(MenuPresenceInterface $presence);
 

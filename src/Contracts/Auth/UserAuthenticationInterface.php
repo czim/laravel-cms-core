@@ -28,9 +28,10 @@ interface UserAuthenticationInterface
     /**
      * @param string $username
      * @param string $password
+     * @param bool   $remember
      * @return bool
      */
-    public function login($username, $password);
+    public function login($username, $password, $remember = true);
 
     /**
      * Performs stateless login.

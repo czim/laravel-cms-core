@@ -2,7 +2,6 @@
 namespace Czim\CmsCore\Http\Middleware;
 
 use Closure;
-use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Support\Enums\NamedRoute;

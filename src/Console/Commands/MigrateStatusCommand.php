@@ -23,7 +23,8 @@ class MigrateStatusCommand extends StatusCommand
         $this->migrator->setConnection($this->determineConnection());
 
         if (! $this->migrator->repositoryExists()) {
-            return $this->error('No migrations found.');
+            $this->error('No migrations found.');
+            return;
         }
 
         $this->migrator->setConnection($this->option('database'));

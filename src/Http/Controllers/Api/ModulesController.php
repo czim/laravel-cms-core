@@ -6,6 +6,7 @@ use Czim\CmsCore\Api\Transformers\ModuleTransformer;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Http\Controllers\Controller;
+use Illuminate\Contracts\Support\Arrayable;
 
 class ModulesController extends Controller
 {
@@ -60,8 +61,8 @@ class ModulesController extends Controller
     /**
      * Wraps data in a transform container.
      *
-     * @param array $data
-     * @param bool  $collection
+     * @param array|Arrayable $data
+     * @param bool            $collection
      * @return TransformContainer
      */
     protected function makeContainer($data, $collection = true)

@@ -8,7 +8,6 @@ use Czim\CmsCore\Modules\ModuleManager;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleAssociatedTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
-use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithSameServiceProvider;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithServiceProviders;
 use Czim\CmsCore\Test\Helpers\Modules\TestModuleWithRoutes;
 use Czim\CmsCore\Test\Helpers\NonInstantiableInterface;

@@ -3,6 +3,7 @@ namespace Czim\CmsCore\Exceptions;
 
 use App\Exceptions\Handler as LaravelHandler;
 use Exception;
+use Illuminate\Contracts\Container\Container;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -16,11 +17,11 @@ class ExtendingHandler extends LaravelHandler
     /**
      * Create a new exception handler instance.
      *
-     * @param LoggerInterface $log
+     * @param Container $container
      */
-    public function __construct(LoggerInterface $log)
+    public function __construct(Container $container)
     {
-        parent::__construct($log);
+        parent::__construct($container);
 
         $this->mergeConfiguredDontReportExceptions();
     }

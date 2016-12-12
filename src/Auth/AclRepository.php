@@ -49,7 +49,7 @@ class AclRepository implements AclRepositoryInterface
     /**
      * Permissions per module.
      *
-     * @var string[]    keyed by module key
+     * @var string[][]  keyed by module key
      */
     protected $modulePermissions;
 

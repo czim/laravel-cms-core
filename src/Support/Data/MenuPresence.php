@@ -148,7 +148,6 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * Adds a child to the end of the child list.
      *
      * @param MenuPresenceInterface $presence
-     * @return mixed
      */
     public function addChild(MenuPresenceInterface $presence)
     {
@@ -167,7 +166,6 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * Adds a child to the front of the child list.
      *
      * @param MenuPresenceInterface $presence
-     * @return mixed
      */
     public function shiftChild(MenuPresenceInterface $presence)
     {
