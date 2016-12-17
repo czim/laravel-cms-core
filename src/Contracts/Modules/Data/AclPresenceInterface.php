@@ -29,7 +29,7 @@ interface AclPresenceInterface extends DataObjectInterface
     public function permissions();
 
     /**
-     * Returns (translatable) label for display.
+     * Returns (translated) label for display.
      *
      * @return string
      */

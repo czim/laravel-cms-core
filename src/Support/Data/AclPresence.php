@@ -57,12 +57,16 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
     }
 
     /**
-     * Returns (translatable) label for display.
+     * Returns (translated) label for display.
      *
      * @return string
      */
     public function label()
     {
+        if ($this->translated()) {
+            return cms_trans($this->getAttribute('label'));
+        }
+
         return $this->getAttribute('label');
     }
 
