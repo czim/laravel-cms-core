@@ -270,7 +270,7 @@ class MenuRepository implements MenuRepositoryInterface
                 $remove[] = $key;
             }
         }
-        $this->menuGroups->forget($remove);
+        $this->menuUngrouped->forget($remove);
 
         // Alternative presences should be left as is, to be determined
         // by whatever front-end implementation they may get.
