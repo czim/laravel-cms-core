@@ -49,4 +49,11 @@ interface AclPresenceInterface extends DataObjectInterface
      */
     public function setPermissions($permissions);
 
+    /**
+     * Removes a permission from the current child permissions.
+     *
+     * @param string $permission
+     */
+    public function removePermission($permission);
+
 }

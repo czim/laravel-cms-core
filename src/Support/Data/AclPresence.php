@@ -85,4 +85,19 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
     {
         $this->setAttribute('permissions', $permissions);
     }
+
+    /**
+     * Removes a permission from the current child permissions.
+     *
+     * @param string $permission
+     */
+    public function removePermission($permission)
+    {
+        $permissions = $this->permissions();
+
+        $permissions = array_diff($permissions, [ $permission ]);
+
+        $this->setAttribute('permissions', $permissions);
+    }
+
 }
