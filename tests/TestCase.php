@@ -17,8 +17,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('cms-modules.modules', []);
-
         // Load the CMS even when unit testing
         $app['config']->set('cms-core.testing', true);
 
@@ -49,14 +47,11 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
                 Component::CACHE       => \Czim\CmsCore\Core\Cache::class,
                 Component::CORE        => \Czim\CmsCore\Core\Core::class,
                 Component::MODULES     => \Czim\CmsCore\Modules\ModuleManager::class,
-                Component::AUTH        => \Czim\CmsAuth\Auth\Authenticator::class,
                 Component::API         => \Czim\CmsCore\Api\ApiCore::class,
                 Component::ACL         => \Czim\CmsCore\Auth\AclRepository::class,
                 Component::MENU        => \Czim\CmsCore\Menu\MenuRepository::class,
                 Component::AUTH        => 'mock-cms-auth',
         ]);
-
-
 
         $this->mockBoundCoreExternalComponents($app);
 
