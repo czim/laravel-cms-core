@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Support\Data;
 use Czim\CmsCore\Contracts\Support\Data\DataClearInterface;
 use Czim\DataObject\AbstractDataObject as CzimAbstractDataObject;
 use Czim\DataObject\Contracts\DataObjectInterface;
+use Illuminate\Contracts\Support\Arrayable;
 
 abstract class AbstractDataObject extends CzimAbstractDataObject implements DataClearInterface
 {
@@ -63,7 +64,9 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
 
                     if ( ! is_a($item, $dataObjectClass)) {
                         /** @var DataObjectInterface $item */
-                        $item = new $dataObjectClass($item->toArray());
+                        $item = new $dataObjectClass(
+                            ($item instanceof Arrayable) ? $item->toArray() : $item
+                        );
                     }
                 }
             }
