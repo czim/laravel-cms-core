@@ -21,7 +21,7 @@ Modules are optional and may be added to the CMS as needed.
 - [ACL Module](https://github.com/czim/laravel-cms-acl-module)  
     A very simple user, role & permission management module.
 
-- [Models Module](https://github.com/czim/laravel-cms-models)
+- [Models Module](https://github.com/czim/laravel-cms-models)  
     Allows extensive management of Eloquent model data.  
     For simple applications, this may be all you need for a complete CMS. 
 
