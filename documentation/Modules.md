@@ -34,3 +34,13 @@ Please check each module's documentation for further information.
 The above list is not exhaustive, if only because making custom modules is encouraged.
 
 For more information, see [creating custom modules](CreatingModules.md).
+
+
+## Debugging
+
+When debugging module setups, it may help to display information about currently registered.
+This is possible using the `cms:modules:show` command:
+
+```bash
+php artisan cms:modules:show
+```
