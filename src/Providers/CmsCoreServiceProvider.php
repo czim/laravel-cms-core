@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Providers;
 
+use Czim\CmsCore\Console\Commands\ShowModules;
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -43,6 +44,7 @@ class CmsCoreServiceProvider extends ServiceProvider
              ->registerConfiguredServiceProviders()
              ->registerConfiguredAliases()
              ->registerInterfaceBindings()
+             ->registerConsoleCommands()
              ->finalizeRegistration();
     }
 
@@ -227,6 +229,22 @@ class CmsCoreServiceProvider extends ServiceProvider
 
         $this->publishes([
             realpath(dirname(__DIR__) . '/../config/cms-api.php') => config_path('cms-api.php'),
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Register CMS console commands
+     *
+     * @return $this
+     */
+    protected function registerConsoleCommands()
+    {
+        $this->app->singleton('cms.commands.core-modules-show', ShowModules::class);
+
+        $this->commands([
+            'cms.commands.core-modules-show',
         ]);
 
         return $this;
