@@ -41,6 +41,7 @@ The CMS core is not a stand-alone package. Some components and modules are requi
 
 You can find more information here:
 
+- [Installing and setting up modules](documentation/Modules.md) for the CMS
 - [Standard installation guide](documentation/StandardInstallation.md)
 
 For an example installation of this CMS, check out the [Laravel CMS Example repository](https://github.com/czim/laravel-cms-example). 
