@@ -22,7 +22,7 @@ composer require czim/laravel-cms-core czim/laravel-cms-auth czim/laravel-cms-mo
 2. Add the Core service provider to `app.php` providers array:
 
 ```php
-    Czim\CmsCore\Providers\CmsCoreServiceProvider::class,
+Czim\CmsCore\Providers\CmsCoreServiceProvider::class,
 ```
 
 3. Publish the `cms-core.php` and `cms-modules.php` config files:
@@ -38,6 +38,7 @@ php artisan vendor:publish
 ```php
     'modules' => [
         Czim\CmsModels\Modules\ModelModuleGenerator::class,
+        Czim\CmsAclModule\Providers\CmsAclModuleServiceProvider::class,
     ],
 ```
 
@@ -48,7 +49,7 @@ php artisan vendor:publish
         // ...
                 
         Czim\CmsModels\Providers\CmsModelsServiceProvider::class,
-        Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
+        Czim\CmsAclModule\Providers\CmsAclModuleServiceProvider::class,
         
         // ...
     ],
@@ -82,12 +83,20 @@ This only needs to be done if you want to overrule CMS defaults for a given mode
 You can find [more information about model configuration here](https://github.com/czim/laravel-cms-models/blob/master/documentation/ModelConfiguration.md).  
 
 
+## Database
+
+1. Run migrations for the CMS:
+
+```bash
+php artisan cms:migrate
+```
+
 ## Set up an admin account
 
 1. Create a new admin user account for the CMS:
 
 ```bash
-php artisan cms:user:create someusername@domain.ext somepassword --admin
+php artisan cms:user:create someusername@domain.ext --admin
 ```
 
 This user will have unrestricted access, and can be used to set up other user accounts and roles, and assign permissions.

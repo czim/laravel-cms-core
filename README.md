@@ -37,7 +37,7 @@ This is the Modular CMS Core, which manages the basics of configuring, accessing
 
 ## Documentation
 
-The CMS core is not a stand-alone package. Some components and modules are required to start using it.
+The CMS core is not a stand-alone package. Some components and modules are required to start using the CMS.
 
 You can find more information here:
 
