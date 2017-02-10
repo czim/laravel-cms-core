@@ -38,7 +38,7 @@ php artisan vendor:publish
 ```php
     'modules' => [
         Czim\CmsModels\Modules\ModelModuleGenerator::class,
-        Czim\CmsAclModule\Providers\CmsAclModuleServiceProvider::class,
+        Czim\CmsAclModule\AclModule::class,
     ],
 ```
 
