@@ -23,7 +23,7 @@ A framework offers developers a tool that lets them work on *business logic* rat
 It is a tool that derives its value from letting programmers write code and take control wherever and however they want.
 
 This CMS is similar to most Laravel CMSes in that it offers a convenient way to quickly set up a user-friendly tool for managing data. 
-Where it differs is in being structured through-and-through as a framwork: in a way that lets developers modify its behavior by writing code. 
+Where it differs is in being structured through-and-through as a framework: in a way that lets developers modify its behavior by writing code. 
 All parts of this CMS are written under the assumption that someone may want to, and should be able to, change the way things work.
     
 It does this by using Laravel's service container, abstract bindings that you can replace using configuration files, and strategy classes that may be easily swapped out. 
@@ -34,17 +34,45 @@ At the top level, the CMS is modular and component-based, making it easy to add,
 
 This is the Modular CMS Core, which manages the basics of configuring, accessing and deferring to modules.  
 
+The core offers:
+
+- Module management, including module based routing and authorization,
+- CMS provision, loading required service providers,
+- The basics for a dedicated OAuth2 API for the CMS,
+- Segregated database migrations and the commands to manage them,
+- The basics for user notification,
+- Some basic debugging tools to help analyze loaded modules.
+ 
 
 ## Documentation
 
 The CMS core is not a stand-alone package. Some components and modules are required to start using the CMS.
 
+### Where Do I Start?
+
+Beyond a very basic setup, this CMS has a bit of a learning curve. 
+Here are some suggested approaches to getting started; pick any that best suit your needs.
+  
+- Install [a pre-configured demo Laravel application](https://github.com/czim/laravel-cms-example) with the CMS fully installed.  
+    If you're just curious what a basic installation of the CMS can do or what it looks like, 
+    this showcase is a good place to start. 
+    Just check out the repository and follow a few simple steps to get the example running locally.
+
+- Follow [a step-by-step installation guide](documentation/StandardInstallation.md) to try the CMS out in your own Laravel application.  
+    This can be a freshly installed copy of Laravel, or a pre-existing application in any stage of development.
+    This CMS is designed to be mostly a drop-in solution. 
+
+There is currently no public live example online. The quickest way to get a peek at this CMS is the first approach listed above.
+
+
+### Reference Material
+
 You can find more information here:
 
-- [Installing and setting up modules](documentation/Modules.md) for the CMS
-- [Standard installation guide](documentation/StandardInstallation.md)
+- Read more about [Installing and setting up standard modules](documentation/Modules.md) for the CMS. 
 
-For an example installation of this CMS, check out the [Laravel CMS Example repository](https://github.com/czim/laravel-cms-example). 
+
+
 
 
 ## API Documentation
