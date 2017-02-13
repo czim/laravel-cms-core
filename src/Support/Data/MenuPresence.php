@@ -8,25 +8,34 @@ use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
  * Class MenuPresence
  *
  * Data container that represents the presence of a module in the menu.
+ *
+ * @property int      $id
+ * @property string   $type
+ * @property string   $label
+ * @property string   $label_translated
+ * @property string   $action
+ * @property string   $image
+ * @property string   $html
+ * @property array    $parameters
+ * @property array    $children
  */
 class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
 {
     protected $attributes = [
-        'translated' => false,
         'parameters' => [],
         'children'   => [],
     ];
 
     protected $rules = [
-        'id'         => 'string',
-        'type'       => 'required|string',
-        'label'      => 'string',
-        'translated' => 'boolean',
-        'action'     => 'string',
-        'parameters' => 'array',
-        'image'      => 'string',
-        'children'   => 'array',
-        'html'       => 'string',
+        'id'               => 'string',
+        'type'             => 'required|string',
+        'label'            => 'string',
+        'label_translated' => 'string',
+        'action'           => 'string',
+        'parameters'       => 'array',
+        'image'            => 'string',
+        'children'         => 'array',
+        'html'             => 'string',
     ];
 
     /**
@@ -92,23 +101,30 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     }
 
     /**
-     * Returns (translatable) label for display.
+     * Returns label for display.
      *
+     * @param bool $translated  return translated label if possible
      * @return string
      */
-    public function label()
+    public function label($translated = true)
     {
+        if ($translated && $key = $this->getAttribute('label_translated')) {
+            if (($label = cms_trans($key)) !== $key) {
+                return $label;
+            }
+        }
+
         return $this->getAttribute('label');
     }
 
     /**
-     * Returns wether the label() is a translation key.
+     * Returns the translation key for the label.
      *
-     * @return bool
+     * @return string
      */
-    public function translated()
+    public function translationKey()
     {
-        return (bool) $this->getAttribute('translated');
+        return $this->getAttribute('label_translated');
     }
 
     /**

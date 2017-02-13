@@ -52,18 +52,19 @@ interface MenuPresenceInterface extends DataObjectInterface
     public function permissions();
 
     /**
-     * Returns (translatable) label for display.
+     * Returns label for display.
+     *
+     * @param bool $translated  return translated label if possible
+     * @return string
+     */
+    public function label($translated = true);
+
+    /**
+     * Returns the translation key for the label.
      *
      * @return string
      */
-    public function label();
-
-    /**
-     * Returns wether the label() is a translation key.
-     *
-     * @return bool
-     */
-    public function translated();
+    public function translationKey();
 
     /**
      * Returns icon or image reference for display purposes.

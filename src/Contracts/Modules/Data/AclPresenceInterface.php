@@ -31,16 +31,17 @@ interface AclPresenceInterface extends DataObjectInterface
     /**
      * Returns (translated) label for display.
      *
+     * @param bool $translated  returns translated label if possible
      * @return string
      */
-    public function label();
+    public function label($translated = true);
 
     /**
-     * Returns wether the label() is a translation key.
+     * Returns the translation key for the label.
      *
-     * @return bool
+     * @return string
      */
-    public function translated();
+    public function translationKey();
 
     /**
      * Replace the permissions entirely.

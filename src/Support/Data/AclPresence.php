@@ -7,22 +7,27 @@ use Czim\CmsCore\Contracts\Modules\Data\AclPresenceInterface;
  * Class AclPresence
  *
  * Data container that represents the presence of a module in the ACL.
+ *
+ * @property int      $id
+ * @property string   $type
+ * @property string   $label
+ * @property string   $label_translated
+ * @property string[] $permissions
  */
 class AclPresence extends AbstractDataObject implements AclPresenceInterface
 {
 
     protected $attributes = [
-        'translated'  => false,
         'permissions' => [],
     ];
 
     protected $rules = [
-        'id'            => 'string',
-        'type'          => 'string',
-        'label'         => 'string',
-        'translated'    => 'boolean',
-        'permissions'   => 'array',
-        'permissions.*' => 'string',
+        'id'               => 'string',
+        'type'             => 'string',
+        'label'            => 'string',
+        'label_translated' => 'string',
+        'permissions'      => 'array',
+        'permissions.*'    => 'string',
     ];
 
     /**
@@ -59,25 +64,28 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
     /**
      * Returns (translated) label for display.
      *
+     * @param bool $translated  returns translated label if possible
      * @return string
      */
-    public function label()
+    public function label($translated = true)
     {
-        if ($this->translated()) {
-            return cms_trans($this->getAttribute('label'));
+        if ($translated && $key = $this->getAttribute('label_translated')) {
+            if (($label = cms_trans($key)) !== $key) {
+                return $label;
+            }
         }
 
         return $this->getAttribute('label');
     }
 
     /**
-     * Returns wether the label() is a translation key.
+     * Returns the translation key for the label.
      *
-     * @return bool
+     * @return string
      */
-    public function translated()
+    public function translationKey()
     {
-        return (bool) $this->getAttribute('translated');
+        return $this->getAttribute('label_translated');
     }
 
     /**
