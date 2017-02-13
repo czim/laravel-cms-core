@@ -93,10 +93,6 @@ class MenuController extends Controller
      */
     protected function makeLabelForPresence(MenuPresenceInterface $presence)
     {
-        if ($presence->translated()) {
-            return cms_trans($presence->label());
-        }
-
         return $presence->label();
     }
 

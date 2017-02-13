@@ -173,7 +173,12 @@ class MenuRepository implements MenuRepositoryInterface
                 );
             }
 
-            $groups[ $id ] = $this->createGroupPresence($id, array_get($data, 'label'), $children);
+            $groups[ $id ] = $this->createGroupPresence(
+                $id,
+                array_get($data, 'label'),
+                array_get($data, 'label_translated'),
+                $children
+            );
 
             // Update the index, so we can find this group's position by its id
             $this->menuGroupIndex[ $id ] = $nestingPrefix . $id;
@@ -355,16 +360,18 @@ class MenuRepository implements MenuRepositoryInterface
      *
      * @param string                                $id
      * @param string                                $label
+     * @param string|null                           $labelTranslated
      * @param array|array[]|MenuPresenceInterface[] $children
      * @return MenuPresenceInterface
      */
-    protected function createGroupPresence($id, $label, array $children = [])
+    protected function createGroupPresence($id, $label, $labelTranslated = null, array $children = [])
     {
         return new MenuPresence([
-            'type'     => MenuPresenceType::GROUP,
-            'id'       => $id,
-            'label'    => $label,
-            'children' => $children,
+            'type'             => MenuPresenceType::GROUP,
+            'id'               => $id,
+            'label'            => $label,
+            'label_translated' => $labelTranslated,
+            'children'         => $children,
         ]);
     }
 
