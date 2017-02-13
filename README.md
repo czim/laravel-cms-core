@@ -72,12 +72,17 @@ You can find more information here:
 - Read more about [Installing and setting up standard modules](documentation/Modules.md) for the CMS. 
 
 
+### Troubleshooting
 
+If you encounter problems, please first [consult the troubleshooting section](documentation/Troubleshooting.md).
+
+When does not help, posting an issue report is much appreciated.
 
 
 ## API Documentation
 
-The documentation for the API endpoints provided by the core may be found here: https://czim.github.io/laravel-cms-core
+The documentation for the API endpoints provided by the core may be found here:  
+[czim.github.io/laravel-cms-core](https://czim.github.io/laravel-cms-core).
 
 
 ## Version Compatibility
