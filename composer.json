@@ -14,7 +14,7 @@
         "laravel/framework": "5.3.*",
         "myclabs/php-enum": "^1.4",
         "czim/laravel-dataobject": "1.3.*",
-        "league/fractal": "^0.13.0",
+        "league/fractal": "^0.13",
         "laracasts/flash": "^2.0"
     },
     "require-dev": {
