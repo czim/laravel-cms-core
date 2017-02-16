@@ -62,6 +62,8 @@ Here are some suggested approaches to getting started; pick any that best suit y
     This can be a freshly installed copy of Laravel, or a pre-existing application in any stage of development.
     This CMS is designed to be mostly a drop-in solution. 
 
+- Explore [available components and modules](documentation/Modules.md).   
+
 There is currently no public live example online. The quickest way to get a peek at this CMS is the first approach listed above.
 
 
@@ -72,7 +74,7 @@ You can find more information here:
 - Read more about [Installing and setting up standard modules](documentation/Modules.md) for the CMS. 
 
 
-### Troubleshooting
+## Troubleshooting
 
 If you encounter problems, please first [consult the troubleshooting section](documentation/Troubleshooting.md).
 
