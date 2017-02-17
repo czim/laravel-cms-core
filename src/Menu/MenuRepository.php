@@ -197,8 +197,13 @@ class MenuRepository implements MenuRepositoryInterface
     {
         // Gather all modules with any menu inherent or overridden presence
         // and store them locally according to their nature.
+        // Sort the modules according to their order in the menu configuration.
 
-        foreach ($this->core->modules()->getModules() as $moduleKey => $module) {
+        $modules = $this->core->modules()->getModules();
+
+        $modules = $this->sortModules($modules);
+
+        foreach ($modules as $moduleKey => $module) {
 
             // If the configuration has overriding data for this module's presence,
             // use it. Otherwise load the menu's own presence.
@@ -250,6 +255,28 @@ class MenuRepository implements MenuRepositoryInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Sorts the modules according as configured.
+     *
+     * @param Collection $modules
+     * @return Collection
+     */
+    protected function sortModules(Collection $modules)
+    {
+        $index = 0;
+
+        // Make a mapping to easily look up configured order with
+        $orderMap = array_flip(array_keys(config('cms-modules.menu.modules', [])));
+
+        return $modules->sort(function (ModuleInterface $module) use (&$index, $orderMap) {
+
+            // Order by configured order first, natural modules order second.
+            $primaryOrder = array_get($orderMap, $module->getKey(), -1);
+
+            return $primaryOrder < 0 ? $index : (1 - 1 / $primaryOrder);
+        });
     }
 
     /**

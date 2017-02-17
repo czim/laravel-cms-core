@@ -48,11 +48,14 @@ return [
 
         // Per module menu presence configuration.
         //
+        // The order in which the modules are listed will be used to order the presences,
+        // whether they are grouped or not.
+        //
         //      'module-slug' => [
         //          // to move the module's menu presence to a group:
         //          'group' => 'some-group-key',
         //          // to override the module's default presence configuration entirely:
-        //          'presence' => ...
+        //          'presence' => [ ... ]
         //      ]
 
         'modules' => [
