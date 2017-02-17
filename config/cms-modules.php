@@ -44,16 +44,6 @@ return [
         //      ]
 
         'groups' => [
-
-            'some-group' => [
-                'label' => 'group display name',
-                'children' => [
-                    'nested-group' => [
-                        'label' => 'another group',
-                    ],
-                ],
-            ],
-
         ],
 
         // Per module menu presence configuration.
@@ -66,9 +56,6 @@ return [
         //      ]
 
         'modules' => [
-            'test-module' => [
-                'group' =>'some-group',
-            ],
         ],
 
     ],
