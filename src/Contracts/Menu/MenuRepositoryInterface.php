@@ -8,6 +8,14 @@ interface MenuRepositoryInterface
 {
 
     /**
+     * Sets whether to ignore permissions.
+     *
+     * @param bool $ignore
+     * @return $this
+     */
+    public function ignorePermission($ignore = true);
+
+    /**
      * Parses available menu presence data, so it may be retrieved.
      */
     public function initialize();

@@ -69,6 +69,13 @@ class MenuRepository implements MenuRepositoryInterface
     protected $alternativePresences;
 
     /**
+     * Whether to ignore permissions during initialization.
+     *
+     * @var bool
+     */
+    protected $ignorePermission = false;
+
+    /**
      * @param CoreInterface          $core
      * @param AuthenticatorInterface $auth
      */
@@ -78,6 +85,19 @@ class MenuRepository implements MenuRepositoryInterface
         $this->auth = $auth;
 
         $this->configMenuModels = $this->core->moduleConfig('menu.modules', []);
+    }
+
+    /**
+     * Sets whether to ignore permissions.
+     *
+     * @param bool $ignore
+     * @return $this
+     */
+    public function ignorePermission($ignore = true)
+    {
+        $this->ignorePermission = (bool) $ignore;
+
+        return $this;
     }
 
     /**
@@ -358,6 +378,10 @@ class MenuRepository implements MenuRepositoryInterface
      */
     protected function filterUnpermittedFromPresence(MenuPresenceInterface $presence)
     {
+        if ($this->ignorePermission) {
+            return $presence;
+        }
+
         if ( ! $this->shouldMenuPresenceBeShown($presence)) {
             return null;
         }
