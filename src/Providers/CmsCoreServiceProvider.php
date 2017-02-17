@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Providers;
 
+use Czim\CmsCore\Console\Commands\ShowMenu;
 use Czim\CmsCore\Console\Commands\ShowModules;
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
@@ -241,9 +242,11 @@ class CmsCoreServiceProvider extends ServiceProvider
      */
     protected function registerConsoleCommands()
     {
+        $this->app->singleton('cms.commands.core-menu-show', ShowMenu::class);
         $this->app->singleton('cms.commands.core-modules-show', ShowModules::class);
 
         $this->commands([
+            'cms.commands.core-menu-show',
             'cms.commands.core-modules-show',
         ]);
 
