@@ -91,13 +91,22 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
 
     /**
      * Returns required permissions to see or use the action.
-     * Null if no permissions required.
      *
-     * @return null|string|string[]
+     * @return string[]
      */
     public function permissions()
     {
-        return $this->getAttribute('permissions');
+        $permissions = $this->getAttribute('permissions');
+
+        if (empty($permissions)) {
+            return [];
+        }
+
+        if ( ! is_array($permissions)) {
+            $permissions = [ $permissions ];
+        }
+
+        return $permissions;
     }
 
     /**

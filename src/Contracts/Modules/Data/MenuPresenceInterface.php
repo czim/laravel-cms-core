@@ -45,9 +45,8 @@ interface MenuPresenceInterface extends DataObjectInterface
 
     /**
      * Returns required permissions to see or use the action.
-     * Null if no permissions required.
      *
-     * @return null|string|string[]
+     * @return string[]
      */
     public function permissions();
 
