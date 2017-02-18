@@ -290,14 +290,12 @@ class MenuRepository implements MenuRepositoryInterface
         // Make a mapping to easily look up configured order with
         $orderMap = array_flip(array_keys(config('cms-modules.menu.modules', [])));
 
-        return $modules->sort(function (ModuleInterface $module) use (&$index, $orderMap) {
+        return $modules->sortBy(function (ModuleInterface $module) use (&$index, $orderMap) {
 
-            $index++;
-            
             // Order by configured order first, natural modules order second.
-            $primaryOrder = array_get($orderMap, $module->getKey(), -1);
+            $primaryOrder = array_get($orderMap, $module->getKey(), -2) + 1;
 
-            return $primaryOrder < 0 ? $index : (1 - 1 / $primaryOrder);
+            return $primaryOrder < 0 ? ++$index : (1 - 1 / $primaryOrder);
         });
     }
 
