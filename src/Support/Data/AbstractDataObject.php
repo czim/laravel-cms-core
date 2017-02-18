@@ -5,6 +5,7 @@ use Czim\CmsCore\Contracts\Support\Data\DataClearInterface;
 use Czim\DataObject\AbstractDataObject as CzimAbstractDataObject;
 use Czim\DataObject\Contracts\DataObjectInterface;
 use Illuminate\Contracts\Support\Arrayable;
+use UnexpectedValueException;
 
 abstract class AbstractDataObject extends CzimAbstractDataObject implements DataClearInterface
 {
@@ -63,10 +64,20 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
                 foreach ($this->attributes[$key] as &$item) {
 
                     if ( ! is_a($item, $dataObjectClass)) {
+
+                        $data = ($item instanceof Arrayable) ? $item->toArray() : $item;
+
+                        if ( ! is_array($data)) {
+                            throw new UnexpectedValueException(
+                                "Cannot instantiate data object '{$dataObjectClass}' with non-array data"
+                                . (is_scalar($data) || is_object($data) && method_exists($data, '__toString')
+                                    ?   ' (data: ' . (string) $data . ')'
+                                    :   null)
+                            );
+                        }
+
                         /** @var DataObjectInterface $item */
-                        $item = new $dataObjectClass(
-                            ($item instanceof Arrayable) ? $item->toArray() : $item
-                        );
+                        $item = new $dataObjectClass($data);
                     }
                 }
             }
@@ -76,7 +87,21 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
         } else {
 
             if ( ! is_a($this->attributes[ $key ], $dataObjectClass)) {
-                $this->attributes[ $key ] = new $dataObjectClass((array) $this->attributes[ $key ]);
+
+                $data = ($this->attributes[ $key ] instanceof Arrayable)
+                        ?   $this->attributes[ $key ]->toArray()
+                        :   $this->attributes[ $key ];
+
+                if ( ! is_array($data)) {
+                    throw new UnexpectedValueException(
+                        "Cannot instantiate data object '{$dataObjectClass}' with non-array data"
+                        . (is_scalar($data) || is_object($data) && method_exists($data, '__toString')
+                            ?   ' (data: ' . (string) $data . ')'
+                            :   null)
+                    );
+                }
+
+                $this->attributes[ $key ] = new $dataObjectClass($data);
             }
         }
 
