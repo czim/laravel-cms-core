@@ -21,6 +21,26 @@ It's a good idea to check the following things when anything goes wrong.
 
 ## Issues
 
+
+### The CMS is slow
+
+If you are using the Models Module, make sure that you enable model configuration cache.
+The cache configuration setting is `cms-models.repository.cache`, setting it `true` will cache the models.  
+This is done according to your application (or CMS-specific) cache driver configuration.
+
+If caching is disabled, the CMS will analyze the database structure, model class files and parse configuration files,
+which can really slow things down as the amount of configured models increases.
+
+
+### Model configuration changes don't show up (Models Module)
+
+Make sure the CMS model configuration cache is cleared.  
+You can clear the models cache by running `php artisan cms:models:clear`.
+
+It is easiest to leave the cache setting disabled while configuring the CMS.
+You can do this by setting `cms-models.repository.cache` to `false`, but note that this will make all CMS pageloads slower.
+
+
 ### The base CMS URL (`<base URL>/cms`) fails to load (with a 404).
   
 When running in a local development environment (using Laravel Valet or `php artisan serve`, for instance), 
@@ -33,6 +53,24 @@ or to change the base path for the CMS (using config key `cms-core.route.prefix`
 Note that this is not an issue with the CMS, and affects any Laravel routing where directory names in public match routes exactly.
 
 
+### The CMS theme style is broken or interactive components (such as date pickers) don't work
+
+Make sure you have run `php artisan vendor:publish` after adding the CMS Service provider to your `app.php` or `cms-core.php` configuration file.
+
+CMS assets may have been altered between versions, and `vendor:publish` will not overwrite the existing contents.
+Make sure to overwrite already published assets by adding the `--force` option:
+
+```bash
+php artisan vendor:publish --force --tag=assets --provider="Czim\CmsTheme\Providers\CmsThemeServiceProvider"
+```
+
+Be warned that forcing this will overwrite **translation** files published by the theme package. 
+Omitting the `--tag` option will also cause the theme **configuration** file to be overwritten.
+If you'd rather only update the public directory assets, simply delete the `public/_cms` directory and run an unforced `vendor:publish`.
+
+For more information on publishing assets, see [the Laravel documentation](https://laravel.com/docs/5.3/packages#public-assets)
+
+
 ## Helpful Artisan Commands
 
 If you're encountering problems due to modules or configuration, keep the following Artisan commands in mind:
@@ -41,6 +79,7 @@ Core:
 
 - `cms:migrate:status`: check if CMS database migrations have all been run.
 - `cms:modules:show`: show currently loaded modules.
+- `cms:menu:show`: show currently loaded menu layout.
 
 Models Module:
 
