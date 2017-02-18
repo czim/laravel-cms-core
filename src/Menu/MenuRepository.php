@@ -292,6 +292,8 @@ class MenuRepository implements MenuRepositoryInterface
 
         return $modules->sort(function (ModuleInterface $module) use (&$index, $orderMap) {
 
+            $index++;
+            
             // Order by configured order first, natural modules order second.
             $primaryOrder = array_get($orderMap, $module->getKey(), -1);
 
