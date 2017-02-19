@@ -11,6 +11,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use League\OAuth2\Server\Exception\OAuthException;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -162,6 +163,32 @@ class Handler extends ExceptionHandler
         $core = $this->getCoreIfBound();
 
         return $core->api()->error($e);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function renderHttpException(HttpException $e)
+    {
+        $status = $e->getStatusCode();
+
+        $core = $this->getCoreIfBound();
+
+        if (    $core && $core->bootChecker()->isCmsWebRequest()
+            &&  view()->exists("cms::errors.{$status}")
+        ) {
+            $flatException = FlattenException::create($e);
+
+            return response()
+                ->view(
+                    "cms::errors.{$status}",
+                    [ 'exception' => $flatException ],
+                    $status,
+                    $e->getHeaders()
+                );
+        }
+
+        return parent::renderHttpException($e);
     }
 
     /**
