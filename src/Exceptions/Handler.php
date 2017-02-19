@@ -168,15 +168,25 @@ class Handler extends ExceptionHandler
     /**
      * {@inheritdoc}
      */
+    protected function convertExceptionToResponse(Exception $e)
+    {
+        if ($this->isCmsWebRequest() && view()->exists("cms::errors.500")) {
+            $flatException = FlattenException::create($e);
+
+            return response()->view("cms::errors.500", [ 'exception' => $flatException ], 500);
+        }
+
+        return parent::convertExceptionToResponse($e);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function renderHttpException(HttpException $e)
     {
         $status = $e->getStatusCode();
 
-        $core = $this->getCoreIfBound();
-
-        if (    $core && $core->bootChecker()->isCmsWebRequest()
-            &&  view()->exists("cms::errors.{$status}")
-        ) {
+        if ($this->isCmsWebRequest() &&  view()->exists("cms::errors.{$status}")) {
             $flatException = FlattenException::create($e);
 
             return response()
@@ -189,6 +199,18 @@ class Handler extends ExceptionHandler
         }
 
         return parent::renderHttpException($e);
+    }
+
+    /**
+     * Returns whether the current request is a CMS web request.
+     *
+     * @return bool
+     */
+    protected function isCmsWebRequest()
+    {
+        $core = $this->getCoreIfBound();
+
+        return $core && $core->bootChecker()->isCmsWebRequest();
     }
 
     /**
