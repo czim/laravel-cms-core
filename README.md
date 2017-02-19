@@ -42,7 +42,16 @@ The core offers:
 - Segregated database migrations and the commands to manage them,
 - The basics for user notification,
 - Some basic debugging tools to help analyze loaded modules.
- 
+
+
+## Heads-up / Disclaimer
+
+This project is currently under heavy development. It's best not to use this in production environments yet.   
+Feedback is welcome, as always.
+
+This CMS currently only works (well) with Laravel 5.3.  
+Laravel 5.4 support will be added soon.
+
 
 ## Documentation
 
@@ -89,11 +98,11 @@ The documentation for the API endpoints provided by the core may be found here:
 
 ## Version Compatibility
 
- Laravel  | Package 
-:---------|:--------
- 5.1.x    | 0.9.x
- 5.2.x    | 0.9.x
- 5.3.x    | 1.3.x
+ Laravel             | Package 
+:--------------------|:--------
+ 5.1.x (out of date) | 0.9.x
+ 5.2.x (out of date) | 0.9.x
+ 5.3.x               | 1.3.x
 
 ## Installation
 

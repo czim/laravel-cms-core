@@ -41,7 +41,7 @@ It is easiest to leave the cache setting disabled while configuring the CMS.
 You can do this by setting `cms-models.repository.cache` to `false`, but note that this will make all CMS pageloads slower.
 
 
-### The base CMS URL (`<base URL>/cms`) fails to load (with a 404).
+### The base CMS URL (`<base URL>/cms`) fails to load (with a 404)
   
 When running in a local development environment (using Laravel Valet or `php artisan serve`, for instance), 
 be advised that some routes may not work depending on your `public` directory contents.
@@ -55,7 +55,8 @@ Note that this is not an issue with the CMS, and affects any Laravel routing whe
 
 ### The CMS theme style is broken or interactive components (such as date pickers) don't work
 
-Make sure you have run `php artisan vendor:publish` after adding the CMS Service provider to your `app.php` or `cms-core.php` configuration file.
+Make sure you have run `php artisan vendor:publish` after adding the CMS Service provider to the `app.php` 
+(or module service providers to the `cms-core.php`) configuration file.
 
 CMS assets may have been altered between versions, and `vendor:publish` will not overwrite the existing contents.
 Make sure to overwrite already published assets by adding the `--force` option:
