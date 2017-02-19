@@ -61,23 +61,11 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
 
             if (is_array($this->attributes[$key])) {
 
-                foreach ($this->attributes[$key] as &$item) {
+                foreach ($this->attributes[$key] as $index => &$item) {
 
                     if ( ! is_a($item, $dataObjectClass)) {
 
-                        $data = ($item instanceof Arrayable) ? $item->toArray() : $item;
-
-                        if ( ! is_array($data)) {
-                            throw new UnexpectedValueException(
-                                "Cannot instantiate data object '{$dataObjectClass}' with non-array data"
-                                . (is_scalar($data) || is_object($data) && method_exists($data, '__toString')
-                                    ?   ' (data: ' . (string) $data . ')'
-                                    :   null)
-                            );
-                        }
-
-                        /** @var DataObjectInterface $item */
-                        $item = new $dataObjectClass($data);
+                        $item = $this->makeNestedDataObject($dataObjectClass, $item, $key . '.' . $index);
                     }
                 }
             }
@@ -88,24 +76,34 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
 
             if ( ! is_a($this->attributes[ $key ], $dataObjectClass)) {
 
-                $data = ($this->attributes[ $key ] instanceof Arrayable)
-                        ?   $this->attributes[ $key ]->toArray()
-                        :   $this->attributes[ $key ];
-
-                if ( ! is_array($data)) {
-                    throw new UnexpectedValueException(
-                        "Cannot instantiate data object '{$dataObjectClass}' with non-array data"
-                        . (is_scalar($data) || is_object($data) && method_exists($data, '__toString')
-                            ?   ' (data: ' . (string) $data . ')'
-                            :   null)
-                    );
-                }
-
-                $this->attributes[ $key ] = new $dataObjectClass($data);
+                $this->attributes[ $key ] = $this->makeNestedDataObject($dataObjectClass, $this->attributes[ $key ], $key);
             }
         }
 
         return $this->attributes[$key];
+    }
+
+    /**
+     * @param string $class
+     * @param mixed  $data
+     * @param string $key
+     * @return mixed
+     */
+    protected function makeNestedDataObject($class, $data, $key)
+    {
+        $data = ($data instanceof Arrayable) ? $data->toArray() : $data;
+
+        if ( ! is_array($data)) {
+            throw new UnexpectedValueException(
+                "Cannot instantiate data object '{$class}' with non-array data for key '{$key}'"
+                . (is_scalar($data) || is_object($data) && method_exists($data, '__toString')
+                    ?   ' (data: ' . (string) $data . ')'
+                    :   null)
+            );
+        }
+
+        /** @var DataObjectInterface $data */
+        return new $class($data);
     }
 
     /**
