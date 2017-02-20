@@ -10,6 +10,7 @@ use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
+use UnexpectedValueException;
 
 class MenuRepository implements MenuRepositoryInterface
 {
@@ -289,7 +290,25 @@ class MenuRepository implements MenuRepositoryInterface
         $index = 0;
 
         // Make a mapping to easily look up configured order with
-        $orderMap = array_flip(array_keys(config('cms-modules.menu.modules', [])));
+        $moduleConfig = config('cms-modules.menu.modules', []);
+
+        // Account for possibility of either 'module key' => [] or 'module key' format in config
+        $orderMap = array_map(
+            function ($key) use ($moduleConfig) {
+
+                if (is_string($key)) return $key;
+
+                if ( ! is_string($moduleConfig[$key])) {
+                    throw new UnexpectedValueException(
+                        "cms-modules.menu.modules entry '{$key}' must be a string or have a non-numeric key"
+                    );
+                }
+
+                return $moduleConfig[$key];
+            },
+            array_keys($moduleConfig)
+        );
+        $orderMap = array_flip($orderMap);
 
         return $modules->sortBy(function (ModuleInterface $module) use (&$index, $orderMap) {
 
