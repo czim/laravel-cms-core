@@ -80,7 +80,8 @@ There is currently no public live example online. The quickest way to get a peek
 
 You can find more information here:
 
-- Read more about [Installing and setting up standard modules](documentation/Modules.md) for the CMS. 
+- [Installing and setting up standard modules](documentation/Modules.md) for the CMS.
+- [The way the menu works](documentation/Menu.md) and how you can customize it.
 
 
 ## Troubleshooting
