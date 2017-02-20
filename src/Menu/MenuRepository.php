@@ -197,7 +197,8 @@ class MenuRepository implements MenuRepositoryInterface
                 $id,
                 array_get($data, 'label'),
                 array_get($data, 'label_translated'),
-                $children
+                $children,
+                array_get($data, 'image')
             );
 
             // Update the index, so we can find this group's position by its id
@@ -413,15 +414,17 @@ class MenuRepository implements MenuRepositoryInterface
      * @param string                                $label
      * @param string|null                           $labelTranslated
      * @param array|array[]|MenuPresenceInterface[] $children
+     * @param string|null                           $image
      * @return MenuPresenceInterface
      */
-    protected function createGroupPresence($id, $label, $labelTranslated = null, array $children = [])
+    protected function createGroupPresence($id, $label, $labelTranslated = null, array $children = [], $image = null)
     {
         return new MenuPresence([
             'type'             => MenuPresenceType::GROUP,
             'id'               => $id,
             'label'            => $label,
             'label_translated' => $labelTranslated,
+            'image'            => $image,
             'children'         => $children,
         ]);
     }
