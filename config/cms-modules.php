@@ -25,38 +25,52 @@ return [
     | Menu
     |--------------------------------------------------------------------------
     |
-    | Adding modules may enable default menu presence, but this depends
-    | on the module content. To customize (or disable) menu presence,
-    | you can set per-module menu configuration in this section.
+    | The menu is composed of module presences, which may be configured,
+    | ordered, or even assigned in a specific nested, grouped layout.
     |
     */
 
     'menu' => [
 
-        // Group structure (listed by key) that modules can hook into.
-        // This will define a menu structure that may be nested as follows:
+        // A menu layout with groups may be defined here, along with the order in which they appear.
+        // Groups are represented by arrays. Menu items for modules are referenced by module key.
         //
-        //      'some-group-key' => [
-        //          'label'    => 'Display Name of Group',
+        // Example:
+        //
+        //  'layout' => [
+        //      [
+        //          'label' => 'Group label for display',
         //          'children' => [
-        //              'some-other-group-key' => [ 'name' => 'Another Display Name' ]
+        //              'another.module-key',
+        //              'yet-another.module-key',
         //          ]
-        //      ]
+        //      ],
+        //      'some.module-key',
+        //  ]
 
-        'groups' => [
+        'layout' => [
         ],
 
-        // Per module menu presence configuration.
+        // Module menu presence configuration and default order of appearance.
         //
-        // The order in which the modules are listed will be used to order the presences,
-        // whether they are grouped or not.
+        // Entries in this array may be either module keys, or key value pairs with
+        // further configuration for a module's menu presence.
         //
-        //      'module-slug' => [
-        //          // to move the module's menu presence to a group:
-        //          'group' => 'some-group-key',
-        //          // to override the module's default presence configuration entirely:
-        //          'presence' => [ ... ]
-        //      ]
+        // Note that the order of appearance defined in the layout key above overrules
+        // the order of the .
+        //
+        // Example:
+        //
+        //  'modules' => [
+        //      'first-module-key',
+        //      'second-module-key',
+        //      'third-module-key' => [
+        //          'presence' => [
+        //              ... (full menu presence configuration)
+        //          ]
+        //      ],
+        //      'some.module-key',
+        //  ]
 
         'modules' => [
         ],
