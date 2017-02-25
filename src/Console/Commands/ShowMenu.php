@@ -25,28 +25,14 @@ class ShowMenu extends Command
 
         $repository->ignorePermission()->initialize();
 
-        $groups = $repository->getMenuGroups();
+        $groups = $repository->getMenuLayout();
 
         if (count($groups)) {
 
-            $this->comment('Configured groups:');
+            $this->comment('Menu layout:');
             $this->info('');
 
             foreach ($groups as $key => $group) {
-
-                $this->displaySingle($group, $key, 1);
-            }
-        }
-
-
-        $ungrouped = $repository->getMenuUngrouped();
-
-        if (count($ungrouped)) {
-
-            $this->comment('Unassigned to configured groups:');
-            $this->info('');
-
-            foreach ($ungrouped as $key => $group) {
 
                 $this->displaySingle($group, $key, 1);
             }

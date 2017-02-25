@@ -40,8 +40,7 @@ class MenuController extends Controller
     {
         return $this->core->api()->response(
             [
-                'groups'    => $this->transformPresencesForApi($this->menu->getMenuGroups()),
-                'ungrouped' => $this->transformPresencesForApi($this->menu->getMenuUngrouped()),
+                'layout' => $this->transformPresencesForApi($this->menu->getMenuLayout()),
             ]
         );
     }

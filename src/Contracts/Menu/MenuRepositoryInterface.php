@@ -21,18 +21,9 @@ interface MenuRepositoryInterface
     public function initialize();
 
     /**
-     * Retrieves menu presences deliberately grouped.
-     *
      * @return Collection|MenuPresenceInterface[]
      */
-    public function getMenuGroups();
-
-    /**
-     * Retrieves menu presences left ungrouped.
-     *
-     * @return Collection|MenuPresenceInterface[]
-     */
-    public function getMenuUngrouped();
+    public function getMenuLayout();
 
     /**
      * Retrieves non-standard presences.
