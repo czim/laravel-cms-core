@@ -13,7 +13,7 @@ use Czim\DataObject\Contracts\DataObjectInterface;
  * @property string   $type
  * @property string   $label
  * @property string   $label_translated
- * @property string   $image
+ * @property string   $icon
  * @property array    $children
  */
 class LayoutGroupData extends AbstractDataObject
@@ -26,7 +26,7 @@ class LayoutGroupData extends AbstractDataObject
         'id'               => 'string',
         'label'            => 'string',
         'label_translated' => 'string',
-        'image'            => 'string',
+        'icon'             => 'string',
         'children'         => 'array',
     ];
 
@@ -93,9 +93,20 @@ class LayoutGroupData extends AbstractDataObject
      *
      * @return string
      */
+    public function icon()
+    {
+        return $this->getAttribute('icon');
+    }
+
+    /**
+     * Returns icon or image reference for display purposes.
+     *
+     * @return string
+     * @deprecated
+     */
     public function image()
     {
-        return $this->getAttribute('image');
+        return $this->getAttribute('icon');
     }
 
     /**

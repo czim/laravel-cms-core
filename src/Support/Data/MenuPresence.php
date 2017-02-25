@@ -14,7 +14,7 @@ use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
  * @property string   $label
  * @property string   $label_translated
  * @property string   $action
- * @property string   $image
+ * @property string   $icon
  * @property string   $html
  * @property array    $parameters
  * @property array    $children
@@ -33,7 +33,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
         'label_translated' => 'string',
         'action'           => 'string',
         'parameters'       => 'array',
-        'image'            => 'string',
+        'icon'             => 'string',
         'children'         => 'array',
         'html'             => 'string',
     ];
@@ -137,13 +137,24 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     }
 
     /**
-     * Returns icon or image reference for display purposes.
+     * Returns icon reference for display purposes.
      *
      * @return string
      */
+    public function icon()
+    {
+        return $this->getAttribute('icon');
+    }
+
+    /**
+     * Returns icon or image reference for display purposes.
+     *
+     * @return string
+     * @deprecated
+     */
     public function image()
     {
-        return $this->getAttribute('image');
+        return $this->getAttribute('icon');
     }
 
     /**

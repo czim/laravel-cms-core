@@ -89,7 +89,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
                 'type'             => MenuPresenceType::GROUP,
                 'label'            => array_get($value, 'label'),
                 'label_translated' => array_get($value, 'label_translated'),
-                'image'            => array_get($value, 'image'),
+                'icon'             => array_get($value, 'icon'),
                 'children'         => $children,
             ]);
         }

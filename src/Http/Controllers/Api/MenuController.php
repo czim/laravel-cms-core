@@ -72,7 +72,7 @@ class MenuController extends Controller
             'id'          => $presence->id(),
             'type'        => $presence->type(),
             'label'       => $this->makeLabelForPresence($presence),
-            'image'       => $presence->image(),
+            'icon'        => $presence->icon(),
             'action'      => $this->makeLinkForPresence($presence),
             'parameters'  => $presence->parameters(),
             'permissions' => $presence->permissions(),

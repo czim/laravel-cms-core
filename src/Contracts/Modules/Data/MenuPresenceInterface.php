@@ -66,9 +66,17 @@ interface MenuPresenceInterface extends DataObjectInterface
     public function translationKey();
 
     /**
+     * Returns icon reference for display purposes.
+     *
+     * @return string
+     */
+    public function icon();
+
+    /**
      * Returns icon or image reference for display purposes.
      *
      * @return string
+     * @deprecated
      */
     public function image();
 
