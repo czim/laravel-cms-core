@@ -10,11 +10,17 @@ use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Core\NotifierInterface;
+use Czim\CmsCore\Contracts\Menu\MenuConfigInterpreterInterface;
+use Czim\CmsCore\Contracts\Menu\MenuModulesInterpreterInterface;
+use Czim\CmsCore\Contracts\Menu\MenuPermissionsFilterInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
 use Czim\CmsCore\Events\CmsHasBooted;
 use Czim\CmsCore\Events\CmsHasRegistered;
+use Czim\CmsCore\Menu\MenuConfigInterpreter;
+use Czim\CmsCore\Menu\MenuModulesInterpreter;
+use Czim\CmsCore\Menu\MenuPermissionsFilter;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Support\Localization\LocaleRepository;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -186,6 +192,9 @@ class CmsCoreServiceProvider extends ServiceProvider
     protected function registerInterfaceBindings()
     {
         $this->app->singleton(LocaleRepositoryInterface::class, LocaleRepository::class);
+        $this->app->singleton(MenuConfigInterpreterInterface::class, MenuConfigInterpreter::class);
+        $this->app->singleton(MenuModulesInterpreterInterface::class, MenuModulesInterpreter::class);
+        $this->app->singleton(MenuPermissionsFilterInterface::class, MenuPermissionsFilter::class);
 
         return $this;
     }

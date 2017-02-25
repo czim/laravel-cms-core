@@ -32,11 +32,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
      */
     public function layout()
     {
-        if ($this->layout && count($this->layout)) {
-            return $this->layout;
-        }
-
-        return array_keys($this->fields);
+        return $this->getAttribute('layout') ?: [];
     }
 
     /**
@@ -44,7 +40,33 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
      */
     public function alternative()
     {
-        return $this->getAttribute('alternative');
+        return $this->getAttribute('alternative') ?: [];
+    }
+
+    /**
+     * Sets the layout.
+     *
+     * @param MenuPresenceInterface[] $presences
+     * @return $this
+     */
+    public function setLayout(array $presences)
+    {
+        $this->setAttribute('layout', $presences);
+
+        return $this;
+    }
+
+    /**
+     * Sets the alternative presences.
+     *
+     * @param MenuPresenceInterface[] $presences
+     * @return $this
+     */
+    public function setAlternative(array $presences)
+    {
+        $this->setAttribute('alternative', $presences);
+
+        return $this;
     }
 
     /**
