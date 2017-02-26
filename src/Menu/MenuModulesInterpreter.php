@@ -82,6 +82,9 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                 continue;
             }
 
+            $standard    = [];
+            $alternative = [];
+
             foreach ($this->normalizeMenuPresence($presencesForModule) as $presence) {
 
                 if ( ! $presence) {
@@ -92,12 +95,15 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                 // it should not appear in the normal menu structure.
                 if ($this->isMenuPresenceAlternative($presence)) {
 
-                    $this->presences->alternative->put($moduleKey, $presence);
+                    $alternative[] = $presence;
                     continue;
                 }
 
-                $this->presences->standard->put($moduleKey, $presence);
+                $standard[] = $presence;
             }
+
+            $this->presences->standard->put($moduleKey, $standard);
+            $this->presences->alternative->put($moduleKey, $alternative);
         }
 
         return $this->presences;

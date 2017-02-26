@@ -9,14 +9,16 @@ use Illuminate\Support\Collection;
 /**
  * Class ConfiguredModulesData
  *
- * @property Collection|MenuPresenceInterface[] $standard
- * @property Collection|MenuPresenceInterface[] $alternative
+ * @property Collection|MenuPresenceInterface[][] $standard
+ * @property Collection|MenuPresenceInterface[][] $alternative
  */
 class ConfiguredModulesData extends AbstractDataObject implements MenuConfiguredModulesDataInterface
 {
 
     /**
-     * @return Collection|MenuPresenceInterface[]
+     * Returns list of lists of presences per module key.
+     *
+     * @return Collection|MenuPresenceInterface[][]
      */
     public function standard()
     {
@@ -24,7 +26,9 @@ class ConfiguredModulesData extends AbstractDataObject implements MenuConfigured
     }
 
     /**
-     * @return Collection|MenuPresenceInterface[]
+     * Returns list of lists of presences per module key.
+     *
+     * @return Collection|MenuPresenceInterface[][]
      */
     public function alternative()
     {

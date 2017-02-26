@@ -113,8 +113,11 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
         $layout = $this->mergeModulePresencesIntoLayoutLayer($layout, $standard);
 
         // Append ungrouped presences to to the end of the layout
-        $standard->each(function (MenuPresenceInterface $presence) use (&$layout) {
-            $layout[] = $presence;
+        $standard->each(function ($presences) use (&$layout) {
+            /** @var MenuPresenceInterface[] $presences */
+            foreach ($presences as $presence) {
+                $layout[] = $presence;
+            }
         });
 
         return $layout;
@@ -124,19 +127,35 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
      * Merges module menu presences into layout tree layers recursively.
      *
      * @param array      $layer
-     * @param Collection $presences     pulls presences
+     * @param Collection $presencesPerModule    pulls presences per module if they are added to the layout
      * @return array
      */
-    protected function mergeModulePresencesIntoLayoutLayer(array $layer, Collection $presences)
+    protected function mergeModulePresencesIntoLayoutLayer(array $layer, Collection $presencesPerModule)
     {
-        foreach ($layer as $key => &$value) {
+        $newLayer = [];
+
+        foreach ($layer as $key => $value) {
+
+            $stringKey = is_string($key) && ! is_numeric($key);
 
             if ($value instanceof MenuPresenceInterface && $value->type() == MenuPresenceType::GROUP) {
-                $value->setChildren($this->mergeModulePresencesIntoLayoutLayer($value->children, $presences));
+                $value->setChildren($this->mergeModulePresencesIntoLayoutLayer($value->children, $presencesPerModule));
+
+                if ($stringKey) {
+                    $newLayer[$key] = $value;
+                } else {
+                    $newLayer[] = $value;
+                }
                 continue;
             }
 
             if ( ! is_string($value)) {
+
+                if ($stringKey) {
+                    $newLayer[$key] = $value;
+                } else {
+                    $newLayer[] = $value;
+                }
                 continue;
             }
 
@@ -144,18 +163,18 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
                 throw new UnexpectedValueException("Module key reference '{$value}' for menu layout is used more than once.");
             }
 
-            if ( ! $presences->has($value)) {
+            if ( ! $presencesPerModule->has($value)) {
                 throw new UnexpectedValueException("Unknown module key reference '{$value}' in menu layout.");
             }
 
             $this->assignedModuleKeys[] = $value;
 
-            $value = $presences->pull($value);
+            foreach ($presences = $presencesPerModule->pull($value) as $presence) {
+                $newLayer[] = $presence;
+            }
         }
 
-        unset ($value);
-
-        return $layer;
+        return $newLayer;
     }
 
     /**
