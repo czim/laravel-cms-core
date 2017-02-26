@@ -25,6 +25,16 @@ class MenuRepository implements MenuRepositoryInterface
     protected $auth;
 
     /**
+     * @var MenuConfigInterpreterInterface
+     */
+    protected $configInterpreter;
+
+    /**
+     * @var MenuPermissionsFilterInterface
+     */
+    protected $permissionsFilter;
+
+    /**
      * Whether the menu data has been prepared, used to prevent
      * performing preparations more than once.
      *
@@ -55,13 +65,21 @@ class MenuRepository implements MenuRepositoryInterface
 
 
     /**
-     * @param CoreInterface          $core
-     * @param AuthenticatorInterface $auth
+     * @param CoreInterface                  $core
+     * @param AuthenticatorInterface         $auth
+     * @param MenuConfigInterpreterInterface $configInterpreter
+     * @param MenuPermissionsFilterInterface $permissionsFilter
      */
-    public function __construct(CoreInterface $core, AuthenticatorInterface $auth)
-    {
-        $this->core = $core;
-        $this->auth = $auth;
+    public function __construct(
+        CoreInterface $core,
+        AuthenticatorInterface $auth,
+        MenuConfigInterpreterInterface $configInterpreter,
+        MenuPermissionsFilterInterface $permissionsFilter
+    ) {
+        $this->core              = $core;
+        $this->auth              = $auth;
+        $this->configInterpreter = $configInterpreter;
+        $this->permissionsFilter = $permissionsFilter;
     }
 
     /**
@@ -116,25 +134,18 @@ class MenuRepository implements MenuRepositoryInterface
         }
 
         if ( ! ($layout = $this->getCachedLayout())) {
-            /** @var MenuConfigInterpreterInterface $interpreter */
-            $interpreter = app(MenuConfigInterpreterInterface::class);
-
-            $layout = $interpreter->interpretLayout($this->core->moduleConfig('menu.layout', []));
+            $layout = $this->configInterpreter->interpretLayout($this->core->moduleConfig('menu.layout', []));
             $this->cacheLayout($layout);
         }
 
-
-        /** @var MenuPermissionsFilterInterface $filter */
-        $filter = app(MenuPermissionsFilterInterface::class);
-
         if ( ! ($permissionsIndex = $this->getCachedPermissionsIndex())) {
-            $permissionsIndex = $filter->buildPermissionsIndex($layout);
+            $permissionsIndex = $this->permissionsFilter->buildPermissionsIndex($layout);
             $this->cachePermissionsIndex($permissionsIndex);
         }
-        
+
 
         if ( ! $this->ignorePermission && ! $this->auth->admin()) {
-            $layout = $filter->filterLayout($layout, $this->auth->user(), $permissionsIndex);
+            $layout = $this->permissionsFilter->filterLayout($layout, $this->auth->user(), $permissionsIndex);
         }
 
         $this->menuLayout           = new Collection($layout->layout());
