@@ -108,6 +108,30 @@ This includes groups that exclusively contain menu presences in them that the us
 Note: you can get a list of available module keys with `php artisan cms:modules:show --keys`.
 
 
+## Hiding Items from the Menu
+
+Any module that has a menu presence will automatically be included in the menu.
+
+To override this and disable a module from having its menu presence appear, add its module key to the `cms-modules.menu.modules`
+configuration array with a value of `false`:
+
+```php
+<?php
+    'menu' => [
+        
+        'modules' => [
+            // This module will still work, but will not appear in the menu
+            'models.app-models.post' => false,
+        ]
+    ]
+```
+
+Note that if you disable a module's presence this way, its key must not be used in the `layout`
+(doing so will an `UnexpectedValueException`).
+
+If you want to modify or replace, rather than disable a module's menu presence, read on.
+
+
 ## Menu Presences
 
 A [Menu Presence](https://github.com/czim/laravel-cms-core/blob/master/src/Support/Data/MenuPresence.php) describes
