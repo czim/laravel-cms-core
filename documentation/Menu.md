@@ -205,6 +205,24 @@ Keep in mind that `php artisan route:list` may help in getting a clear view of w
 Note that this approach is fully compatible with any `group` assignment.
 
 
+## Caching
+
+The menu layout may be cached to speed up loading of CMS pages.
+
+Caching can be enabled or disabled by setting the `cms-modules.menu.cache` with a boolean value.
+It is recommended to leave caching disabled while configuring the CMS.
+
+When enabled, the cache is automatically filled whenever it is found empty. 
+
+Changes are not automatically detected, the cache must be flushed when the layout is changed or modules are added.
+
+To flush the cache manually, use this artisan command:
+
+```bash
+php artisan cms:menu:clear
+```
+
+
 ## Debugging
 
 When building menus, the `cms:menu:show` command may be helpful:
