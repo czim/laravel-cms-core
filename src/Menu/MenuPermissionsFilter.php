@@ -237,6 +237,10 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      */
     protected function userHasPermission(array $permissions)
     {
+        if ( ! count($permissions)) {
+            return true;
+        }
+
         return !! count(
             array_filter($permissions, function ($permission) {
                 return array_get($this->userPermissions, $permission);
@@ -252,6 +256,10 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      */
     protected function userHasAllPermissions(array $permissions)
     {
+        if ( ! count($permissions)) {
+            return true;
+        }
+
         return ! count(
             array_filter($permissions, function ($permission) {
                 return ! array_get($this->userPermissions, $permission);
