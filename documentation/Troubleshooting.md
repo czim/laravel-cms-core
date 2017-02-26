@@ -24,12 +24,25 @@ It's a good idea to check the following things when anything goes wrong.
 
 ### The CMS is slow
 
+One way to speed up the CMS somewhat, is to enable menu caching.
+You can do this by setting `cms-models.repository.cache` to `true`.
+Note that this will require manually clearing the menu cache (using `php artisan cms:menu:clear`) whenever modules are
+added or the menu configuration is altered.
+
 If you are using the Models Module, make sure that you enable model configuration cache.
 The cache configuration setting is `cms-models.repository.cache`, setting it `true` will cache the models.  
 This is done according to your application (or CMS-specific) cache driver configuration.
 
 If caching is disabled, the CMS will analyze the database structure, model class files and parse configuration files,
 which can really slow things down as the amount of configured models increases.
+
+### Menu items or menu layout changes don't show up
+
+Make sure the CMS menu configuration cache is cleared.  
+You can clear the menu cache by running `php artisan cms:menu:clear`.
+
+It is easiest to leave the cache setting disabled while configuring the CMS.
+You can do this by setting `cms-modules.menu.cache` to `false`, but note that this will make all CMS pageloads slower.
 
 
 ### Model configuration changes don't show up (Models Module)
