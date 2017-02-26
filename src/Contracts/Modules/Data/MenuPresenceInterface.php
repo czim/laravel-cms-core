@@ -81,6 +81,28 @@ interface MenuPresenceInterface extends DataObjectInterface
     public function image();
 
     /**
+     * Returns configuration mode for menu presence definition.
+     *
+     * @return string
+     */
+    public function mode();
+
+    /**
+     * Sets keys that are explicitly configured.
+     *
+     * @param string[] $keys
+     * @return $this
+     */
+    public function setExplicitKeys(array $keys);
+
+    /**
+     * Returns keys that were explicitly set in configuration.
+     *
+     * @return string[]
+     */
+    public function explicitKeys();
+
+    /**
      * Removes all children currently on the presence.
      */
     public function clearChildren();
