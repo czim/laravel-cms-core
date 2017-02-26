@@ -25,11 +25,6 @@ class MenuRepository implements MenuRepositoryInterface
     protected $auth;
 
     /**
-     * @var MenuPermissionsFilterInterface
-     */
-    protected $permissionsFilter;
-
-    /**
      * Whether the menu data has been prepared, used to prevent
      * performing preparations more than once.
      *
@@ -60,8 +55,8 @@ class MenuRepository implements MenuRepositoryInterface
 
 
     /**
-     * @param CoreInterface                  $core
-     * @param AuthenticatorInterface         $auth
+     * @param CoreInterface          $core
+     * @param AuthenticatorInterface $auth
      */
     public function __construct(CoreInterface $core, AuthenticatorInterface $auth)
     {
@@ -128,6 +123,7 @@ class MenuRepository implements MenuRepositoryInterface
             $this->cacheLayout($layout);
         }
 
+
         /** @var MenuPermissionsFilterInterface $filter */
         $filter = app(MenuPermissionsFilterInterface::class);
 
@@ -135,6 +131,7 @@ class MenuRepository implements MenuRepositoryInterface
             $permissionsIndex = $filter->buildPermissionsIndex($layout);
             $this->cachePermissionsIndex($permissionsIndex);
         }
+        
 
         if ( ! $this->ignorePermission && ! $this->auth->admin()) {
             $layout = $filter->filterLayout($layout, $this->auth->user(), $permissionsIndex);
