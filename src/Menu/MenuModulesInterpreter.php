@@ -182,6 +182,8 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
             return $newPresence;
         }
 
+        // Should not matter, since setting the presence to false (instead of an array)
+        // will disable the presences entirely
         if (false === $newPresence) {
             return $oldPresence;
         }
@@ -253,20 +255,18 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
 
     /**
      * Returns whether the module presence has deliberately been disabled in the config.
-     * This can only be done by setting the module's 'presence' value to false (strict).
+     * This can only be done by setting the module key's value to false (strict).
      *
      * @param ModuleInterface $module
      * @return bool
      */
     protected function isConfiguredModulePresenceDisabled(ModuleInterface $module)
     {
-        if (    ! array_key_exists($module->getKey(), $this->configModules)
-            ||  ! is_array($this->configModules[ $module->getKey() ])
-        ) {
+        if ( ! array_key_exists($module->getKey(), $this->configModules)) {
             return false;
         }
 
-        return false === array_get($this->configModules[ $module->getKey() ], 'presence', true);
+        return false === $this->configModules[ $module->getKey() ];
     }
 
 }

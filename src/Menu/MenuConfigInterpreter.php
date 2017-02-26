@@ -164,7 +164,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
             }
 
             if ( ! $presencesPerModule->has($value)) {
-                throw new UnexpectedValueException("Unknown module key reference '{$value}' in menu layout.");
+                throw new UnexpectedValueException("Unknown (or disabled) module key reference '{$value}' in menu layout.");
             }
 
             $this->assignedModuleKeys[] = $value;
