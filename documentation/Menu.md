@@ -191,9 +191,18 @@ The available presence `type` values are:
 
 ## Overriding Menu Presences
 
-It is possible to completely override menu presences as defined by CMS modules.
+It is possible to modify or completely override menu presences as defined by CMS modules.
 
-Each menu module configuration array in `cms-modules.menu.modules` may have a presence override:
+This is not recommended unless you have a solid understanding of how the 
+[menu presence data objects](https://github.com/czim/laravel-cms-core/blob/master/src/Support/Data/MenuPresence.php) work, 
+as well as how route names and permissions are identified.
+
+Keep in mind that `php artisan route:list` and `php artisan cms:modules:show` may help in getting a clear view of what
+actions, route names and permissions are available.
+
+Note that this is fully compatible with any `layout` assignment.
+
+Each menu module configuration array in `cms-modules.menu.modules` may have a presence modification:
 
 ```php
 <?php
@@ -202,17 +211,15 @@ Each menu module configuration array in `cms-modules.menu.modules` may have a pr
         'modules' => [
             
             'models.app-models.post' => [
-                'presence' => [
-                    'label'            => 'Employees',
-                    'type'             => \Czim\CmsCore\Support\Enums\MenuPresenceType\MenuPresenceType::ACTION,
-                    'action'           => 'cms::models.model.app-models-employee.index',
-                    'parameters'       => [
-                        'home' => true,
-                    ],
-                    'permissions'      => [
-                        'models.app-models-employee.*',
-                    ],
-                ]
+                'label'            => 'Employees',
+                'type'             => \Czim\CmsCore\Support\Enums\MenuPresenceType\MenuPresenceType::ACTION,
+                'action'           => 'cms::models.model.app-models-employee.index',
+                'parameters'       => [
+                    'home' => true,
+                ],
+                'permissions'      => [
+                    'models.app-models-employee.*',
+                ],
             ],            
         ]
     ]
@@ -220,13 +227,70 @@ Each menu module configuration array in `cms-modules.menu.modules` may have a pr
 
 This may be mixed in the `modules` array with module key strings, as long as no module key appears more than once.
 
-This is not recommended unless you have a solid understanding of how the 
-[menu presence data objects](https://github.com/czim/laravel-cms-core/blob/master/src/Support/Data/MenuPresence.php) work, 
-as well as how route names and permissions are identified.
+Some modules may have multiple presences, which may each (in the same order) be modified or overwritten
+by providing an array of arrays:
 
-Keep in mind that `php artisan route:list` may help in getting a clear view of what actions, route names and permissions are available.
+```php
+<?php
+    'menu' => [
+        
+        'modules' => [
+            
+            'models.app-models.post' => [
+                [
+                    'label'       => 'First Presence',
+                    'permissions' => [
+                        'models.app-models-employee.show',
+                    ],
+                ],
+                [
+                    'label_translated' => 'second.presence.translation.key',
+                ]
+            ]            
+        ]
+    ]
+```
 
-Note that this approach is fully compatible with any `group` assignment.
+If there are multiple presences and the value for the module key is not an array of arrays (but a single presence definition),
+only the first of the module's presences is modified.
+
+For more control, a `mode` flag may be added to each presence definition to determine how the module's presences
+should be altered.
+
+```php
+<?php
+    'menu' => [
+        
+        'modules' => [
+            
+            'models.app-models.post' => [
+                [
+                    // The first original module presence will be completely replaced, using none of the original data
+                    'mode'             => 'replace',
+                    'label_translated' => 'second.presence.translation.key',
+                    'type'             => \Czim\CmsCore\Support\Enums\MenuPresenceType\MenuPresenceType::LINK,
+                    'action'           => 'https://github.com',
+                ],
+                [
+                    // The second original module presence will be removed and won't appear in the menu
+                    'mode' => 'delete',
+                ],
+                [
+                    // This presence will be added, regardless of what happens with original presence
+                    'mode'   => 'add',
+                    'label'  => 'New Presences',
+                    'type'   => \Czim\CmsCore\Support\Enums\MenuPresenceType\MenuPresenceType::ACTION,
+                    'action' => 'cms::models.model.app-models-employee.index',
+                ],
+            ]            
+        ]
+    ]
+```
+
+If the `mode` key is not present in the definition, the original data will be maintained, overwritten only 
+by values for keys specified in the configured definition.
+
+Keep in mind that any menu presence definition may be a group with further nested presences.
 
 
 ## Caching
