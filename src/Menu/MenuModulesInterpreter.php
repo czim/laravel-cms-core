@@ -114,23 +114,21 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         $index = 0;
 
         // Make a mapping to easily look up configured order with
-        $moduleConfig = config('cms-modules.menu.modules', []);
-
         // Account for possibility of either 'module key' => [] or 'module key' format in config
         $orderMap = array_map(
-            function ($key) use ($moduleConfig) {
+            function ($key) {
 
                 if (is_string($key)) return $key;
 
-                if ( ! is_string($moduleConfig[$key])) {
+                if ( ! is_string($this->configModules[$key])) {
                     throw new UnexpectedValueException(
                         "cms-modules.menu.modules entry '{$key}' must be string or have a non-numeric key"
                     );
                 }
 
-                return $moduleConfig[$key];
+                return $this->configModules[$key];
             },
-            array_keys($moduleConfig)
+            array_keys($this->configModules)
         );
         $orderMap = array_flip($orderMap);
 
@@ -138,7 +136,11 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         return $modules->sortBy(function (ModuleInterface $module) use (&$index, $orderMap) {
 
             // Order by configured order first, natural modules order second.
-            $primaryOrder = array_get($orderMap, $module->getKey(), -2) + 1;
+            if (count($orderMap)) {
+                $primaryOrder = (int) array_get($orderMap, $module->getKey(), -2) + 1;
+            } else {
+                $primaryOrder = -1;
+            }
 
             return $primaryOrder < 0 ? ++$index : (1 - 1 / $primaryOrder);
         });
