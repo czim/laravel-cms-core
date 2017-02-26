@@ -32,4 +32,9 @@ interface MenuRepositoryInterface
      */
     public function getAlternativePresences();
 
+    /**
+     * Clears cached menu data.
+     */
+    public function clearCache();
+
 }

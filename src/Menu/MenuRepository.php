@@ -6,6 +6,7 @@ use Czim\CmsCore\Contracts\Menu\MenuPermissionsFilterInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuLayoutDataInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuPermissionsIndexDataInterface;
+use Exception;
 use Illuminate\Support\Collection;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
@@ -13,6 +14,19 @@ use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 
 class MenuRepository implements MenuRepositoryInterface
 {
+    /**
+     * The key under which the layout is cached.
+     *
+     * @var string
+     */
+    const CACHE_KEY_LAYOUT = 'cms:menu-layout-data';
+
+    /**
+     * The key under which the permissions index is cached.
+     *
+     * @var string
+     */
+    const CACHE_KEY_INDEX = 'cms:menu-permissions-index';
 
     /**
      * @var CoreInterface
@@ -119,6 +133,15 @@ class MenuRepository implements MenuRepositoryInterface
         return $this->alternativePresences;
     }
 
+    /**
+     * Clears cached menu data.
+     */
+    public function clearCache()
+    {
+        $this->core->cache()->forget(static::CACHE_KEY_LAYOUT);
+        $this->core->cache()->forget(static::CACHE_KEY_INDEX);
+    }
+
 
     // ------------------------------------------------------------------------------
     //      Processing and preparation
@@ -153,14 +176,40 @@ class MenuRepository implements MenuRepositoryInterface
     }
 
     /**
+     * Returns whether the CMS is configured to cache menu data.
+     *
+     * @return bool
+     */
+    protected function isCacheEnabled()
+    {
+        return (bool) $this->core->moduleConfig('menu.cache');
+    }
+
+    /**
      * Attempts to retrieve menu layout from cache.
      *
      * @return MenuLayoutDataInterface|false
      */
     protected function getCachedLayout()
     {
-        // todo: get from cache
-        return false;
+        if ( ! $this->isCacheEnabled() || ! $this->core->cache()->has(static::CACHE_KEY_LAYOUT)) {
+            return false;
+        }
+
+        try {
+            $layout = $this->core->cache()->get(static::CACHE_KEY_LAYOUT);
+
+        } catch (Exception $e) {
+
+            $this->clearCache();
+            return false;
+        }
+
+        if ( ! ($layout instanceof MenuLayoutDataInterface)) {
+            return false;
+        }
+
+        return $layout;
     }
 
     /**
@@ -170,7 +219,11 @@ class MenuRepository implements MenuRepositoryInterface
      */
     protected function cacheLayout(MenuLayoutDataInterface $data)
     {
-        // todo: cache
+        if ( ! $this->isCacheEnabled()) {
+            return;
+        }
+
+        $this->core->cache()->forever(static::CACHE_KEY_LAYOUT, $data);
     }
 
     /**
@@ -180,8 +233,24 @@ class MenuRepository implements MenuRepositoryInterface
      */
     protected function getCachedPermissionsIndex()
     {
-        // todo: get from cache
-        return false;
+        if ( ! $this->isCacheEnabled() || ! $this->core->cache()->has(static::CACHE_KEY_INDEX)) {
+            return false;
+        }
+
+        try {
+            $index = $this->core->cache()->get(static::CACHE_KEY_INDEX);
+
+        } catch (Exception $e) {
+
+            $this->clearCache();
+            return false;
+        }
+
+        if ( ! ($index instanceof MenuPermissionsIndexDataInterface)) {
+            return false;
+        }
+
+        return $index;
     }
 
     /**
@@ -191,7 +260,11 @@ class MenuRepository implements MenuRepositoryInterface
      */
     protected function cachePermissionsIndex(MenuPermissionsIndexDataInterface $data)
     {
-        // todo: cache
+        if ( ! $this->isCacheEnabled()) {
+            return;
+        }
+
+        $this->core->cache()->forever(static::CACHE_KEY_INDEX, $data);
     }
 
 }
