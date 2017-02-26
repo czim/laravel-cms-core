@@ -131,6 +131,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
         $permissions = [];
 
         $unconditional = false;
+        $mixed         = false;
 
         foreach ($layout as $key => $value) {
 
@@ -144,14 +145,15 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
                 // If the children of the group have unconditional presences,
                 // this layer becomes unconditionally displayable as well.
                 if (false === $childPermissions) {
-                    $unconditional = true;
-                } else {
+                    $mixed = true;
+                } elseif (count($childPermissions)) {
                     $permissions = array_merge($permissions, $childPermissions);
                 }
 
                 continue;
             }
 
+            // For non-group presences, check the permissions directly
             if ( ! count($value->permissions())) {
                 $unconditional = true;
                 continue;
@@ -162,7 +164,8 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
 
         $this->permissions = array_merge($this->permissions, $permissions);
 
-        if ($unconditional && count($permissions)) {
+        // This layer and its descendants have mixed con/unconditional presences when:
+        if ($mixed || count($permissions) && $unconditional) {
             return false;
         }
 
