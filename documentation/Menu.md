@@ -4,83 +4,10 @@ Each module may have a Menu Presence (or any number of them).
 Once a module is added to the CMS, its menu presence will automatically be applied.
 
 For example, if you include the [simple ACL Module](https://github.com/czim/laravel-cms-acl-module) to your CMS,
-it will make an access control menu item appear: an expandable group with links to users and roles tables. 
+it will make an access control menu item appear: an expandable group with links to lists of users and roles. 
 
-Note that a menu presence is not required for all modules (for instance, if it only offers backend or API-based functionality).
-
-
-## Grouping Menu Items
-
-It is possible to make custom groups of module menu presences. 
-This way, you can create a menu tree to any desired depth to give the menu any structure you want.
-
-To create groups, add a group layout to the `cms-modules.menu.groups` configuration array.
-The keys you use in this array serve as references for grouping modules.
-
-Then, configure the presence of any module you want to add in the `cms-modules.menu.modules` array.
-Add the module as a key-value pair with the module key as the key, and an array value with at least the `group` key present.
-
-For example, to create a single group and assign a module to it:
-
-```php
-<?php
-    'menu' => [
-        
-        'groups' => [
-            'some-group' => [
-                'label_translated' => 'some.translation.key'
-            ]
-        ],
-        
-        'modules' => [
-            'models.app-models.post' => [
-                // Refers to the key used in the 'groups' array above
-                'group' => 'some-group'                
-            ],          
-        ]
-    ]
-```
-
-Groups may have children. You can create nested groups this way to any depth (as long as it is supported by your CMS theme).
-
-```php
-<?php
-    'menu' => [
-        
-        'groups' => [
-            'some-group' => [
-                'label_translated' => 'some.translation.key',
-                'children'         => [
-                    'first-child-group' => [
-                        'label' => 'Child Group One'                       
-                    ],
-                    'second-child-group' => [
-                        'label' => 'Child Group Two'                       
-                    ]
-                ] 
-            ]
-        ],
-        
-        'modules' => [
-            'models.app-models.post' => [
-                'group' => 'some-group'                
-            ],          
-            'models.app-models.comment' => [
-                'group' => 'first-child-group'                
-            ],
-        ]
-    ]
-```
-
-
-Any module not configured in this way will automatically be added to the menu as 'ungrouped', 
-which will always appear *after* any configured groups.
-
-Empty groups will not appear on the menu.
-This includes groups that exclusively contain menu presences in them that the user currently has no permission to see or use.
-
-
-Note: you can get a list of available module keys with `php artisan cms:modules:show --keys`.
+Note that a menu presence is not required for a module 
+(for instance, no presence should be set if the module only offers backend or API-based functionality).
 
 
 ## Order of Menu Items
@@ -88,10 +15,9 @@ Note: you can get a list of available module keys with `php artisan cms:modules:
 Unless a specific order is configured, menu items will be placed in the order in which their modules are loaded.
 You can change this by changing the order of items in the `cms-modules.modules` configuration array.
 
-Alternatively, and for more control, the order of menu presences may be determined by adding module keys to 
-the `cms-modules.menu.modules` configuration array. 
-This means that entries in that array may be key-value pairs (the key being the module key), or string values (module keys),
-or a combination of them.
+Alternatively, for more control, the order of menu presences may be determined by adding module keys to 
+the `cms-modules.menu.modules` configuration array.
+You can do so by adding module key strings to this array, in the order that they should appear in the menu.
 
 For example, the models module may order a Comment model before a Post model in the menu. 
 Reversing this can be done by setting `cms-modules.menu.modules` as follows: 
@@ -107,22 +33,77 @@ Reversing this can be done by setting `cms-modules.menu.modules` as follows:
     ]
 ```
 
-Any configured item order will also apply within nested menu groups:
+Note: you can get a list of available module keys with `php artisan cms:modules:show --keys`.
+
+
+## Defining a Menu Layout
+
+If adjusting the order itself is not enough, a menu layout with nested groups may optionally be defined. 
+This way, you can create a menu tree to any desired depth to give the menu any structure you want.
+
+The layout is defined in the `cms-modules.menu.layout` configuration array.
+
+(If you are already familiar with the way form layouts work in the [Models Module](https://github.com/czim/laravel-cms-models),
+note that menu layouts are defined mostly the same way.)
+
+For example, to create a single group and assign some modules to it:
 
 ```php
 <?php
     'menu' => [
         
-        'modules' => [
-            'models.app-models.post' => [
-                'group' => 'some-group'                
-            ],
-            'models.app-models.comment' => [
-                'group' => 'some-group'                                                       
-            ]            
-        ]
+        'layout' => [
+            'some-group' => [
+                'label'    => 'Some Group',
+                'icon'     => 'home',
+                'children' => [
+                    'models.app-models.post',
+                    'models.app-models.comment',
+                ]
+            ]
+        ],
     ]
 ```
+
+The fields available for menu groups in the layout array are:
+
+- `id` (string)
+- `label` (string)
+- `label_translated` (string)
+- `icon` (string)
+- `children` (array) (child module keys and/or nested groups)
+
+For more information, see the [Menu Presences](#menu-presences) section below.
+
+Groups may have children to any depth. The only limit is what your CMS theme supports.
+
+```php
+<?php
+    'menu' => [
+        
+        'layout' => [
+            'some-group' => [
+                'label'    => 'Some Group',
+                'icon'     => 'home',
+                'children' => [
+                    'models.app-models.post',
+                    [
+                        'label'    => 'Some Group',
+                        'icon'     => 'home',
+                        'children' => [
+                            'models.app-models.comment',
+                        ]
+                    ]
+                ]
+            ]
+        ],
+    ]
+```
+
+Any module not listed in the layout will automatically be added at the top menu level, *after* layout defined presences.
+
+Empty groups will not appear on the menu.
+This includes groups that exclusively contain menu presences in them that the user currently has no permission to see or use.
 
 Note: you can get a list of available module keys with `php artisan cms:modules:show --keys`.
 
@@ -166,8 +147,8 @@ Presence attributes are as follows:
     An array with key-value pairs that should be passed along as parameters for the `action` route.
     This may be used to set some (hard-coded) parameters, which may help to differentiate between navigation links used.
 
-- `image` (string)  
-    An indicator that may allow the CMS theme to draw an icon image in front of the presence label text.  
+- `icon` (string)  
+    An indicator that may allow the CMS theme to draw an icon in front of the presence label text.  
     For the standard CMS theme, [Font Awesome](http://fontawesome.io/icons) class names are supported,
     without the 'fa-' prefix (f.i.: `'home'` for 'fa-home').
 
@@ -188,7 +169,7 @@ The available presence `type` values are:
 
 It is possible to completely override menu presences as defined by CMS modules.
 
-Each menu module configuration array in `cms-modules.menu.modules` may have a presence override like so:
+Each menu module configuration array in `cms-modules.menu.modules` may have a presence override:
 
 ```php
 <?php
@@ -212,6 +193,8 @@ Each menu module configuration array in `cms-modules.menu.modules` may have a pr
         ]
     ]
 ```
+
+This may be mixed in the `modules` array with module key strings, as long as no module key appears more than once.
 
 This is not recommended unless you have a solid understanding of how the 
 [menu presence data objects](https://github.com/czim/laravel-cms-core/blob/master/src/Support/Data/MenuPresence.php) work, 
