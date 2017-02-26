@@ -8,6 +8,7 @@ use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuConfiguredModulesDataInterface;
 use Czim\CmsCore\Support\Data\Menu\ConfiguredModulesData;
 use Czim\CmsCore\Support\Data\MenuPresence;
+use Czim\CmsCore\Support\Enums\MenuPresenceMode;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -56,6 +57,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      */
     public function interpret()
     {
+        /** @var Collection|ModuleInterface[] $modules */
         $modules = $this->sortModules(
             $this->core->modules()->getModules()
         );
@@ -70,10 +72,12 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                 continue;
             }
 
-            $configuredPresencesForModule = $this->getConfiguredModulePresence($module);
+            $configuredPresencesForModule = $this->normalizeConfiguredPresence(
+                $this->getConfiguredModulePresence($module)
+            );
 
             $presencesForModule = $this->mergeNormalizedMenuPresences(
-                $module->getMenuPresence(),
+                $this->normalizeMenuPresence($module->getMenuPresence()),
                 $configuredPresencesForModule
             );
 
@@ -85,7 +89,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
             $standard    = [];
             $alternative = [];
 
-            foreach ($this->normalizeMenuPresence($presencesForModule) as $presence) {
+            foreach ($presencesForModule as $presence) {
 
                 if ( ! $presence) {
                     continue;
@@ -166,43 +170,161 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
             return false;
         }
 
-        return array_get($this->configModules[ $module->getKey() ], 'presence', false);
+        return $this->configModules[ $module->getKey() ] ?: [];
+    }
+
+    /**
+     * Returns whether an array contains presence definition data.
+     *
+     * @param array $configured
+     * @return bool
+     */
+    protected function isArrayPresenceDefinition(array $configured)
+    {
+        return !! count(
+            array_intersect(
+                array_keys($configured),
+                [
+                    'id', 'label', 'label_translated', 'type', 'action',
+                    'icon', 'image', 'html', 'parameters', 'children',
+                    'mode',
+                ]
+            )
+        );
     }
 
     /**
      * Merges two normalized menu presences into one.
      *
-     * @param false|MenuPresenceInterface[] $oldPresence
-     * @param false|MenuPresenceInterface[] $newPresence
+     * @param false|MenuPresenceInterface[] $oldPresences
+     * @param false|MenuPresenceInterface[] $newPresences
      * @return MenuPresenceInterface[]
      */
-    protected function mergeNormalizedMenuPresences($oldPresence, $newPresence)
+    protected function mergeNormalizedMenuPresences($oldPresences, $newPresences)
     {
-        if (false === $oldPresence) {
-            return $newPresence;
+        if (false === $oldPresences) {
+            return $newPresences;
         }
 
         // Should not matter, since setting the presence to false (instead of an array)
         // will disable the presences entirely
-        if (false === $newPresence) {
-            return $oldPresence;
+        if (false === $newPresences) {
+            return $oldPresences;
         }
 
-        // todo merge the presences, overruling old for new
-        // if only one presence in either set, do a real merge
-        // otherwise it is too complicated and fuzzy for now.
+        // Since menu presences are normalized as non-associative arrays, we must
+        // assume that overrides or modifications are intended index for index.
+        // The first presence will be enriched or overwritten with the first presence
+        // listed, unless it is specifically flagged to be added.
 
-        return $newPresence;
+        // Treat additions separately
+        $additions = [];
+        $removals  = [];
+
+        foreach ($newPresences as $presence) {
+            if ($presence->mode() == MenuPresenceMode::ADD) {
+                $additions[] = $presence;
+            }
+        }
+
+        // Reset the
+        /** @var MenuPresenceInterface[] $oldPresences */
+        /** @var MenuPresenceInterface[] $newPresences */
+        $oldPresences = array_values($oldPresences);
+        $newPresences = array_values($newPresences);
+
+        // Perform deletions, replacements or modifications
+        foreach ($newPresences as $index => $presence) {
+
+            if ( ! array_key_exists($index, $oldPresences)) {
+                continue;
+            }
+
+            switch ($presence->mode()) {
+
+                case MenuPresenceMode::DELETE:
+                    $removals[] = $index;
+                    continue;
+
+                case MenuPresenceMode::REPLACE:
+                    $this->enrichConfiguredPresenceData($presence);
+                    $oldPresences[ $index] = $presence;
+                    continue;
+
+                // Modify is the default mode
+                default:
+                    $oldPresences[ $index ] = $this->mergeMenuPresenceData($oldPresences[ $index ], $presence);
+                    continue;
+            }
+        }
+
+        if (count($removals)) {
+            $oldPresences = array_forget($oldPresences, $removals);
+        }
+
+        foreach ($additions as $presence) {
+            $this->enrichConfiguredPresenceData($presence);
+            $oldPresences[] = $presence;
+        }
+
+        return $oldPresences;
+    }
+
+    /**
+     * Normalizes configured menu presence definitions.
+     *
+     * @param mixed $configured
+     * @return false|MenuPresenceInterface[]
+     */
+    protected function normalizeConfiguredPresence($configured)
+    {
+        if ($configured instanceof MenuPresenceInterface) {
+            return [ $configured ];
+        }
+
+        if (false === $configured || ! is_array($configured)) {
+            return false;
+        }
+
+        // Normalize if top layer is a presence definition, instead of an array of presences
+        if ($this->isArrayPresenceDefinition($configured)) {
+            $configured = [ $configured ];
+        }
+
+        foreach ($configured as &$value) {
+
+            if ($value instanceof MenuPresenceInterface) {
+                continue;
+            }
+
+            if ( ! is_array($value)) {
+                throw new UnexpectedValueException('Menu presence definition must be an array');
+            }
+
+            // Set the keys that were explicitly defined, to enable specific overrides only
+            $keys = array_keys($value);
+
+            $value = new MenuPresence($value);
+            $value->setExplicitKeys($keys);
+        }
+
+        unset ($value);
+
+        return $configured;
     }
 
     /**
      * Normalizes menu presence data to an array of MenuPresence instances.
      *
      * @param $data
-     * @return MenuPresenceInterface[]
+     * @return false|MenuPresenceInterface[]
      */
     protected function normalizeMenuPresence($data)
     {
+        if ( ! $data) {
+            return false;
+        }
+
         if ($data instanceof MenuPresenceInterface) {
 
             $data = [ $data ];
@@ -212,7 +334,18 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
             $presences = [];
 
             foreach ($data as $nestedData) {
-                $presences[] = new MenuPresence($nestedData);
+
+                if (is_array($nestedData)) {
+                    $nestedData = new MenuPresence($nestedData);
+                }
+
+                if ( ! ($nestedData instanceof MenuPresenceInterface)) {
+                    throw new UnexpectedValueException(
+                        'Menu presence data from array provided by module is not an array or menu presence instance'
+                    );
+                }
+
+                $presences[] = $nestedData;
             }
 
             $data = $presences;
@@ -238,6 +371,60 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         }
 
         return $data;
+    }
+
+    /**
+     * Merges configured new presence data into an original presence object.
+     *
+     * @param MenuPresenceInterface $original
+     * @param MenuPresenceInterface $new
+     * @return MenuPresenceInterface
+     */
+    protected function mergeMenuPresenceData(MenuPresenceInterface $original, MenuPresenceInterface $new)
+    {
+        $keys = $new->explicitKeys();
+
+        foreach ($keys as $key) {
+            $original->{$key} = $new->{$key};
+        }
+
+        return $original;
+    }
+
+    /**
+     * Enriches a full, new presence data
+     *
+     * @param MenuPresenceInterface|MenuPresence $presence
+     */
+    protected function enrichConfiguredPresenceData(MenuPresenceInterface $presence)
+    {
+        if ( ! $presence->type()) {
+
+            // If type is not set, it should be determined by the action or html value set
+            if ($presence->action()) {
+
+                if ($this->isStringUrl($presence->action())) {
+                    $presence->type = MenuPresenceType::LINK;
+                } else {
+                    $presence->type = MenuPresenceType::ACTION;
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns whether a string
+     *
+     * @param string $string
+     * @return bool
+     */
+    protected function isStringUrl($string)
+    {
+        if ( ! is_string($string)) {
+            return false;
+        }
+
+        return (bool) preg_match('#^(https?:)?//|^www\.#', $string);
     }
 
     /**
