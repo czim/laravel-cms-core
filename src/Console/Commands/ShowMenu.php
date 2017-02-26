@@ -60,7 +60,7 @@ class ShowMenu extends Command
     {
         $indent = str_repeat(' ', $depth * 2);
 
-        $this->comment($indent . ucfirst($presence->type()) . ($key && ! is_numeric($key) ? " (key: {$key})" : null));
+        $this->comment($indent . ucfirst($presence->type()));
 
         if ($presence->label()) {
             $this->info($indent . 'Label       : ' . $presence->label());
