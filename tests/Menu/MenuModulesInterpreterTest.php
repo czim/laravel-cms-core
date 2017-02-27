@@ -621,7 +621,73 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertEquals('replaced label', $data->standard()->get('test-b')[0]->label());
         static::assertNull($data->standard()->get('test-b')[0]->id(), 'Original value still present');
         static::assertEmpty($data->standard()->get('test-b')[0]->permissions(), 'Original value still present');
+    }
 
+    /**
+     * @test
+     */
+    function it_allows_modifying_groups_with_nested_presence_definitions()
+    {
+        $this->modules = collect([
+            'test' => $this->getMockModuleWithCustomPresence([
+                [
+                    'id'    => 'test',
+                    'type'  => MenuPresenceType::GROUP,
+                    'label' => 'something',
+                    'children' => [
+                        [
+                            'id'    => 'test-child-1',
+                            'type'  => MenuPresenceType::ACTION,
+                            'label' => 'something 1',
+                        ],
+                        [
+                            'id'    => 'test-child-2',
+                            'type'  => MenuPresenceType::ACTION,
+                            'label' => 'something 2',
+                        ]
+                    ]
+                ]
+            ]),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test' => [
+                'children' => [
+                    [
+                        'label' => 'modified',
+                    ],
+                    false,
+                    [
+                        'mode'  => MenuPresenceMode::ADD,
+                        'id'    => 'test-child-3',
+                        'type'  => MenuPresenceType::ACTION,
+                        'label' => 'something 3',
+                    ]
+                ],
+            ],
+        ];
+
+        $interpreter = $this->makeModulesInterpreter();
+
+        $data = $interpreter->interpret();
+
+        static::assertCount(1, $data->standard());
+        static::assertTrue($data->standard()->has('test'));
+        static::assertCount(1, $data->standard()->get('test'));
+
+        static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
+        static::assertEquals('test', $data->standard()->get('test')[0]->id());
+        static::assertCount(2, $data->standard()->get('test')[0]->children());
+
+        /** @var MenuPresenceInterface[] $children */
+        $children = array_values($data->standard()->get('test')[0]->children());
+
+        static::assertInstanceOf(MenuPresenceInterface::class, $children[0]);
+        static::assertEquals('test-child-1', $children[0]->id(), 'Nested child did not use original values');
+        static::assertEquals('modified', $children[0]->label(), 'Nested child was not modified');
+
+        static::assertInstanceOf(MenuPresenceInterface::class, $children[1]);
+        static::assertEquals('test-child-3', $children[1]->id());
     }
 
 
