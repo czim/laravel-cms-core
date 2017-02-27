@@ -60,7 +60,7 @@ return [
         // further configuration for a module's menu presence.
         //
         // Note that the order of appearance defined in the layout key above overrules
-        // the order of the .
+        // the order of the module keys below.
         //
         // Example:
         //
