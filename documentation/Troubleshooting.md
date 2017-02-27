@@ -94,6 +94,7 @@ Core:
 - `cms:migrate:status`: check if CMS database migrations have all been run.
 - `cms:modules:show`: show currently loaded modules.
 - `cms:menu:show`: show currently loaded menu layout.
+- `cms:menu:clear`: clear cached menu data.
 
 Models Module:
 
