@@ -16,6 +16,17 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/</directory>
+            <exclude>
+                <directory suffix=".php">./src/Facades/</directory>
+                <directory suffix=".php">./src/Logger/</directory>
+                <directory suffix=".php">./src/Exceptions</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_KEY" value="r5oGyLQMNyJ3xkJsV97KtK8u7DggzaAq"/>
