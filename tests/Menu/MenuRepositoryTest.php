@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Test\Menu;
 
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
+use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Menu\MenuConfigInterpreterInterface;
 use Czim\CmsCore\Contracts\Menu\MenuPermissionsFilterInterface;
@@ -11,6 +12,7 @@ use Czim\CmsCore\Contracts\Support\Data\MenuPermissionsIndexDataInterface;
 use Czim\CmsCore\Menu\MenuRepository;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Test\TestCase;
+use Illuminate\Support\Collection;
 
 class MenuRepositoryTest extends TestCase
 {
@@ -53,6 +55,23 @@ class MenuRepositoryTest extends TestCase
     /**
      * @test
      */
+    function it_only_initializes_once()
+    {
+        $menu = new MenuRepository(
+            $this->getMockCore(true),
+            $this->getMockAuth(),
+            $this->getMockConfigInterpreter(),
+            $this->getMockPermissionsFilter()
+        );
+
+        $menu->initialize();
+
+        $menu->initialize();
+    }
+
+    /**
+     * @test
+     */
     function it_can_be_set_to_ignore_permissions_for_initialization()
     {
         $this->menuLayoutStandardFiltered = [
@@ -69,6 +88,60 @@ class MenuRepositoryTest extends TestCase
         $layout = $menu->getMenuLayout();
 
         static::assertEmpty($layout, 'Ignoring permissions should not return filtered standard layout');
+    }
+
+    /**
+     * @test
+     */
+    function it_returns_empty_layout_before_initialization()
+    {
+        $menu = $this->makeMenuRepository();
+
+        $presences = $menu->getMenuLayout();
+
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertTrue($presences->isEmpty());
+    }
+
+    /**
+     * @test
+     */
+    function it_returns_empty_alternative_presences_before_initialization()
+    {
+        $menu = $this->makeMenuRepository();
+
+        $presences = $menu->getAlternativePresences();
+
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertTrue($presences->isEmpty());
+    }
+
+    // ------------------------------------------------------------------------------
+    //      Cache
+    // ------------------------------------------------------------------------------
+
+    /**
+     * @test
+     */
+    function it_clears_cached_menu_data()
+    {
+        $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+
+        $cacheMock->expects(static::exactly(2))
+            ->method('forget')
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ));
+
+        $menu = new MenuRepository(
+            $this->getMockCore(false, $cacheMock),
+            $this->getMockAuth(),
+            $this->getMockConfigInterpreter(),
+            $this->getMockPermissionsFilter()
+        );
+
+        $menu->clearCache();
     }
 
     
@@ -90,13 +163,16 @@ class MenuRepositoryTest extends TestCase
     }
 
     /**
+     * @param bool $exactExpects
+     * @param CacheInterface|null $cacheMock
      * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockCore()
+    protected function getMockCore($exactExpects = false, $cacheMock = null)
     {
         $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
 
-        $mock->method('moduleConfig')
+        $mock->expects($exactExpects ? static::exactly(5) : static::any())
+             ->method('moduleConfig')
              ->willReturnCallback(function ($key, $default = null) {
                  switch ($key) {
 
@@ -109,6 +185,10 @@ class MenuRepositoryTest extends TestCase
 
                  return $default;
              });
+
+        if ($cacheMock) {
+            $mock->method('cache')->willreturn($cacheMock);
+        }
 
         return $mock;
     }
