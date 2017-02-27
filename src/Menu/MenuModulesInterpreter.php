@@ -297,6 +297,10 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                 continue;
             }
 
+            if (false === $value) {
+                $value = [ 'mode' => MenuPresenceMode::DELETE ];
+            }
+
             if ( ! is_array($value)) {
                 throw new UnexpectedValueException('Menu presence definition must be an array');
             }
