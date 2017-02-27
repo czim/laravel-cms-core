@@ -68,9 +68,8 @@ return [
         //      'first-module-key',
         //      'second-module-key',
         //      'third-module-key' => [
-        //          'presence' => [
-        //              ... (full menu presence configuration)
-        //          ]
+        //          'label' => 'Custom Label',
+        //          'icon'  => 'home',
         //      ],
         //      'some.module-key',
         //  ]
