@@ -72,14 +72,23 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                 continue;
             }
 
-            $configuredPresencesForModule = $this->normalizeConfiguredPresence(
-                $this->getConfiguredModulePresence($module)
-            );
+            if ($this->hasConfiguredModulePresence($module)) {
 
-            $presencesForModule = $this->mergeNormalizedMenuPresences(
-                $this->normalizeMenuPresence($module->getMenuPresence()),
-                $configuredPresencesForModule
-            );
+                $configuredPresencesForModule = $this->normalizeConfiguredPresence(
+                    $this->getConfiguredModulePresence($module)
+                );
+
+                $presencesForModule = $this->mergeNormalizedMenuPresences(
+                    $this->normalizeMenuPresence($module->getMenuPresence()),
+                    $configuredPresencesForModule
+                );
+
+            } else {
+                // If no configuration is set, simply normalize and use the original
+
+                $presencesForModule = $this->normalizeMenuPresence($module->getMenuPresence());
+            }
+
 
             // If a module has no presence, skip it
             if ( ! $presencesForModule) {
@@ -157,7 +166,18 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     }
 
     /**
-     * Returns normalized presence data from config, if an overriding custom presence was set.
+     * Returns whether presence configuration is set for a module.
+     *
+     * @param ModuleInterface $module
+     * @return bool
+     */
+    protected function hasConfiguredModulePresence(ModuleInterface $module)
+    {
+        return array_key_exists($module->getKey(), $this->configModules);
+    }
+
+    /**
+     * Returns raw presence configuration data, if an overriding custom presence was set.
      *
      * @param ModuleInterface $module
      * @return array|false
@@ -217,17 +237,29 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         // The first presence will be enriched or overwritten with the first presence
         // listed, unless it is specifically flagged to be added.
 
-        // Treat additions separately
+        // Treat additions separately, splitting them off from the overriding/modifying/deleting definitions
         $additions = [];
         $removals  = [];
 
-        foreach ($newPresences as $presence) {
+        /** @var MenuPresenceInterface[] $newPresences */
+        $newPresences = array_values($newPresences);
+
+        $splitForAddition = [];
+
+        foreach ($newPresences as $index => $presence) {
             if ($presence->mode() == MenuPresenceMode::ADD) {
                 $additions[] = $presence;
+                $splitForAddition[] = $index;
             }
         }
 
-        // Reset the
+        if (count($splitForAddition)) {
+            foreach (array_reverse($splitForAddition) as $index) {
+                unset($newPresences[$index]);
+            }
+        }
+
+
         /** @var MenuPresenceInterface[] $oldPresences */
         /** @var MenuPresenceInterface[] $newPresences */
         $oldPresences = array_values($oldPresences);
@@ -259,7 +291,9 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         }
 
         if (count($removals)) {
-            $oldPresences = array_forget($oldPresences, $removals);
+            foreach (array_reverse($removals) as $index) {
+                unset($oldPresences[$index]);
+            }
         }
 
         foreach ($additions as $presence) {
@@ -282,7 +316,11 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
             return [ $configured ];
         }
 
-        if (false === $configured || ! is_array($configured)) {
+        if (false === $configured) {
+            return [ new MenuPresence([ 'mode' => MenuPresenceMode::DELETE ]) ];
+        }
+
+        if ( ! is_array($configured)) {
             return false;
         }
 
