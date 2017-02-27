@@ -173,6 +173,8 @@ class MenuRepository implements MenuRepositoryInterface
 
         $this->menuLayout           = new Collection($layout->layout());
         $this->alternativePresences = new Collection($layout->alternative());
+
+        $this->prepared = true;
     }
 
     /**
