@@ -96,7 +96,19 @@ class MenuRepositoryTest extends TestCase
     {
         $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
 
-        $mock->expects(static::once())->method('moduleConfig')->willReturn([]);
+        $mock->method('moduleConfig')
+             ->willReturnCallback(function ($key, $default = null) {
+                 switch ($key) {
+
+                     case 'menu.layout':
+                         return [];
+
+                     case 'menu.cache':
+                         return false;
+                 }
+
+                 return $default;
+             });
 
         return $mock;
     }
