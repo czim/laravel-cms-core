@@ -94,6 +94,9 @@ class MenuRepository implements MenuRepositoryInterface
         $this->auth              = $auth;
         $this->configInterpreter = $configInterpreter;
         $this->permissionsFilter = $permissionsFilter;
+
+        $this->menuLayout           = new Collection;
+        $this->alternativePresences = new Collection;
     }
 
     /**
