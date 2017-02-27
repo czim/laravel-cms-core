@@ -285,6 +285,26 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
 
                 // Modify is the default mode
                 default:
+
+                    // Merge children for groups that have further nested definitions
+                    if (    $oldPresences[ $index ]->type() == MenuPresenceType::GROUP
+                        &&  (   $presence->type() == MenuPresenceType::GROUP
+                            ||  ! in_array('type', $presence->explicitKeys() ?: [])
+                            )
+                        &&  count($presence->children())
+                    ) {
+                        // Set the merged children in the new presence, so they will be merged in
+                        // for the upcoming mergeMenuPresenceData call
+                        if (count($oldPresences[ $index]->children())) {
+                            $presence->setChildren(
+                                $this->mergeNormalizedMenuPresences(
+                                    $oldPresences[ $index]->children(),
+                                    $presence->children()
+                                )
+                            );
+                        }
+                    }
+
                     $oldPresences[ $index ] = $this->mergeMenuPresenceData($oldPresences[ $index ], $presence);
                     continue;
             }
@@ -313,6 +333,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     protected function normalizeConfiguredPresence($configured)
     {
         if ($configured instanceof MenuPresenceInterface) {
+            $configured->setChildren($this->normalizeConfiguredPresence($configured->children()));
             return [ $configured ];
         }
 
@@ -332,6 +353,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         foreach ($configured as &$value) {
 
             if ($value instanceof MenuPresenceInterface) {
+                $value->setChildren($this->normalizeConfiguredPresence($value->children()));
                 continue;
             }
 
@@ -345,6 +367,10 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
 
             // Set the keys that were explicitly defined, to enable specific overrides only
             $keys = array_keys($value);
+
+            if (array_key_exists('children', $value)) {
+                $value['children'] = $this->normalizeConfiguredPresence($value['children']);
+            }
 
             $value = new MenuPresence($value);
             $value->setExplicitKeys($keys);
