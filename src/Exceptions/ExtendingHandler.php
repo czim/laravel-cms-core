@@ -4,7 +4,6 @@ namespace Czim\CmsCore\Exceptions;
 use App\Exceptions\Handler as LaravelHandler;
 use Exception;
 use Illuminate\Contracts\Container\Container;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class ExtendingHandler
