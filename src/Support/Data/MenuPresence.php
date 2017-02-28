@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Support\Data;
 
 use Czim\CmsCore\Support\Enums\MenuPresenceMode;
+use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Illuminate\Support\Collection;
 use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 
@@ -70,11 +71,17 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     /**
      * Returns child presences of this presence.
      *
-     * @return null|array|MenuPresenceInterface[]
+     * @return MenuPresenceInterface[]
      */
     public function children()
     {
-        return $this->getAttribute('children');
+        $children = $this->getAttribute('children') ?: [];
+
+        if ($children && ! is_array($children)) {
+            return [ $children ];
+        }
+
+        return $children;
     }
 
     /**
@@ -212,6 +219,32 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     public function explicitKeys()
     {
         return $this->getAttribute('explicit_keys') ?: [];
+    }
+
+    /**
+     * Returns whether this menu item is active based on the current location.
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        switch ($this->type) {
+
+            case MenuPresenceType::GROUP:
+                return false;
+
+            case MenuPresenceType::ACTION:
+                // Activity is based on named route match, unless specific match is defined
+                return false;
+
+            case MenuPresenceType::LINK:
+                // Activity is based on URL match, unless specific match is defined
+                return false;
+
+            // Default omitted on purpose
+        }
+
+        return false;
     }
 
     /**

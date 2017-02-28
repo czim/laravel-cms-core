@@ -24,7 +24,7 @@ interface AclPresenceInterface extends DataObjectInterface
     /**
      * Returns available permission(s).
      *
-     * @return null|string|string[]
+     * @return string[]
      */
     public function permissions();
 

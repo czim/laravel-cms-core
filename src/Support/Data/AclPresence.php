@@ -54,11 +54,17 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
     /**
      * Returns available permission(s).
      *
-     * @return null|string|string[]
+     * @return string[]
      */
     public function permissions()
     {
-        return $this->getAttribute('permissions') ?: [];
+        $permissions = $this->getAttribute('permissions') ?: [];
+
+        if ($permissions && ! is_array($permissions)) {
+            return [ $permissions ];
+        }
+
+        return $permissions;
     }
 
     /**

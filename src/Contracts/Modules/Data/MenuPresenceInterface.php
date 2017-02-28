@@ -25,7 +25,7 @@ interface MenuPresenceInterface extends DataObjectInterface
     /**
      * Returns child presences of this presence.
      *
-     * @return null|array|MenuPresenceInterface[]
+     * @return MenuPresenceInterface[]
      */
     public function children();
 
@@ -101,6 +101,13 @@ interface MenuPresenceInterface extends DataObjectInterface
      * @return string[]
      */
     public function explicitKeys();
+
+    /**
+     * Returns whether this menu item is active based on the current location.
+     *
+     * @return bool
+     */
+    public function isActive();
 
     /**
      * Removes all children currently on the presence.
