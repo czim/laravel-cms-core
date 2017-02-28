@@ -99,14 +99,14 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
             throw new RuntimeException('FilterLayout requires permissions index data to be set');
         }
 
+        // If user has all permissions, no need to walk though the tree
+        if ($this->userHasAllPermissions($this->permissionsIndex->permissions())) {
+            return $layout;
+        }
+
         // Get access rights for all permissions
         foreach ($this->permissionsIndex->permissions() as $permission) {
             $this->userPermissions[ $permission] = $user && $user->can($permission);
-        }
-
-        // If user has all permissions, no need to walk though the tree
-        if (count(array_filter($this->userPermissions)) == count($this->userPermissions)) {
-            return $layout;
         }
 
         $layout->setLayout($this->filterLayoutLayer($layout->layout()));
