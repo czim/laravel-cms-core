@@ -204,7 +204,7 @@ class MenuPermissionsFilterTest extends TestCase
 
         $filter = new MenuPermissionsFilter();
         $index = new PermissionsIndexData([
-            'layout' => [
+            'index' => [
                 base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a', 'permission-b'],
                 base64_encode('group-a') .'.' . base64_encode('group-c') => [],
             ],
@@ -286,7 +286,7 @@ class MenuPermissionsFilterTest extends TestCase
 
         $filter = new MenuPermissionsFilter();
         $index = new PermissionsIndexData([
-            'layout' => [
+            'index' => [
                 base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a', 'permission-b'],
                 base64_encode('group-a') .'.' . base64_encode('group-c') => [],
             ],
@@ -391,7 +391,7 @@ class MenuPermissionsFilterTest extends TestCase
         ]);
 
         $index = new PermissionsIndexData([
-            'layout' => [
+            'index' => [
                 base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a', 'permission-b'],
                 base64_encode('group-a') .'.' . base64_encode('group-c') => [],
             ],
@@ -417,7 +417,72 @@ class MenuPermissionsFilterTest extends TestCase
         
         static::assertCount(1, $array['group-a']->children()['group-c']->children(), 'Group-a layer should have 1 entry');
         static::assertArraySubset(['test-f'], array_pluck($array['group-a']->children()['group-c']->children(), 'id'));
+    }
 
+    /**
+     * @test
+     */
+    function it_is_optimized_to_not_parse_nodes_while_filtering_unless_this_is_required()
+    {
+        // We can test this by providing index data that is inconsistent with the layout data.
+        // If the index indicates that some nodes should be left as-is, while the layout has
+        // data that it *should* leave out, the layout should be returned with 'invalid' data.
+        $user = $this->getMockUser();
+
+        $user->method('can')
+            ->willReturnCallback(function ($permission) {
+                switch ($permission) {
+                    case 'permission-a':
+                    case 'permission-z':
+                    case 'permission-y':
+                        return true;
+
+                    default:
+                        return false;
+                }
+            });
+
+        $filter = new MenuPermissionsFilter();
+        $index = new PermissionsIndexData([
+            'index' => [
+                // this group should have permission-a & permission-b indexed, but since it has only a,
+                // the users' permission-a will make the optimization skip the group regardless of its content
+                base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a'],
+                base64_encode('group-a') .'.' . base64_encode('group-c') => [],
+            ],
+            'permissions' => [
+                'permission-a',
+                'permission-b',
+                'permission-z',
+                'permission-x',
+                'permission-y',
+            ],
+        ]);
+
+        $layout = new LayoutData([
+            'layout' => $this->getComplexLayoutArray(),
+        ]);
+
+        $layout = $filter->filterLayout($layout, $user, $index);
+
+        static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
+        $array = $layout->layout();
+        static::assertCount(1, $array, 'Topmost layer should have 1 entry');
+        static::assertArrayHasKey('group-a', $array, 'Topmost layer should have "group-a" key');
+
+        static::assertCount(5, $array['group-a']->children(), 'Group-a layer should have 3 entries');
+        static::assertArraySubset(
+            [1, 2, 'group-b','group-c', 'group-d'], // 0 is filtered out
+            array_keys($array['group-a']->children()),
+            'Group-a layer should have keys: 1, 2, group-b, group-c, group-d'
+        );
+
+        // Group b
+        static::assertCount(
+            2,
+            $array['group-a']->children()['group-b']->children(),
+            'Group-b layer should have 2 entries (regardless of missing permission-b)'
+        );
     }
 
 
