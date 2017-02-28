@@ -28,7 +28,7 @@ class VersionsTest extends ApiTestCase
         $response = $this->decodeResponseJson();
 
         foreach ($response['data'] as $version) {
-            $this->assertRegExp('#^\d+\.\d+\.\d+$#', $version['version']);
+            static::assertRegExp('#^\d+\.\d+\.\d+$#', $version['version']);
         }
     }
 

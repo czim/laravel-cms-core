@@ -22,7 +22,7 @@ class LocaleRepositoryTest extends TestCase
     {
         $repository = $this->makeLocaleRepository();
 
-        $this->assertEquals('nl', $repository->getDefault());
+        static::assertEquals('nl', $repository->getDefault());
     }
 
     /**
@@ -33,12 +33,12 @@ class LocaleRepositoryTest extends TestCase
         $repository = $this->makeLocaleRepository();
 
         // When default is the same as fallback locale
-        $this->assertEquals(['nl'], $repository->getAvailable());
+        static::assertEquals(['nl'], $repository->getAvailable());
 
         // When different fallback locale is set
         $this->app['config']->set('app.locale', 'en');
 
-        $this->assertEquals(['en', 'nl'], $repository->getAvailable());
+        static::assertEquals(['en', 'nl'], $repository->getAvailable());
     }
 
     /**
@@ -54,7 +54,7 @@ class LocaleRepositoryTest extends TestCase
             'agq' => ['name' => 'Aghem', 'script' => 'Latn', 'native' => 'Aghem', 'regional' => ''],
         ]);
 
-        $this->assertEquals(['ace', 'af', 'agq'], $repository->getAvailable());
+        static::assertEquals(['ace', 'af', 'agq'], $repository->getAvailable());
     }
 
     /**
@@ -64,12 +64,12 @@ class LocaleRepositoryTest extends TestCase
     {
         $repository = $this->makeLocaleRepository();
 
-        $this->assertFalse($repository->isLocalized(), "Single locale should not be isLocalized");
+        static::assertFalse($repository->isLocalized(), "Single locale should not be isLocalized");
 
         // When different fallback locale is set
         $this->app['config']->set('app.locale', 'en');
 
-        $this->assertTrue($repository->isLocalized(), "Double locale should nbe isLocalized");
+        static::assertTrue($repository->isLocalized(), "Double locale should nbe isLocalized");
     }
 
     /**
@@ -79,8 +79,8 @@ class LocaleRepositoryTest extends TestCase
     {
         $repository = $this->makeLocaleRepository();
         
-        $this->assertTrue($repository->isAvailable('nl'));
-        $this->assertFalse($repository->isAvailable('it'));
+        static::assertTrue($repository->isAvailable('nl'));
+        static::assertFalse($repository->isAvailable('it'));
     }
 
 

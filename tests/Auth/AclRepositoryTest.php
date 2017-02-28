@@ -37,9 +37,9 @@ class AclRepositoryTest extends TestCase
 
         $presences = $acl->getAclPresences();
 
-        $this->assertInstanceOf(Collection::class, $presences);
-        $this->assertCount(1, $presences);
-        $this->assertInstanceOf(AclPresenceInterface::class, $presences->first());
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertCount(1, $presences);
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->first());
     }
 
     /**
@@ -55,9 +55,9 @@ class AclRepositoryTest extends TestCase
 
         $presences = $acl->getAclPresences();
 
-        $this->assertInstanceOf(Collection::class, $presences);
-        $this->assertCount(1, $presences);
-        $this->assertInstanceOf(AclPresenceInterface::class, $presences->first(), 'Array was not normalized to presence instance');
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertCount(1, $presences);
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->first(), 'Array was not normalized to presence instance');
     }
 
     /**
@@ -73,10 +73,10 @@ class AclRepositoryTest extends TestCase
 
         $presences = $acl->getAclPresences();
 
-        $this->assertInstanceOf(Collection::class, $presences);
-        $this->assertCount(2, $presences);
-        $this->assertInstanceOf(AclPresenceInterface::class, $presences->first());
-        $this->assertInstanceOf(AclPresenceInterface::class, $presences->last());
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertCount(2, $presences);
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->first());
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->last());
     }
 
     /**
@@ -93,12 +93,12 @@ class AclRepositoryTest extends TestCase
 
         $presences = $acl->getAclPresences();
 
-        $this->assertInstanceOf(Collection::class, $presences);
-        $this->assertCount(2, $presences);
-        $this->assertInstanceOf(AclPresenceInterface::class, $presences->first());
-        $this->assertInstanceOf(AclPresenceInterface::class, $presences->values()[1]);
-        $this->assertEquals('test-a', $presences->first()->id());
-        $this->assertEquals('test-b', $presences->values()[1]->id());
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertCount(2, $presences);
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->first());
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->values()[1]);
+        static::assertEquals('test-a', $presences->first()->id());
+        static::assertEquals('test-b', $presences->values()[1]->id);
     }
 
     /**
@@ -115,10 +115,10 @@ class AclRepositoryTest extends TestCase
 
         $presences = $acl->getAclPresencesByModule('test-b');
 
-        $this->assertInstanceOf(Collection::class, $presences);
-        $this->assertCount(1, $presences);
-        $this->assertInstanceOf(AclPresenceInterface::class, $presences->first());
-        $this->assertEquals('test-b', $presences->first()->id());
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertCount(1, $presences);
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->first());
+        static::assertEquals('test-b', $presences->first()->id());
     }
 
     /**
@@ -135,8 +135,8 @@ class AclRepositoryTest extends TestCase
 
         $permissions = $acl->getAllPermissions();
 
-        $this->assertInternalType('array', $permissions);
-        $this->assertCount(5, $permissions, "Combined permissions should be complete without duplicates");
+        static::assertInternalType('array', $permissions);
+        static::assertCount(5, $permissions, "Combined permissions should be complete without duplicates");
     }
 
     /**
@@ -153,8 +153,8 @@ class AclRepositoryTest extends TestCase
 
         $permissions = $acl->getModulePermissions('test-a');
 
-        $this->assertInternalType('array', $permissions);
-        $this->assertCount(3, $permissions);
+        static::assertInternalType('array', $permissions);
+        static::assertCount(3, $permissions);
     }
 
     /**
@@ -166,8 +166,8 @@ class AclRepositoryTest extends TestCase
 
         $permissions = $acl->getAllPermissions();
 
-        $this->assertInternalType('array', $permissions);
-        $this->assertCount(0, $permissions);
+        static::assertInternalType('array', $permissions);
+        static::assertCount(0, $permissions);
     }
 
     /**
@@ -179,8 +179,8 @@ class AclRepositoryTest extends TestCase
 
         $permissions = $acl->getModulePermissions('does-not-exist');
 
-        $this->assertInternalType('array', $permissions);
-        $this->assertCount(0, $permissions);
+        static::assertInternalType('array', $permissions);
+        static::assertCount(0, $permissions);
     }
 
 
@@ -212,7 +212,7 @@ class AclRepositoryTest extends TestCase
 
         $modules = $modules ?: new Collection;
 
-        $mock->expects($this->once())
+        $mock->expects(static::once())
              ->method('getModules')
              ->willReturn($modules);
 
@@ -236,7 +236,7 @@ class AclRepositoryTest extends TestCase
     {
         $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
 
-        $mock->expects($this->once())
+        $mock->expects(static::once())
              ->method('getAclPresence')
              ->willReturn(
                  new AclPresence([
@@ -261,7 +261,7 @@ class AclRepositoryTest extends TestCase
     {
         $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
 
-        $mock->expects($this->once())
+        $mock->expects(static::once())
             ->method('getAclPresence')
             ->willReturn([
                 'id'   => 'test-b',
@@ -284,7 +284,7 @@ class AclRepositoryTest extends TestCase
     {
         $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
 
-        $mock->expects($this->once())
+        $mock->expects(static::once())
             ->method('getAclPresence')
             ->willReturn([
                 [

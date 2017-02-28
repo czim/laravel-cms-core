@@ -15,7 +15,7 @@ class BootCheckerTest extends TestCase
     {
         $checker = $this->getBootChecker();
 
-        $this->assertTrue($checker->shouldCmsRegister());
+        static::assertTrue($checker->shouldCmsRegister());
     }
 
     /**
@@ -25,7 +25,7 @@ class BootCheckerTest extends TestCase
     {
         $checker = $this->getBootChecker();
 
-        $this->assertTrue($checker->shouldCmsBoot());
+        static::assertTrue($checker->shouldCmsBoot());
     }
 
     /**
@@ -35,7 +35,7 @@ class BootCheckerTest extends TestCase
     {
         $checker = $this->getBootChecker();
 
-        $this->assertTrue($checker->isCmsRegistered());
+        static::assertTrue($checker->isCmsRegistered());
     }
 
     /**
@@ -45,7 +45,7 @@ class BootCheckerTest extends TestCase
     {
         $checker = $this->getBootChecker();
 
-        $this->assertTrue($checker->isCmsBooted());
+        static::assertTrue($checker->isCmsBooted());
     }
 
     /**
@@ -55,7 +55,7 @@ class BootCheckerTest extends TestCase
     {
         $checker = $this->getBootChecker();
 
-        $this->assertFalse($checker->shouldLoadCmsApiMiddleware(), "Should not load middleware for testing");
+        static::assertFalse($checker->shouldLoadCmsApiMiddleware(), "Should not load middleware for testing");
     }
 
     /**
@@ -65,7 +65,7 @@ class BootCheckerTest extends TestCase
     {
         $checker = $this->getBootChecker();
 
-        $this->assertFalse($checker->isCmsWebRequest(), "Test env. is not a web request");
+        static::assertFalse($checker->isCmsWebRequest(), "Test env. is not a web request");
     }
 
     /**
@@ -75,7 +75,7 @@ class BootCheckerTest extends TestCase
     {
         $checker = $this->getBootChecker();
 
-        $this->assertFalse($checker->isCmsApiRequest(), "Test env. is not the API");
+        static::assertFalse($checker->isCmsApiRequest(), "Test env. is not the API");
     }
 
     /**
