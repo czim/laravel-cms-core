@@ -9,6 +9,7 @@ use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleGeneratorInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
+use InvalidArgumentException;
 use ReflectionException;
 
 class ModuleManager implements ModuleManagerInterface
@@ -185,8 +186,8 @@ class ModuleManager implements ModuleManagerInterface
      */
     protected function instantiateClass($class)
     {
-        if ( ! class_exists($class)) {
-            throw new \InvalidArgumentException("No instantiable class for '{$class}'");
+        if ( ! class_exists($class) && ! interface_exists($class)) {
+            throw new InvalidArgumentException("No instantiable class for '{$class}'");
         }
 
         try {
@@ -198,7 +199,7 @@ class ModuleManager implements ModuleManagerInterface
         }
 
         if (null === $instance) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Failed to instantiate Module or ModuleGenerator instance for '{$class}'"
             );
         }
@@ -206,7 +207,7 @@ class ModuleManager implements ModuleManagerInterface
         if (    ! ($instance instanceof ModuleInterface)
             &&  ! ($instance instanceof ModuleGeneratorInterface)
         ) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Expected ModuleInterface or ModuleGeneratorInterface, got '{$class}'"
             );
         }
