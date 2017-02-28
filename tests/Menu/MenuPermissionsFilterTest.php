@@ -170,6 +170,20 @@ class MenuPermissionsFilterTest extends TestCase
 
     /**
      * @test
+     * @expectedException \Exception
+     */
+    function it_throws_an_exception_if_no_permissions_index_is_set()
+    {
+        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
+        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+
+        $filter = new MenuPermissionsFilter();
+
+        $filter->filterLayout($layoutMock, false);
+    }
+
+    /**
+     * @test
      */
     function it_filters_a_layout_based_on_a_nested_filter_index()
     {
@@ -296,7 +310,7 @@ class MenuPermissionsFilterTest extends TestCase
         static::assertCount(1, $array, 'Topmost layer should have 1 entry');
         static::assertArrayHasKey('group-a', $array, 'Topmost layer should have "group-a" key');
 
-        static::assertCount(4, $array['group-a']->children(), 'Group-a layer should have 3 entries');
+        static::assertCount(4, $array['group-a']->children(), 'Group-a layer should have 4 entries');
         static::assertArrayNotHasKey(
             'group-b',
             $array['group-a']->children(),
@@ -340,6 +354,70 @@ class MenuPermissionsFilterTest extends TestCase
         $filter = new MenuPermissionsFilter();
 
         $filter->filterLayout($layoutMock, $user, $indexMock);
+    }
+
+    /**
+     * @test
+     */
+    function it_does_not_attempt_to_filter_if_user_has_all_indexed_permissions()
+    {
+        $user = $this->getMockUser();
+        $user->method('isAdmin')->willReturn(false);
+        $user->method('can')->willReturn(true);
+        $user->method('canAnyOf')->willReturn(true);
+
+        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
+        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+        $layoutMock->method('setLayout')
+            ->willThrowException(new \RuntimeException("setLayout should not be called"));
+
+        $indexMock = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
+        $indexMock->method('index')
+            ->willThrowException(new \RuntimeException("index should not be called"));
+        $indexMock->expects(static::atLeastOnce())->method('permissions')->willReturn([]);
+
+        $filter = new MenuPermissionsFilter();
+
+        $filter->filterLayout($layoutMock, $user, $indexMock);
+    }
+
+    /**
+     * @test
+     */
+    function it_filters_out_anything_conditional_if_no_user_is_provided()
+    {
+        $layout = new LayoutData([
+            'layout' => $this->getComplexLayoutArray(),
+        ]);
+
+        $index = new PermissionsIndexData([
+            'layout' => [
+                base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a', 'permission-b'],
+                base64_encode('group-a') .'.' . base64_encode('group-c') => [],
+            ],
+            'permissions' => [
+                'permission-a',
+                'permission-b',
+                'permission-z',
+                'permission-x',
+                'permission-y',
+            ],
+        ]);
+
+        $filter = new MenuPermissionsFilter();
+
+        $layout = $filter->filterLayout($layout, false, $index);
+
+        $array = $layout->layout();
+        static::assertCount(1, $array, 'Topmost layer should have 1 entry');
+        static::assertArrayHasKey('group-a', $array, 'Topmost layer should have "group-a" key');
+
+        static::assertCount(3, $array['group-a']->children(), 'Group-a layer should have 3 entries');
+        static::assertArraySubset(['test-c','group-c', 'group-d'], array_pluck($array['group-a']->children(), 'id'));
+        
+        static::assertCount(1, $array['group-a']->children()['group-c']->children(), 'Group-a layer should have 1 entry');
+        static::assertArraySubset(['test-f'], array_pluck($array['group-a']->children()['group-c']->children(), 'id'));
+
     }
 
 
