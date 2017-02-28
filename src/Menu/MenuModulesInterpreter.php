@@ -185,7 +185,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     protected function getConfiguredModulePresence(ModuleInterface $module)
     {
         if (    ! array_key_exists($module->getKey(), $this->configModules)
-            ||  ! is_array($this->configModules[ $module->getKey() ])
+            ||  ! $this->configModules[ $module->getKey() ]
         ) {
             return false;
         }
@@ -334,6 +334,10 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     {
         if ($configured instanceof MenuPresenceInterface) {
             $configured->setChildren($this->normalizeConfiguredPresence($configured->children()));
+            // To determine what keys should be used, list everything that's non-empty
+            $configured->setExplicitKeys(
+                array_keys(array_filter($configured->toArray()))
+            );
             return [ $configured ];
         }
 
