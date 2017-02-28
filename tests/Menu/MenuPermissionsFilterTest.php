@@ -304,6 +304,44 @@ class MenuPermissionsFilterTest extends TestCase
         );
     }
 
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_incorrect_value_is_given_for_user_parameter()
+    {
+        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
+        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+
+        $filter = new MenuPermissionsFilter();
+
+        $filter->filterLayout($layoutMock, 'not a user');
+    }
+
+    /**
+     * @test
+     */
+    function it_does_not_attempt_to_filter_if_user_is_admin()
+    {
+        $user = $this->getMockUser();
+        $user->expects(static::atLeastOnce())->method('isAdmin')->willReturn(true);
+
+        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
+        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+        $layoutMock->method('setLayout')
+            ->willThrowException(new \RuntimeException("setLayout should not be called"));
+
+        $indexMock = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
+        $indexMock->method('index')
+            ->willThrowException(new \RuntimeException("index should not be called"));
+        $indexMock->method('permissions')
+            ->willThrowException(new \RuntimeException("permissions should not be called"));
+
+        $filter = new MenuPermissionsFilter();
+
+        $filter->filterLayout($layoutMock, $user, $indexMock);
+    }
+
 
     // ------------------------------------------------------------------------------
     //      Helpers
