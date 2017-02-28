@@ -204,7 +204,10 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
             // the children of this node: not if all children are unconditional
             // (index is empty array) or user has all permissions.
 
-            $index = $this->permissionsIndex->getForNode($parentKeys);
+            $combinedParentKeys = $parentKeys;
+            $combinedParentKeys[] = $key;
+
+            $index = $this->permissionsIndex->getForNode($combinedParentKeys);
 
             if (is_array($index) && ( ! count($index) || $this->userHasAllPermissions($index))) {
                 continue;
