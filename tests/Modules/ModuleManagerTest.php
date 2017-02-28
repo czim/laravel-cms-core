@@ -10,7 +10,6 @@ use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithServiceProviders;
 use Czim\CmsCore\Test\Helpers\Modules\TestModuleWithRoutes;
-use Czim\CmsCore\Test\Helpers\NonInstantiableInterface;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
@@ -25,7 +24,7 @@ class ModuleManagerTest extends TestCase
     {
         $manager = $this->makeManager();
 
-        $this->assertRegExp('#^\d+\.\d+\.\d+$#', $manager->version());
+        static::assertRegExp('#^\d+\.\d+\.\d+$#', $manager->version());
     }
 
     /**
@@ -49,10 +48,10 @@ class ModuleManagerTest extends TestCase
 
         $modules = $manager->getModules();
 
-        $this->assertInstanceOf(Collection::class, $modules, 'getModules() did not return Collection');
-        $this->assertCount(2, $modules, "Two modules should be loaded by default");
-        $this->assertTrue($modules->has('test-module'), 'Test Module should be loaded');
-        $this->assertTrue($modules->has('associated-test-module'), 'Associated Test Module should be loaded');
+        static::assertInstanceOf(Collection::class, $modules, 'getModules() did not return Collection');
+        static::assertCount(2, $modules, "Two modules should be loaded by default");
+        static::assertTrue($modules->has('test-module'), 'Test Module should be loaded');
+        static::assertTrue($modules->has('associated-test-module'), 'Associated Test Module should be loaded');
     }
 
     /**
@@ -66,8 +65,8 @@ class ModuleManagerTest extends TestCase
 
         $modules = $manager->getModules();
 
-        $this->assertCount(1, $modules, 'There should be only one module loaded');
-        $this->assertEquals('associated-test-module', $modules->first()->getKey(), 'The wrong module was loaded');
+        static::assertCount(1, $modules, 'There should be only one module loaded');
+        static::assertEquals('associated-test-module', $modules->first()->getKey(), 'The wrong module was loaded');
     }
 
     /**
@@ -81,7 +80,7 @@ class ModuleManagerTest extends TestCase
             SimpleTestModuleGenerator::class,
         ]);
 
-        $this->assertInstanceOf(ModuleInterface::class, $manager->get('associated-test-module'));
+        static::assertInstanceOf(ModuleInterface::class, $manager->get('associated-test-module'));
     }
 
     /**
@@ -93,8 +92,8 @@ class ModuleManagerTest extends TestCase
 
         $manager->initialize();
 
-        $this->assertInstanceOf(ModuleInterface::class, $manager->get('test-module'));
-        $this->assertInstanceOf(ModuleInterface::class, $manager->get('associated-test-module'));
+        static::assertInstanceOf(ModuleInterface::class, $manager->get('test-module'));
+        static::assertInstanceOf(ModuleInterface::class, $manager->get('associated-test-module'));
     }
 
     /**
@@ -106,7 +105,7 @@ class ModuleManagerTest extends TestCase
 
         $manager->initialize();
 
-        $this->assertInstanceOf(ModuleInterface::class, $manager->getByAssociatedClass(ModuleManager::class));
+        static::assertInstanceOf(ModuleInterface::class, $manager->getByAssociatedClass(ModuleManager::class));
     }
 
     /**
@@ -118,7 +117,7 @@ class ModuleManagerTest extends TestCase
 
         $manager->initialize();
 
-        $this->assertSame(false, $manager->get('does-not-exist'));
+        static::assertSame(false, $manager->get('does-not-exist'));
     }
 
     /**
@@ -130,7 +129,7 @@ class ModuleManagerTest extends TestCase
 
         $manager->initialize();
 
-        $this->assertSame(false, $manager->getByAssociatedClass('Some\\Unassociated\\Class'));
+        static::assertSame(false, $manager->getByAssociatedClass('Some\\Unassociated\\Class'));
     }
 
     /**
@@ -142,8 +141,8 @@ class ModuleManagerTest extends TestCase
 
         $manager->initialize();
 
-        $this->assertTrue($manager->has('test-module'), 'Should return true for loaded module');
-        $this->assertFalse($manager->has('not-loaded'), 'Should return false for unloaded module');
+        static::assertTrue($manager->has('test-module'), 'Should return true for loaded module');
+        static::assertFalse($manager->has('not-loaded'), 'Should return false for unloaded module');
     }
 
     /**
@@ -170,8 +169,8 @@ class ModuleManagerTest extends TestCase
         $manager->initialize([ TestModuleWithRoutes::class ]);
 
         $router = $this->getMockRouter();
-        $router->expects($this->once())->method('get')->with('test', 'SomeController@index');
-        $router->expects($this->once())->method('post')->with('test', 'SomeController@store');
+        $router->expects(static::once())->method('get')->with('test', 'SomeController@index');
+        $router->expects(static::once())->method('post')->with('test', 'SomeController@store');
 
         $manager->mapWebRoutes($router);
     }
@@ -186,8 +185,8 @@ class ModuleManagerTest extends TestCase
         $manager->initialize([ TestModuleWithRoutes::class ]);
 
         $router = $this->getMockRouter();
-        $router->expects($this->once())->method('get')->with('test', 'SomeApiController@index');
-        $router->expects($this->once())->method('post')->with('test', 'SomeApiController@store');
+        $router->expects(static::once())->method('get')->with('test', 'SomeApiController@index');
+        $router->expects(static::once())->method('post')->with('test', 'SomeApiController@store');
 
         $manager->mapApiRoutes($router);
     }
@@ -206,9 +205,9 @@ class ModuleManagerTest extends TestCase
 
         $modules = $manager->getModules();
 
-        $this->assertCount(2, $modules);
-        $this->assertEquals('test-module', $modules->first()->getKey());
-        $this->assertEquals('test-module-with-service-providers', $modules->last()->getKey());
+        static::assertCount(2, $modules);
+        static::assertEquals('test-module', $modules->first()->getKey());
+        static::assertEquals('test-module-with-service-providers', $modules->last()->getKey());
     }
 
     /**
@@ -218,13 +217,13 @@ class ModuleManagerTest extends TestCase
     {
         $mockAcl = $this->getMockAcl();
 
-        $mockAcl->expects($this->once())
+        $mockAcl->expects(static::once())
                 ->method('getAllPermissions')
                 ->willReturn(['test']);
 
         $manager = new ModuleManager($this->getMockCore(), $mockAcl);
 
-        $this->assertEquals(['test'], $manager->getAllPermissions());
+        static::assertEquals(['test'], $manager->getAllPermissions());
     }
 
     /**
@@ -234,14 +233,14 @@ class ModuleManagerTest extends TestCase
     {
         $mockAcl = $this->getMockAcl();
 
-        $mockAcl->expects($this->once())
+        $mockAcl->expects(static::once())
             ->method('getModulePermissions')
             ->with('testing')
             ->willReturn(['test']);
 
         $manager = new ModuleManager($this->getMockCore(), $mockAcl);
 
-        $this->assertEquals(['test'], $manager->getModulePermissions('testing'));
+        static::assertEquals(['test'], $manager->getModulePermissions('testing'));
     }
 
 
@@ -267,7 +266,7 @@ class ModuleManagerTest extends TestCase
         $manager = $this->makeManager();
 
         $manager->initialize([
-            NonInstantiableInterface::class,
+            \Czim\CmsCore\Test\Helpers\NonInstantiableInterface::class,
         ]);
     }
 
@@ -293,7 +292,7 @@ class ModuleManagerTest extends TestCase
         $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
 
         $mock->method('moduleConfig')
-             ->with('modules', $this->anything())
+             ->with('modules', static::anything())
              ->willReturn([
                  SimpleTestModule::class,
                  SimpleAssociatedTestModule::class,
