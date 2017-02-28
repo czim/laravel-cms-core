@@ -40,6 +40,20 @@ class ModuleManagerTest extends TestCase
     /**
      * @test
      */
+    function it_returns_whether_it_was_initialized()
+    {
+        $manager = $this->makeManager();
+
+        static::assertFalse($manager->isInitialized(), 'Should not report initialized directly after construct');
+
+        $manager->initialize();
+
+        static::assertTrue($manager->isInitialized(), 'Should report initialized after initialize()');
+    }
+
+    /**
+     * @test
+     */
     function it_loads_configured_modules_on_initialization()
     {
         $manager = $this->makeManager();
@@ -267,6 +281,19 @@ class ModuleManagerTest extends TestCase
 
         $manager->initialize([
             \Czim\CmsCore\Test\Helpers\NonInstantiableInterface::class,
+        ]);
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    function it_throws_an_exception_when_trying_to_load_a_class_with_uninstantiable_dependencies()
+    {
+        $manager = $this->makeManager();
+
+        $manager->initialize([
+            \Czim\CmsCore\Test\Helpers\NonInstantiableClassWithDependency::class,
         ]);
     }
 
