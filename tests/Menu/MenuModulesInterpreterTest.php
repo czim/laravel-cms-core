@@ -28,14 +28,19 @@ class MenuModulesInterpreterTest extends TestCase
      */
     protected $modules;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->menuModulesConfig = [];
+    }
 
     /**
      * @test
      */
     function it_returns_standard_presences_if_no_menu_modules_are_configured()
     {
-        $this->modules           = $this->getMockModules();
-        $this->menuModulesConfig = [];
+        $this->modules = $this->getMockModules();
 
         $interpreter = $this->makeModulesInterpreter();
 
@@ -98,6 +103,26 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertEquals('test-overruled', head($data->standard()->first())->id(), 'Presence should be overruled');
     }
 
+    /**
+     * @test
+     */
+    function it_separates_alternative_presences()
+    {
+        $this->modules = collect([
+            'alt' => $this->getMockModuleWithCustomPresence([
+                'type' => MenuPresenceType::HTML,
+                'html' => 'testing',
+            ]),
+        ]);
+
+        $interpreter = $this->makeModulesInterpreter();
+
+        $data = $interpreter->interpret();
+
+        static::assertCount(0, $data->standard(), 'Standard collection should be empty');
+        static::assertCount(1, $data->alternative(), 'There should be one alternative presence');
+        static::assertTrue($data->alternative()->has('alt'));
+    }
 
     // ------------------------------------------------------------------------------
     //      Interpretation
@@ -108,8 +133,6 @@ class MenuModulesInterpreterTest extends TestCase
      */
     function it_interprets_module_presence_with_false_value()
     {
-        $this->menuModulesConfig = [];
-
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence(false),
         ]);
@@ -126,8 +149,6 @@ class MenuModulesInterpreterTest extends TestCase
      */
     function it_interprets_module_presence_with_null_value()
     {
-        $this->menuModulesConfig = [];
-
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence(null),
         ]);
@@ -144,8 +165,6 @@ class MenuModulesInterpreterTest extends TestCase
      */
     function it_interprets_module_presence_instance()
     {
-        $this->menuModulesConfig = [];
-
         $this->modules = collect([
             'test-a' => $this->getMockModuleWithPresenceInstance(),
         ]);
@@ -167,8 +186,6 @@ class MenuModulesInterpreterTest extends TestCase
      */
     function it_interprets_module_presence_array()
     {
-        $this->menuModulesConfig = [];
-
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence([
                 'id'    => 'test',
@@ -194,8 +211,6 @@ class MenuModulesInterpreterTest extends TestCase
      */
     function it_interprets_module_presence_nested_arrays()
     {
-        $this->menuModulesConfig = [];
-
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence([
                 [
@@ -221,11 +236,11 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(2, $data->standard()->get('test'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
-        static::assertEquals('test', $data->standard()->get('test')[0]->id());
+        static::assertEquals('test', $data->standard()->get('test')[0]->id);
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[1]);
-        static::assertEquals('test-2', $data->standard()->get('test')[1]->id());
-        static::assertEquals('something else', $data->standard()->get('test')[1]->label());
+        static::assertEquals('test-2', $data->standard()->get('test')[1]->id);
+        static::assertEquals('something else', $data->standard()->get('test')[1]->label);
     }
 
     /**
@@ -233,8 +248,6 @@ class MenuModulesInterpreterTest extends TestCase
      */
     function it_interprets_module_presence_nested_group_arrays()
     {
-        $this->menuModulesConfig = [];
-
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence([
                 [
@@ -262,11 +275,11 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(1, $data->standard()->get('test'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
-        static::assertEquals('test', $data->standard()->get('test')[0]->id());
+        static::assertEquals('test', $data->standard()->get('test')[0]->id);
 
-        static::assertCount(1, $data->standard()->get('test')[0]->children());
-        static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]->children()[0]);
-        static::assertEquals('test-child', $data->standard()->get('test')[0]->children()[0]->id());
+        static::assertCount(1, $data->standard()->get('test')[0]->children);
+        static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]->children[0]);
+        static::assertEquals('test-child', $data->standard()->get('test')[0]->children[0]->id);
     }
 
     /**
@@ -274,8 +287,6 @@ class MenuModulesInterpreterTest extends TestCase
      */
     function it_interprets_module_presence_nested_group_array_in_instance()
     {
-        $this->menuModulesConfig = [];
-
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence(
                 new MenuPresence([
@@ -303,17 +314,68 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(1, $data->standard()->get('test'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
-        static::assertEquals('test', $data->standard()->get('test')[0]->id());
+        static::assertEquals('test', $data->standard()->get('test')[0]->id);
 
-        static::assertCount(1, $data->standard()->get('test')[0]->children());
-        static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]->children()[0]);
-        static::assertEquals('test-child', $data->standard()->get('test')[0]->children()[0]->id());
+        static::assertCount(1, $data->standard()->get('test')[0]->children);
+        static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]->children[0]);
+        static::assertEquals('test-child', $data->standard()->get('test')[0]->children[0]->id);
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_incorrect_presence_data_is_defined_for_a_module()
+    {
+        $this->modules = collect([
+            'test' => $this->getMockModuleWithCustomPresence([
+                'invalid',
+            ]),
+        ]);
+
+        $this->makeModulesInterpreter()->interpret();
     }
 
 
     // ------------------------------------------------------------------------------
     //      Configuration interpretation
     // ------------------------------------------------------------------------------
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_incorrect_presence_data_is_configured_for_a_module()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(false),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-a' => 'testing',
+        ];
+
+        $this->makeModulesInterpreter()->interpret();
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_incorrect_presence_data_is_configured_for_a_module_in_a_nesting_array()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(false),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-a' => [
+                'testing',
+            ],
+        ];
+
+        $this->makeModulesInterpreter()->interpret();
+    }
 
     /**
      * @test
@@ -492,10 +554,10 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(2, $data->standard()->get('test-a'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-a')[0]);
-        static::assertEquals('test-a', $data->standard()->get('test-a')[0]->id());
+        static::assertEquals('test-a', $data->standard()->get('test-a')[0]->id);
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-a')[1]);
-        static::assertEquals('test-added', $data->standard()->get('test-a')[1]->id());
+        static::assertEquals('test-added', $data->standard()->get('test-a')[1]->id);
     }
 
     /**
@@ -530,7 +592,7 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(1, $data->standard()->get('test-a'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-a')[0]);
-        static::assertEquals('test-added', $data->standard()->get('test-a')[0]->id());
+        static::assertEquals('test-added', $data->standard()->get('test-a')[0]->id);
     }
 
     /**
@@ -557,8 +619,8 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(1, $data->standard()->get('test-a'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-a')[0]);
-        static::assertEquals('test-modified', $data->standard()->get('test-a')[0]->id(), 'Not modified');
-        static::assertEquals('something', $data->standard()->get('test-a')[0]->label(), 'Original value missing');
+        static::assertEquals('test-modified', $data->standard()->get('test-a')[0]->id, 'Not modified');
+        static::assertEquals('something', $data->standard()->get('test-a')[0]->label, 'Original value missing');
     }
 
     /**
@@ -586,8 +648,68 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(1, $data->standard()->get('test-a'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-a')[0]);
-        static::assertEquals('test-a', $data->standard()->get('test-a')[0]->id(), 'Original value missing');
-        static::assertEquals('modified label', $data->standard()->get('test-a')[0]->label(), 'Not modified');
+        static::assertEquals('test-a', $data->standard()->get('test-a')[0]->id, 'Original value missing');
+        static::assertEquals('modified label', $data->standard()->get('test-a')[0]->label, 'Not modified');
+    }
+
+    /**
+     * @test
+     */
+    function it_allows_modifying_a_menu_presence_by_defining_a_menu_presence_instance()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(false),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-a' => [
+                new MenuPresence([
+                    'mode'  => MenuPresenceMode::MODIFY,
+                    'label' => 'modified label',
+                ]),
+            ],
+        ];
+
+        $interpreter = $this->makeModulesInterpreter();
+
+        $data = $interpreter->interpret();
+
+        static::assertCount(1, $data->standard());
+        static::assertTrue($data->standard()->has('test-a'));
+        static::assertCount(1, $data->standard()->get('test-a'));
+
+        static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-a')[0]);
+        static::assertEquals('test-a', $data->standard()->get('test-a')[0]->id, 'Original value missing');
+        static::assertEquals('modified label', $data->standard()->get('test-a')[0]->label);
+    }
+
+    /**
+     * @test
+     */
+    function it_allows_modifying_a_menu_presence_by_defining_a_menu_presence_instance_at_the_top_level()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(false),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-a' => new MenuPresence([
+                'mode'  => MenuPresenceMode::MODIFY,
+                'label' => 'modified label',
+            ]),
+        ];
+
+        $interpreter = $this->makeModulesInterpreter();
+
+        $data = $interpreter->interpret();
+
+        static::assertCount(1, $data->standard());
+        static::assertTrue($data->standard()->has('test-a'));
+        static::assertCount(1, $data->standard()->get('test-a'));
+
+        static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-a')[0]);
+        static::assertEquals('test-a', $data->standard()->get('test-a')[0]->id, 'Original value missing');
+        static::assertEquals('modified label', $data->standard()->get('test-a')[0]->label);
     }
 
     /**
@@ -617,10 +739,10 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(1, $data->standard()->get('test-b'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test-b')[0]);
-        static::assertEquals(MenuPresenceType::LINK, $data->standard()->get('test-b')[0]->type());
-        static::assertEquals('replaced label', $data->standard()->get('test-b')[0]->label());
-        static::assertNull($data->standard()->get('test-b')[0]->id(), 'Original value still present');
-        static::assertEmpty($data->standard()->get('test-b')[0]->permissions(), 'Original value still present');
+        static::assertEquals(MenuPresenceType::LINK, $data->standard()->get('test-b')[0]->type);
+        static::assertEquals('replaced label', $data->standard()->get('test-b')[0]->label);
+        static::assertNull($data->standard()->get('test-b')[0]->id, 'Original value still present');
+        static::assertEmpty($data->standard()->get('test-b')[0]->permissions, 'Original value still present');
     }
 
     /**
@@ -676,18 +798,93 @@ class MenuModulesInterpreterTest extends TestCase
         static::assertCount(1, $data->standard()->get('test'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
-        static::assertEquals('test', $data->standard()->get('test')[0]->id());
-        static::assertCount(2, $data->standard()->get('test')[0]->children());
+        static::assertEquals('test', $data->standard()->get('test')[0]->id);
+        static::assertCount(2, $data->standard()->get('test')[0]->children);
 
         /** @var MenuPresenceInterface[] $children */
-        $children = array_values($data->standard()->get('test')[0]->children());
+        $children = array_values($data->standard()->get('test')[0]->children);
 
         static::assertInstanceOf(MenuPresenceInterface::class, $children[0]);
-        static::assertEquals('test-child-1', $children[0]->id(), 'Nested child did not use original values');
+        static::assertEquals('test-child-1', $children[0]->id, 'Nested child did not use original values');
         static::assertEquals('modified', $children[0]->label(), 'Nested child was not modified');
 
         static::assertInstanceOf(MenuPresenceInterface::class, $children[1]);
         static::assertEquals('test-child-3', $children[1]->id());
+    }
+
+    /**
+     * @test
+     */
+    function it_silently_ignores_modifying_presences_definitions_that_have_no_match_in_the_original_presences()
+    {
+        $this->modules = collect([
+            'test-b' => $this->getMockModuleWithPermissions(),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-b' => [
+                [
+                    'mode'   => MenuPresenceMode::DELETE,
+                    'type'   => MenuPresenceType::LINK,
+                    'label'  => 'replaced label',
+                    'action' => 'new:action',
+                ],
+                [
+                    'mode'   => MenuPresenceMode::REPLACE,
+                    'label'  => 'ignored',
+                    'action' => 'new:action',
+                ],
+                [
+                    'mode'   => MenuPresenceMode::MODIFY,
+                    'label'  => 'ignored',
+                ],
+                [
+                    'mode' => MenuPresenceMode::DELETE,
+                ],
+            ],
+        ];
+
+        $interpreter = $this->makeModulesInterpreter();
+
+        $data = $interpreter->interpret();
+
+        static::assertCount(0, $data->standard());
+    }
+
+    /**
+     * @test
+     */
+    function it_enriches_missing_type_for_module_presence_definition()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(),
+        ]);
+
+        $this->menuModulesConfig = [
+            'test-a' => [
+                [
+                    'mode'   => MenuPresenceMode::ADD,
+                    'label'  => 'new label 1',
+                    'action' => 'new:action',
+                ],
+                [
+                    'mode'   => MenuPresenceMode::ADD,
+                    'label'  => 'new label 2',
+                    'action' => 'http://www.google.com',
+                ],
+            ],
+        ];
+
+        $interpreter = $this->makeModulesInterpreter();
+
+        $data = $interpreter->interpret();
+
+        static::assertCount(1, $data->standard());
+        static::assertTrue($data->standard()->has('test-a'));
+        static::assertCount(3, $data->standard()->get('test-a'));
+
+        static::assertEquals(MenuPresenceType::ACTION, $data->standard()->get('test-a')[1]->type);
+        static::assertEquals(MenuPresenceType::LINK, $data->standard()->get('test-a')[2]->type);
     }
 
 
