@@ -211,6 +211,7 @@ class MenuRepository implements MenuRepositoryInterface
         }
 
         if ( ! ($layout instanceof MenuLayoutDataInterface)) {
+            $this->clearCache();
             return false;
         }
 
@@ -252,6 +253,7 @@ class MenuRepository implements MenuRepositoryInterface
         }
 
         if ( ! ($index instanceof MenuPermissionsIndexDataInterface)) {
+            $this->clearCache();
             return false;
         }
 
