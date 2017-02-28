@@ -27,6 +27,35 @@ class AclRepositoryTest extends TestCase
     /**
      * @test
      */
+    function it_only_initializes_once()
+    {
+        $acl = new AclRepository($this->getMockCore(null, true));
+
+        $acl->initialize();
+        $acl->initialize();
+    }
+
+    /**
+     * @test
+     */
+    function it_ignores_acl_presences_defined_by_module_as_null_or_false()
+    {
+        $acl = new AclRepository($this->getMockCore(
+            new Collection([
+                'test-a' => $this->getMockModuleWithCustomPresence(null),
+                'test-b' => $this->getMockModuleWithCustomPresence(false),
+            ])
+        ));
+
+        $presences = $acl->getAclPresences();
+
+        static::assertInstanceOf(Collection::class, $presences);
+        static::assertCount(0, $presences);
+    }
+
+    /**
+     * @test
+     */
     function it_retrieves_acl_presence_defined_by_module_as_instance()
     {
         $acl = new AclRepository($this->getMockCore(
@@ -183,6 +212,20 @@ class AclRepositoryTest extends TestCase
         static::assertCount(0, $permissions);
     }
 
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_invalid_nested_presence_data_is_set()
+    {
+        $acl = new AclRepository($this->getMockCore(
+            new Collection([
+                'test' => $this->getMockModuleWithCustomPresence([ false ]),
+            ])
+        ));
+
+        $acl->getAclPresences();
+    }
 
     // ------------------------------------------------------------------------------
     //      Helpers
@@ -190,13 +233,15 @@ class AclRepositoryTest extends TestCase
 
     /**
      * @param null|Collection $modules
+     * @param bool            $expect  whether to force strict expectactions
      * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockCore($modules = null)
+    protected function getMockCore($modules = null, $expect = false)
     {
         $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
 
-        $mock->method('modules')
+        $mock->expects($expect ? static::once() : static::any())
+             ->method('modules')
              ->willReturn($this->getMockModuleManager($modules));
 
         return $mock;
@@ -306,6 +351,21 @@ class AclRepositoryTest extends TestCase
                     ],
                 ],
             ]);
+
+        return $mock;
+    }
+
+    /**
+     * @param mixed $presence
+     * @return ModuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockModuleWithCustomPresence($presence)
+    {
+        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+
+        $mock->expects(static::once())
+             ->method('getAclPresence')
+             ->willReturn($presence);
 
         return $mock;
     }
