@@ -199,6 +199,28 @@ class MenuConfigInterpreterTest extends TestCase
         ]);
     }
 
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_an_incorrect_value_is_present_in_the_layout_tree()
+    {
+        $this->menuModulesStandard = $this->getMockModulePresences();
+
+        $interpreter = $this->makeConfigInterpreter();
+
+        $interpreter->interpretLayout([
+            [
+                'id'       => 'group-a',
+                'label'    => 'Test Group',
+                'children' => [
+                    false,
+                ],
+            ],
+            'test-a',
+        ]);
+    }
+
 
 
     // ------------------------------------------------------------------------------
