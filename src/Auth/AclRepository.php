@@ -145,6 +145,8 @@ class AclRepository implements AclRepositoryInterface
 
         $this->loadAclModules()
              ->collapsePermissions();
+
+        $this->prepared = true;
     }
 
     /**
