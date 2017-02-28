@@ -150,21 +150,21 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
             }
 
             if ( ! is_string($value)) {
-
-                if ($stringKey) {
-                    $newLayer[$key] = $value;
-                } else {
-                    $newLayer[] = $value;
-                }
-                continue;
+                throw new UnexpectedValueException(
+                    'Module key reference in menu layout must be string module key reference, or array for layout group'
+                );
             }
 
             if (in_array($value, $this->assignedModuleKeys)) {
-                throw new UnexpectedValueException("Module key reference '{$value}' for menu layout is used more than once.");
+                throw new UnexpectedValueException(
+                    "Module key reference '{$value}' for menu layout is used more than once."
+                );
             }
 
             if ( ! $presencesPerModule->has($value)) {
-                throw new UnexpectedValueException("Unknown (or disabled) module key reference '{$value}' in menu layout.");
+                throw new UnexpectedValueException(
+                    "Unknown (or disabled) module key reference '{$value}' in menu layout."
+                );
             }
 
             $this->assignedModuleKeys[] = $value;
