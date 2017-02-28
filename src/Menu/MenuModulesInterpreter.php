@@ -100,10 +100,6 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
 
             foreach ($presencesForModule as $presence) {
 
-                if ( ! $presence) {
-                    continue;
-                }
-
                 // If a menu presence is deemed 'alternative',
                 // it should not appear in the normal menu structure.
                 if ($this->isMenuPresenceAlternative($presence)) {
@@ -115,8 +111,12 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                 $standard[] = $presence;
             }
 
-            $this->presences->standard->put($moduleKey, $standard);
-            $this->presences->alternative->put($moduleKey, $alternative);
+            if (count($standard)) {
+                $this->presences->standard->put($moduleKey, $standard);
+            }
+            if (count($alternative)) {
+                $this->presences->alternative->put($moduleKey, $alternative);
+            }
         }
 
         return $this->presences;
@@ -334,19 +334,12 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     {
         if ($configured instanceof MenuPresenceInterface) {
             $configured->setChildren($this->normalizeConfiguredPresence($configured->children()));
-            // To determine what keys should be used, list everything that's non-empty
-            $configured->setExplicitKeys(
-                array_keys(array_filter($configured->toArray()))
-            );
+            $this->markExplicitKeysForMenuPresence($configured);
             return [ $configured ];
         }
 
-        if (false === $configured) {
-            return [ new MenuPresence([ 'mode' => MenuPresenceMode::DELETE ]) ];
-        }
-
         if ( ! is_array($configured)) {
-            return false;
+            throw new UnexpectedValueException('Menu presence definition must be an array');
         }
 
         // Normalize if top layer is a presence definition, instead of an array of presences
@@ -358,6 +351,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
 
             if ($value instanceof MenuPresenceInterface) {
                 $value->setChildren($this->normalizeConfiguredPresence($value->children()));
+                $this->markExplicitKeysForMenuPresence($value);
                 continue;
             }
 
@@ -492,11 +486,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      */
     protected function isStringUrl($string)
     {
-        if ( ! is_string($string)) {
-            return false;
-        }
-
-        return (bool) preg_match('#^(https?:)?//|^www\.#', $string);
+        return (bool) is_string($string) && preg_match('#^(https?:)?//|^www\.#', $string);
     }
 
     /**
@@ -526,6 +516,18 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         }
 
         return false === $this->configModules[ $module->getKey() ];
+    }
+
+    /**
+     * Marks explicit keys for non-empty menu presence.
+     *
+     * @param MenuPresenceInterface $presence
+     */
+    protected function markExplicitKeysForMenuPresence(MenuPresenceInterface $presence)
+    {
+        $presence->setExplicitKeys(
+            array_keys(array_filter($presence->toArray()))
+        );
     }
 
 }
