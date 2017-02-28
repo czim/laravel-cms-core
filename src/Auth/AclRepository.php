@@ -4,10 +4,10 @@ namespace Czim\CmsCore\Auth;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\Data\AclPresenceInterface;
 use Czim\CmsCore\Support\Data\AclPresence;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
+use UnexpectedValueException;
 
 class AclRepository implements AclRepositoryInterface
 {
@@ -194,6 +194,10 @@ class AclRepository implements AclRepositoryInterface
      */
     protected function normalizeAclPresence($data)
     {
+        if ( ! $data) {
+            return [];
+        }
+
         if ($data instanceof AclPresenceInterface) {
 
             $data = [$data];
@@ -203,7 +207,18 @@ class AclRepository implements AclRepositoryInterface
             $presences = [];
 
             foreach ($data as $nestedData) {
-                $presences[] = new AclPresence($nestedData);
+
+                if (is_array($nestedData)) {
+                    $nestedData = new AclPresence($nestedData);
+                }
+
+                if ( ! ($nestedData instanceof AclPresenceInterface)) {
+                    throw new UnexpectedValueException(
+                        'ACL presence data from array provided by module is not an array or ACL presence instance'
+                    );
+                }
+
+                $presences[] = $nestedData;
             }
 
             $data = $presences;
@@ -219,17 +234,7 @@ class AclRepository implements AclRepositoryInterface
         // Make sure the permission children are listed as simple strings.
         foreach ($data as $index => $presence) {
 
-            $children = $presence->permissions() ?: [];
-
-            if ($children instanceof Arrayable) {
-                $children = $children->toArray();
-            }
-
-            if ( ! is_array($children)) {
-                $children = [ $children ];
-            }
-
-            $data[ $index ]->setPermissions($children);
+            $data[ $index ]->setPermissions($presence->permissions());
         }
 
         return $data;
@@ -251,7 +256,7 @@ class AclRepository implements AclRepositoryInterface
             /** @var AclPresenceInterface[] $presences */
             foreach ($presences as $presence) {
 
-                if ( ! $presence->permissions() || ! count($presence->permissions())) {
+                if ( ! count($presence->permissions())) {
                     continue;
                 }
 
