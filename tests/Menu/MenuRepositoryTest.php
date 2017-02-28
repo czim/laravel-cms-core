@@ -41,6 +41,20 @@ class MenuRepositoryTest extends TestCase
      */
     protected $isAdmin = false;
 
+    /**
+     * Whether to mock enable caching.
+     *
+     * @var bool
+     */
+    protected $cacheEnabled = false;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->cacheEnabled = false;
+    }
+
 
     /**
      * @test
@@ -123,6 +137,71 @@ class MenuRepositoryTest extends TestCase
     /**
      * @test
      */
+    function it_caches_if_allowed()
+    {
+        $this->cacheEnabled = true;
+
+        // Make a mock cache that returns test mocks
+        $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+
+        $cacheMock->expects(static::atLeast(2))
+            ->method(static::logicalOr('forever', 'put'))
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ))
+            ->willReturn(true);
+
+        $menu = $this->makeMenuRepository($cacheMock);
+
+        $menu->initialize();
+    }
+
+    /**
+     * @test
+     */
+    function it_uses_cache_if_allowed_and_the_cache_is_set()
+    {
+        $this->cacheEnabled = true;
+
+        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+        $indexMock  = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
+
+        // Make a mock cache that returns test mocks
+        $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+
+        $cacheMock->expects(static::atLeast(2))
+            ->method('has')
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ))
+            ->willReturn(true);
+
+        $cacheMock->expects(static::atLeast(2))
+            ->method('get')
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ))
+            ->willReturnCallback(function ($key) use ($layoutMock, $indexMock) {
+                switch ($key) {
+                    case MenuRepository::CACHE_KEY_LAYOUT:
+                        return $layoutMock;
+                    case MenuRepository::CACHE_KEY_INDEX:
+                        return $indexMock;
+                }
+                return null;
+            });
+
+        $menu = $this->makeMenuRepository($cacheMock);
+
+        $menu->initialize();
+    }
+
+    /**
+     * @test
+     */
     function it_clears_cached_menu_data()
     {
         $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
@@ -134,14 +213,89 @@ class MenuRepositoryTest extends TestCase
                 MenuRepository::CACHE_KEY_INDEX
             ));
 
-        $menu = new MenuRepository(
-            $this->getMockCore(false, $cacheMock),
-            $this->getMockAuth(),
-            $this->getMockConfigInterpreter(),
-            $this->getMockPermissionsFilter()
-        );
+        $menu = $this->makeMenuRepository($cacheMock);
 
         $menu->clearCache();
+    }
+
+    /**
+     * @test
+     */
+    function it_catches_and_does_not_rethrow_exceptions_when_retrieving_cached_data()
+    {
+        $this->cacheEnabled = true;
+
+        $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+
+        $cacheMock->method('has')->willReturn(true);
+
+        $cacheMock->expects(static::atLeast(2))
+            ->method('get')
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ))
+            ->willReturnCallback(function ($key) {
+                switch ($key) {
+                    case MenuRepository::CACHE_KEY_LAYOUT:
+                        throw new \Exception('This test exception should be caught (layout)');
+                    case MenuRepository::CACHE_KEY_INDEX:
+                        throw new \Exception('This test exception should be caught (index)');
+                }
+                return null;
+            });
+
+        // The cache should be cleared on errors detected
+        $cacheMock->expects(static::atLeast(2))
+            ->method('forget')
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ));
+
+        $menu = $this->makeMenuRepository($cacheMock);
+
+        $menu->initialize();
+    }
+
+    /**
+     * @test
+     */
+    function it_does_not_throw_an_exception_if_cached_data_is_invalid()
+    {
+        $this->cacheEnabled = true;
+
+        $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+
+        $cacheMock->method('has')->willReturn(true);
+
+        $cacheMock->expects(static::atLeast(2))
+            ->method('get')
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ))
+            ->willReturnCallback(function ($key) {
+                switch ($key) {
+                    case MenuRepository::CACHE_KEY_LAYOUT:
+                        return 'invalid data';
+                    case MenuRepository::CACHE_KEY_INDEX:
+                        return 'invalid data';
+                }
+                return null;
+            });
+
+        // The cache should be cleared on errors detected
+        $cacheMock->expects(static::atLeast(2))
+            ->method('forget')
+            ->with(static::logicalOr(
+                MenuRepository::CACHE_KEY_LAYOUT,
+                MenuRepository::CACHE_KEY_INDEX
+            ));
+
+        $menu = $this->makeMenuRepository($cacheMock);
+
+        $menu->initialize();
     }
 
     
@@ -150,12 +304,13 @@ class MenuRepositoryTest extends TestCase
     // ------------------------------------------------------------------------------
 
     /**
+     * @param CacheInterface|null $cacheMock
      * @return MenuRepository
      */
-    protected function makeMenuRepository()
+    protected function makeMenuRepository($cacheMock = null)
     {
         return new MenuRepository(
-            $this->getMockCore(),
+            $this->getMockCore(false, $cacheMock),
             $this->getMockAuth(),
             $this->getMockConfigInterpreter(),
             $this->getMockPermissionsFilter()
@@ -180,7 +335,7 @@ class MenuRepositoryTest extends TestCase
                          return [];
 
                      case 'menu.cache':
-                         return false;
+                         return $this->cacheEnabled;
                  }
 
                  return $default;
