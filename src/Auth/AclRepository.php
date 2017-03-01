@@ -175,7 +175,9 @@ class AclRepository implements AclRepositoryInterface
             foreach ($this->normalizeAclPresence($presencesForModule) as $presence) {
 
                 if ( ! $presence) {
+                    // @codeCoverageIgnoreStart
                     continue;
+                    // @codeCoverageIgnoreEnd
                 }
 
                 $this->presences->push($presence);
@@ -195,7 +197,9 @@ class AclRepository implements AclRepositoryInterface
     protected function normalizeAclPresence($data)
     {
         if ( ! $data) {
+            // @codeCoverageIgnoreStart
             return [];
+            // @codeCoverageIgnoreEnd
         }
 
         if ($data instanceof AclPresenceInterface) {

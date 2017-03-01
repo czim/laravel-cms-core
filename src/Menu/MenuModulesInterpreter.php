@@ -187,7 +187,9 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         if (    ! array_key_exists($module->getKey(), $this->configModules)
             ||  ! $this->configModules[ $module->getKey() ]
         ) {
+            // @codeCoverageIgnoreStart
             return false;
+            // @codeCoverageIgnoreEnd
         }
 
         return $this->configModules[ $module->getKey() ] ?: [];
@@ -223,13 +225,17 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     protected function mergeNormalizedMenuPresences($oldPresences, $newPresences)
     {
         if (false === $oldPresences) {
+            // @codeCoverageIgnoreStart
             return $newPresences;
+            // @codeCoverageIgnoreEnd
         }
 
         // Should not matter, since setting the presence to false (instead of an array)
         // will disable the presences entirely
         if (false === $newPresences) {
+            // @codeCoverageIgnoreStart
             return $oldPresences;
+            // @codeCoverageIgnoreEnd
         }
 
         // Since menu presences are normalized as non-associative arrays, we must
