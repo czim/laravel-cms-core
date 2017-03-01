@@ -149,35 +149,36 @@ class Core implements CoreInterface
      *
      * @param null|string|array $level   if $message is set as non-array, type, otherwise, if string, the message
      * @param null|string|array $message if an array and $type was the message, the extra data, otherwise the message
-     * @param null|array        $extra   only used if neither $type nor $message are arrays
+     * @param array             $extra   only used if neither $type nor $message are arrays
      * @return array
      */
-    protected function normalizeMonologParameters($level = null, $message = null, $extra = null)
+    protected function normalizeMonologParameters($level = null, $message = null, $extra = [])
     {
-        // Normalize the parameters so they're translated into sensible category
+        // Normalize the parameters so they're translated into sensible categories
         if (null !== $level) {
             if (is_array($level)) {
                 $extra = $level;
                 $level = null;
             } elseif (null === $message || is_array($message)) {
+                $extra   = is_array($message) ? $message : $extra;
                 $message = $level;
                 $level   = null;
             }
         }
 
         if (is_array($message)) {
-            $extra = $message;
+            $extra   = $message;
             $message = null;
         }
 
         if ( ! empty($extra) && ! is_array($extra)) {
-            $extra = [ $extra ];
+            $extra = (array) $extra;
         }
 
         return [
             $level   ?: 'info',
             $message ?: 'Data.',
-            $extra   ?: []
+            $extra
         ];
     }
 
