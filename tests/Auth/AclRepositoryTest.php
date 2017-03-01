@@ -117,17 +117,23 @@ class AclRepositoryTest extends TestCase
             new Collection([
                 'test-a' => $this->getMockModuleWithPresenceInstance(),
                 'test-b' => $this->getMockModuleWithPresenceArray(),
+                'test-c' => $this->getMockModuleWithCustomPresence([
+                    'id'          => 'test-c',
+                    'permissions' => []
+                ]),
             ])
         ));
 
         $presences = $acl->getAclPresences();
 
         static::assertInstanceOf(Collection::class, $presences);
-        static::assertCount(2, $presences);
+        static::assertCount(3, $presences);
         static::assertInstanceOf(AclPresenceInterface::class, $presences->first());
         static::assertInstanceOf(AclPresenceInterface::class, $presences->values()[1]);
+        static::assertInstanceOf(AclPresenceInterface::class, $presences->values()[2]);
         static::assertEquals('test-a', $presences->first()->id());
         static::assertEquals('test-b', $presences->values()[1]->id);
+        static::assertEquals('test-c', $presences->values()[2]->id);
     }
 
     /**
