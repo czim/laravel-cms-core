@@ -1,3 +1,10 @@
+
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status](https://travis-ci.org/czim/laravel-dataobject.svg?branch=master)](https://travis-ci.org/czim/laravel-dataobject)
+[![Coverage Status](https://coveralls.io/repos/github/czim/laravel-cms-core/badge.svg?branch=master)](https://coveralls.io/github/czim/laravel-cms-core?branch=master)
+
+
 # CMS for Laravel - Core
 
 So you're looking for a Laravel CMS, and ...
@@ -153,4 +160,11 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
+[ico-version]: https://img.shields.io/packagist/v/czim/laravel-cms-core.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/czim/laravel-cms-core.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/czim/laravel-cms-core
+[link-downloads]: https://packagist.org/packages/czim/laravel-cms-core
+[link-author]: https://github.com/czim
 [link-contributors]: ../../contributors
