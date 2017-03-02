@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Test\Core;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Core\Cache;
+use Czim\CmsCore\Test\Helpers\Spies\CacheSpy;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Cache\Store;
@@ -18,21 +19,15 @@ class CacheTest extends TestCase
     {
         $mockCore = $this->getMockCore('test-store');
 
-        $mockCache = $this->getMockCacheManager();
+        $cacheSpy = new CacheSpy();
 
-        // Shouldn't apply cache tags by default
-        $mockCache->expects(static::exactly(0))
-            ->method('tags')
-            ->willReturnSelf();
-
-        $mockCache->expects(static::once())
-            ->method('store')
-            ->with('test-store')
-            ->willReturn($mockCache);
-
-        $this->app->instance('cache', $mockCache);
+        $this->app->instance('cache', $cacheSpy);
 
         new Cache($mockCore);
+
+        static::assertEquals(1, $cacheSpy->storeCalled);
+        static::assertEquals('test-store', $cacheSpy->storeParameter);
+        static::assertEquals(0, $cacheSpy->tagsCalled);
     }
 
     /**
@@ -42,20 +37,16 @@ class CacheTest extends TestCase
     {
         $mockCore = $this->getMockCore('test-store', ['test-tag']);
 
-        // Shouldn't apply cache tags by default
-        $mockCache = $this->getMockCacheManager();
-        $mockCache->expects(static::once())
-            ->method('store')
-            ->with('test-store')
-            ->willReturnSelf();
+        $cacheSpy = new CacheSpy();
 
-        //$mockCache->expects(static::once())
-        //    ->method('tags')
-        //    ->willReturnSelf();
-
-        $this->app->instance('cache', $mockCache);
+        $this->app->instance('cache', $cacheSpy);
 
         new Cache($mockCore);
+
+        static::assertEquals(1, $cacheSpy->storeCalled);
+        static::assertEquals('test-store', $cacheSpy->storeParameter);
+        static::assertEquals(1, $cacheSpy->tagsCalled);
+        static::assertEquals(['test-tag'], $cacheSpy->tagsParameter);
     }
 
     /**
@@ -306,3 +297,4 @@ class CacheTest extends TestCase
     }
 
 }
+
