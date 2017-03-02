@@ -10,7 +10,7 @@ use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Illuminate\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
-interface CoreInterface extends StateInterface
+interface CoreInterface
 {
 
     /**

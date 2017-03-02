@@ -27,9 +27,6 @@ class Core implements CoreInterface
     const VERSION = '0.0.1';
 
 
-    use StateRepositoryTrait;
-
-
     /**
      * @var Application
      */
