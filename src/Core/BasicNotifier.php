@@ -82,6 +82,8 @@ class BasicNotifier implements NotifierInterface
     /**
      * Adds a new notification for the current user.
      *
+     * @codeCoverageIgnore until implemented
+     *
      * @param string      $message
      * @param null|string $level
      * @return $this
@@ -94,6 +96,8 @@ class BasicNotifier implements NotifierInterface
     /**
      * Marks all unread notifications for the current user read.
      *
+     * @codeCoverageIgnore until implemented
+     *
      * @return $this
      */
     public function markNotificationsRead()
@@ -103,6 +107,8 @@ class BasicNotifier implements NotifierInterface
 
     /**
      * Returns all unread notifications for the current user;
+     *
+     * @codeCoverageIgnore until implemented
      *
      * @return array
      */
@@ -114,6 +120,8 @@ class BasicNotifier implements NotifierInterface
     /**
      * Returns all notifications set for the current user.
      *
+     * @codeCoverageIgnore until implemented
+     *
      * @return array
      */
     public function getAllNotifications()
@@ -123,6 +131,8 @@ class BasicNotifier implements NotifierInterface
 
     /**
      * Returns notifications per page for the current user.
+     *
+     * @codeCoverageIgnore until implemented
      *
      * @param int $page
      * @param int $pageSize
@@ -135,6 +145,8 @@ class BasicNotifier implements NotifierInterface
 
     /**
      * Deletes all notifications for the current user.
+     *
+     * @codeCoverageIgnore until implemented
      *
      * @return $this
      */
