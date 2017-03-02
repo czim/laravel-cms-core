@@ -301,6 +301,20 @@ class CoreTest extends TestCase
         $this->makeCore()->log('emergency', 'testing', 'context');
     }
 
+    /**
+     * @test
+     */
+    function it_logs_exceptions_with_level_error()
+    {
+        $exception = new \Exception('test');
+
+        $loggerMock = $this->makeLoggerMock('error', $exception, []);
+        $this->app->instance(Component::LOG, $loggerMock);
+
+        $this->makeCore()->log($exception);
+    }
+
+
     // ------------------------------------------------------------------------------
     //      Routing
     // ------------------------------------------------------------------------------
