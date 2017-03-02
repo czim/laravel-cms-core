@@ -172,6 +172,14 @@ class Core implements CoreInterface
             $extra = (array) $extra;
         }
 
+        if ($message instanceof \Exception) {
+            $level = 'error';
+        }
+
+        if ( ! $extra) {
+            $extra = [];
+        }
+
         return [
             $level   ?: 'info',
             $message ?: 'Data.',
