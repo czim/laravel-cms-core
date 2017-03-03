@@ -301,6 +301,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Translations
+    |--------------------------------------------------------------------------
+    |
+    | Translations may be namespaced for the CMS. If not found within the
+    | prefixed namespace, translations will fall back to the application's.
+    |
+    */
+
+    'translation' => [
+
+        // The namespace prefix to use for CMS translations (cms_trans())
+        'prefix' => 'cms::',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Logging
     |--------------------------------------------------------------------------
     |
