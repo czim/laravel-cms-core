@@ -32,9 +32,9 @@ class ShowMenu extends Command
             $this->comment('Menu layout:');
             $this->info('');
 
-            foreach ($groups as $key => $group) {
+            foreach ($groups as $group) {
 
-                $this->displaySingle($group, $key, 1);
+                $this->displaySingle($group, 1);
             }
         }
     }
@@ -53,10 +53,9 @@ class ShowMenu extends Command
 
     /**
      * @param MenuPresenceInterface $presence
-     * @param string|null           $key
      * @param int                   $depth
      */
-    protected function displaySingle(MenuPresenceInterface $presence, $key = null, $depth = 0)
+    protected function displaySingle(MenuPresenceInterface $presence, $depth = 0)
     {
         $indent = str_repeat(' ', $depth * 2);
 
@@ -94,7 +93,7 @@ class ShowMenu extends Command
 
             foreach ($children as $key => $child) {
 
-                $this->displaySingle($child, ! is_numeric($key) ? $key : null, $depth + 1);
+                $this->displaySingle($child, $depth + 1);
             }
         }
         
