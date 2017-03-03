@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Contracts\Foundation\Application;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Providers\CmsCoreServiceProvider;
@@ -93,6 +94,16 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         });
 
         return $this;
+    }
+
+    /**
+     * Returns most recent artisan command output.
+     *
+     * @return string
+     */
+    protected function getArtisanOutput()
+    {
+        return $this->app[ConsoleKernelContract::class]->output();
     }
 
 }
