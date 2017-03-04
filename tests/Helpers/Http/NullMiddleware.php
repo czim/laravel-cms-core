@@ -1,5 +1,5 @@
 <?php
-namespace Czim\CmsCore\Test\Http;
+namespace Czim\CmsCore\Test\Helpers\Http;
 
 use Closure;
 
