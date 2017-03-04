@@ -18,7 +18,9 @@ class MigrateResetCommand extends ResetCommand
     public function fire()
     {
         if (! $this->confirmToProceed()) {
+            // @codeCoverageIgnoreStart
             return;
+            // @codeCoverageIgnoreEnd
         }
 
         $this->migrator->setConnection($this->determineConnection());

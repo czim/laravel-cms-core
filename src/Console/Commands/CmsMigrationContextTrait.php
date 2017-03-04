@@ -45,8 +45,10 @@ trait CmsMigrationContextTrait
      */
     protected function getMigrationPath()
     {
-        return app()->databasePath() . DIRECTORY_SEPARATOR
-             . $this->getCore()->config('database.migrations.path');
+        return realpath(
+            app()->databasePath() . DIRECTORY_SEPARATOR
+            . $this->getCore()->config('database.migrations.path')
+        );
     }
 
     /**

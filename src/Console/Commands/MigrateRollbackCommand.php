@@ -18,7 +18,9 @@ class MigrateRollbackCommand extends LaravelMigrateRollbackCommand
     public function fire()
     {
         if (! $this->confirmToProceed()) {
+            // @codeCoverageIgnoreStart
             return;
+            // @codeCoverageIgnoreEnd
         }
 
         $this->migrator->setConnection($this->determineConnection());

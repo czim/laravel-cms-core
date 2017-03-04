@@ -18,7 +18,9 @@ class MigrateRefreshCommand extends RefreshCommand
     public function fire()
     {
         if (! $this->confirmToProceed()) {
+            // @codeCoverageIgnoreStart
             return;
+            // @codeCoverageIgnoreEnd
         }
 
         $database = $this->determineConnection();
