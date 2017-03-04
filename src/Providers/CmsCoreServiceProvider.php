@@ -289,14 +289,6 @@ class CmsCoreServiceProvider extends ServiceProvider
     }
 
     /**
-     * @return CoreInterface
-     */
-    protected function getCmsCore()
-    {
-        return $this->app[Component::CORE];
-    }
-
-    /**
      * Returns core CMS configuration array entry.
      * Note that this must be able to function before the Core is bound.
      *
