@@ -171,7 +171,9 @@ class CmsCoreServiceProvider extends ServiceProvider
         $aliases = $this->getCoreConfig('aliases', []);
 
         if (empty($aliases)) {
+            // @codeCoverageIgnoreStart
             return $this;
+            // @codeCoverageIgnoreEnd
         }
 
         $aliasLoader = AliasLoader::getInstance();
