@@ -32,17 +32,18 @@ class LogServiceProvider extends ServiceProvider
     {
         $log = new Logger("cms.{$this->app->environment()}");
 
+        // Bind dedicated log writer for the CMS
         $writer = new Writer($log);
-
-        // For separate logs, configure the writer to use a different file/path
-        if ($this->getCore()->config('log.separate')) {
-            $this->configureSeparateWriter($writer);
-        }
-
         $this->app->instance(Component::LOG, $writer);
 
-        // For shared logs, decorate the entries for the CMS
-        if ( ! $this->getCore()->config('log.separate')) {
+
+        if ($this->getCore()->config('log.separate')) {
+            // For separate logs, configure the writer to use a different file/path
+
+            $this->configureSeparateWriter($writer);
+
+        } else {
+            // For shared logs, decorate the entries for the CMS
 
             // Clone all handlers defined for the main app, but decorate
             // the formatters to include a prefix
@@ -55,8 +56,6 @@ class LogServiceProvider extends ServiceProvider
                     ->setLevel($this->getCore()->config('log.threshold'));
             }
         }
-
-        $this->bindLoggerContextually();
 
         return $this;
     }
@@ -81,21 +80,6 @@ class LogServiceProvider extends ServiceProvider
 
             $handler->setLevel($this->getCore()->config('log.threshold'));
         }
-    }
-
-    /**
-     * Binds the CMS logger contextually for CMS requests.
-     *
-     * @return $this
-     */
-    protected function bindLoggerContextually()
-    {
-        $this->app
-            ->when(Handler::class)
-            ->needs(LoggerInterface::class)
-            ->give(Component::LOG);
-
-        return $this;
     }
 
     /**
