@@ -1,6 +1,8 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Illuminate\Support\Facades\Schema;
+
 abstract class SimpleDbTestCase extends TestCase
 {
 
@@ -18,6 +20,30 @@ abstract class SimpleDbTestCase extends TestCase
             'database' => ':memory:',
             'prefix'   => '',
         ]);
+    }
+
+    /**
+     * Creates and verifies the cms migrations table.
+     */
+    protected function createMigrationTable()
+    {
+        static::assertEquals(0, $this->artisan('cms:migrate:install'));
+
+        static::assertTrue(
+            Schema::connection('testbench')->hasTable('cms_migrations'),
+            'CMS migration table should exist for setup'
+        );
+    }
+
+    /**
+     * Sets the migrations cms path to a directory with test migrations.
+     */
+    protected function setHelperCmsMigrationPath()
+    {
+        $this->app['config']->set(
+            'cms-core.database.migrations.path',
+            '../../../../../tests/Helpers/migrations/cms'
+        );
     }
 
 }

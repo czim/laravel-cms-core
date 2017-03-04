@@ -34,7 +34,12 @@
     "autoload-dev": {
         "psr-4": {
             "Czim\\CmsCore\\Test\\": "tests"
-        }
+        },
+        "files": [
+            "tests/Helpers/migrations/DatabaseSeeder.php",
+            "tests/Helpers/migrations/cms/2017_01_01_100000_create_test_records_table.php",
+            "tests/Helpers/migrations/cms/2017_01_01_200000_create_more_test_records_table.php"
+        ]
     },
     "scripts": {
         "test": "phpunit"
