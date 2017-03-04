@@ -20,8 +20,8 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/</directory>
             <exclude>
+                <directory suffix=".php">./src/Events/</directory>
                 <directory suffix=".php">./src/Facades/</directory>
-                <directory suffix=".php">./src/Logger/</directory>
                 <directory suffix=".php">./src/Exceptions</directory>
             </exclude>
         </whitelist>
