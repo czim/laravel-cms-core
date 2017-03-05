@@ -5,6 +5,9 @@ use Monolog\Formatter\FormatterInterface;
 
 class CmsFormatterDecorator implements FormatterInterface
 {
+    const CMS_RECORD_PREFIX = '[CMS] ';
+
+
     /**
      * @var FormatterInterface
      */
@@ -13,7 +16,7 @@ class CmsFormatterDecorator implements FormatterInterface
     /**
      * @var string
      */
-    protected $formatterPrefix = '[CMS] ';
+    protected $formatterPrefix = self::CMS_RECORD_PREFIX;
 
 
     /**
@@ -28,9 +31,8 @@ class CmsFormatterDecorator implements FormatterInterface
     /**
      * Formats a log record.
      *
-     * @param array $record A record to format
-     *
-     * @return mixed The formatted record
+     * @param array $record     a record to format
+     * @return mixed    the formatted record
      */
     public function format(array $record)
     {
@@ -39,25 +41,22 @@ class CmsFormatterDecorator implements FormatterInterface
         if (is_array($formattedRecord)) {
             list($channel, $message, $backtrace, $loglevel) = $formattedRecord;
 
-            $formattedRecord = [
+            return [
                 $channel,
                 $this->formatterPrefix . $message,
                 $backtrace,
                 $loglevel,
             ];
-        } else {
-            $formattedRecord = $this->formatterPrefix . $formattedRecord;
         }
 
-        return $formattedRecord;
+        return $this->formatterPrefix . $formattedRecord;
     }
 
     /**
      * Formats a set of log records.
      *
-     * @param array $records A set of records to format
-     *
-     * @return mixed The formatted set of records
+     * @param array $records    a set of records to format
+     * @return mixed    the formatted set of records
      */
     public function formatBatch(array $records)
     {
