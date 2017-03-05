@@ -71,7 +71,7 @@ class ShowModulesTest extends TestCase
     function it_shows_information_about_a_specific_module_by_key()
     {
         $modulesMock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
-        $modulesMock->expects(static::exactly(0))->method('getModules');
+        $modulesMock->expects(static::never())->method('getModules');
         $modulesMock->expects(static::once())
             ->method('get')
             ->with('test-b')

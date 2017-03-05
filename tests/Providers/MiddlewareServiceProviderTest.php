@@ -36,7 +36,7 @@ class MiddlewareServiceProviderTest extends TestCase
             ->method('shouldLoadCmsMiddleware')
             ->willReturn(false);
 
-        $checkerMock->expects(static::exactly(0))
+        $checkerMock->expects(static::never())
             ->method('shouldLoadCmsWebMiddleware');
 
         $provider = new MiddlewareServiceProvider($this->app);

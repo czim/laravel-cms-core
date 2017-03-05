@@ -33,7 +33,7 @@ class EventServiceProviderTest extends TestCase
 
         event('testing.event.trigger');
 
-        static::assertTrue($this->app->bound('testing.listened'), 'Eventl istener did not catch the test event');
+        static::assertTrue($this->app->bound('testing.listened'), 'Event listener did not catch the test event');
     }
 
 }
