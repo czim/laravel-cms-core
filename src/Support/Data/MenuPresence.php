@@ -162,17 +162,6 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     }
 
     /**
-     * Returns icon or image reference for display purposes.
-     *
-     * @return string
-     * @deprecated
-     */
-    public function image()
-    {
-        return $this->getAttribute('icon');
-    }
-
-    /**
      * Returns configuration mode for menu presence definition.
      *
      * @return string

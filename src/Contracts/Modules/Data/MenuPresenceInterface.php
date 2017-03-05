@@ -73,14 +73,6 @@ interface MenuPresenceInterface extends DataObjectInterface
     public function icon();
 
     /**
-     * Returns icon or image reference for display purposes.
-     *
-     * @return string
-     * @deprecated
-     */
-    public function image();
-
-    /**
      * Returns configuration mode for menu presence definition.
      *
      * @return string
