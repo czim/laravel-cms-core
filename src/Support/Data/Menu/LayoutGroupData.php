@@ -111,8 +111,10 @@ class LayoutGroupData extends AbstractDataObject
         }
 
         if ( ! isset($this->attributes[$key]) || ! is_array($this->attributes[$key])) {
+            // @codeCoverageIgnoreStart
             $null = null;
             return $null;
+            // @codeCoverageIgnoreEnd
         }
 
         // If object is an array, interpret it as a group

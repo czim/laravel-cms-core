@@ -82,7 +82,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
         }
 
         if ( ! isset($this->attributes[$key]) || ! is_array($this->attributes[$key])) {
-            $null = null;
+            $null = [];
             return $null;
         }
 
