@@ -14,15 +14,6 @@ class MiddlewareServiceProviderTest extends TestCase
 {
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Overridden to prevent CMS booting
-    }
-
-
-    /**
      * @test
      */
     function it_does_not_load_middleware_if_bootchecker_says_not_to()

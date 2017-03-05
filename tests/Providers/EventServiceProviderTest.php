@@ -8,15 +8,6 @@ class EventServiceProviderTest extends TestCase
 {
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Overridden to prevent CMS booting
-    }
-
-
-    /**
      * @test
      */
     function it_registers_configured_events()

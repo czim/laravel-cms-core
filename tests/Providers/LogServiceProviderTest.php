@@ -32,15 +32,6 @@ class LogServiceProviderTest extends TestCase
 
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Overridden to prevent CMS booting
-    }
-
-
-    /**
      * @test
      */
     function it_writes_to_the_laravel_log_if_configured_to()
