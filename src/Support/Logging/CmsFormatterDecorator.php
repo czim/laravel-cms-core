@@ -1,5 +1,5 @@
 <?php
-namespace Czim\CmsCore\Logger\Formatters;
+namespace Czim\CmsCore\Support\Logging;
 
 use Monolog\Formatter\FormatterInterface;
 
@@ -46,7 +46,7 @@ class CmsFormatterDecorator implements FormatterInterface
                 $loglevel,
             ];
         } else {
-            $formattedRecord = $this->formatterPrefix.$formattedRecord;
+            $formattedRecord = $this->formatterPrefix . $formattedRecord;
         }
 
         return $formattedRecord;

@@ -2,15 +2,13 @@
 namespace Czim\CmsCore\Providers;
 
 use Illuminate\Contracts\Logging\Log;
-use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Log\Writer;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
-use Czim\CmsCore\Logger\Formatters\CmsFormatterDecorator;
+use Czim\CmsCore\Support\Logging\CmsFormatterDecorator;
 use Czim\CmsCore\Support\Enums\Component;
-use Psr\Log\LoggerInterface;
 
 class LogServiceProvider extends ServiceProvider
 {
