@@ -19,6 +19,7 @@ use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
  * @property string   $icon
  * @property string   $html
  * @property array    $parameters
+ * @property array    $permissions
  * @property array    $children
  * @property string   $mode             only used for configuration, should be ignored when rendering
  * @property string[] $explicit_keys    only used for configuration, should be ignored when rendering
@@ -78,7 +79,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
         $children = $this->getAttribute('children') ?: [];
 
         if ($children && ! is_array($children)) {
-            return [ $children ];
+            return (array) $children;
         }
 
         return $children;
@@ -111,14 +112,10 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      */
     public function permissions()
     {
-        $permissions = $this->getAttribute('permissions');
-
-        if (empty($permissions)) {
-            return [];
-        }
+        $permissions = $this->getAttribute('permissions') ?: [];
 
         if ( ! is_array($permissions)) {
-            $permissions = [ $permissions ];
+            $permissions = (array) $permissions;
         }
 
         return $permissions;
