@@ -78,7 +78,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     {
         $children = $this->getAttribute('children') ?: [];
 
-        if ($children && ! is_array($children)) {
+        if ($children && ! is_array($children) && ! ($children instanceof Collection)) {
             return (array) $children;
         }
 
@@ -211,6 +211,8 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * Returns whether this menu item is active based on the current location.
      *
      * @return bool
+     * @codeCoverageIgnore
+     * @todo
      */
     public function isActive()
     {
