@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test\Support\Localization;
 
+use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Support\Localization\LocaleRepository;
 use Czim\CmsCore\Test\TestCase;
 
@@ -44,6 +45,19 @@ class LocaleRepositoryTest extends TestCase
     /**
      * @test
      */
+    function it_returns_available_locales_if_explicitly_configured()
+    {
+        $repository = $this->makeLocaleRepository();
+
+        // When different fallback locale is set
+        $this->app['config']->set('cms-core.locale.available', ['en', 'fr']);
+
+        static::assertEquals(['en', 'fr'], $repository->getAvailable());
+    }
+
+    /**
+     * @test
+     */
     function it_returns_available_locales_defined_in_mcamara_localization_package()
     {
         $repository = $this->makeLocaleRepository();
@@ -55,6 +69,18 @@ class LocaleRepositoryTest extends TestCase
         ]);
 
         static::assertEquals(['ace', 'af', 'agq'], $repository->getAvailable());
+    }
+
+    /**
+     * @test
+     */
+    function it_returns_available_locales_defined_in_translatable_package()
+    {
+        $repository = $this->makeLocaleRepository();
+
+        $this->app['config']->set('translatable.locales', ['de', 'fr']);
+
+        static::assertEquals(['de', 'fr'], $repository->getAvailable());
     }
 
     /**
@@ -89,7 +115,7 @@ class LocaleRepositoryTest extends TestCase
      */
     protected function makeLocaleRepository()
     {
-        return app(LocaleRepository::class);
+        return new LocaleRepository($this->app[Component::CORE]);
     }
 
 }
