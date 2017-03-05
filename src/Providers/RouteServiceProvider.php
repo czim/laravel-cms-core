@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Providers;
 
+use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Http\Controllers\LocaleController;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Contracts\Http\Kernel;
@@ -30,30 +31,24 @@ class RouteServiceProvider extends ServiceProvider
     protected $router;
 
     /**
-     * @var Kernel
-     */
-    protected $kernel;
-
-    /**
      * @var CoreInterface
      */
     protected $core;
 
 
     /**
-     * @param Router        $router
-     * @param Kernel        $kernel
-     * @param CoreInterface $core
+     * @param Router               $router
+     * @param CoreInterface        $core
+     * @param BootCheckerInterface $bootChecker
      */
-    public function boot(Router $router, Kernel $kernel, CoreInterface $core)
+    public function boot(Router $router, CoreInterface $core, BootCheckerInterface $bootChecker)
     {
         // If we don't need the web routes, skip booting entirely
-        if ( ! $core->bootChecker()->shouldRegisterCmsWebRoutes()) {
+        if ( ! $bootChecker->shouldRegisterCmsWebRoutes()) {
             return;
         }
 
         $this->router = $router;
-        $this->kernel = $kernel;
         $this->core   = $core;
 
         $this->registerRoutes();
@@ -74,7 +69,9 @@ class RouteServiceProvider extends ServiceProvider
     {
         // If the application has all routes cached, skip registering them
         if ($this->app->routesAreCached()) {
+            // @codeCoverageIgnoreStart
             return $this;
+            // @codeCoverageIgnoreEnd
         }
 
         $this->router->group(
@@ -90,7 +87,7 @@ class RouteServiceProvider extends ServiceProvider
                 // Embed the routes that require authorization in a group
                 // with the middleware to keep guests out.
 
-                $this->router->group(
+                $router->group(
                     [
                         'middleware' => [ CmsMiddleware::AUTHENTICATED ],
                     ],
