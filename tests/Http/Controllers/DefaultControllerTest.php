@@ -1,6 +1,7 @@
 <?php
-namespace Czim\CmsCore\Http\Controllers;
+namespace Czim\CmsCore\Test\Http\Controllers;
 
+use Czim\CmsCore\Http\Controllers\DefaultController;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Contracts\View\Factory;

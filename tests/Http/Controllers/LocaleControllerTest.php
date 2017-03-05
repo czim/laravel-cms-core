@@ -1,7 +1,8 @@
 <?php
-namespace Czim\CmsCore\Http\Controllers;
+namespace Czim\CmsCore\Test\Http\Controllers;
 
 use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
+use Czim\CmsCore\Http\Controllers\LocaleController;
 use Czim\CmsCore\Http\Requests\SetLocaleRequest;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\CmsBootTestCase;
