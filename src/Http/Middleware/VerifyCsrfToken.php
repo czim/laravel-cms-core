@@ -5,6 +5,11 @@ use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 use Illuminate\Session\TokenMismatchException;
 
+/**
+ * Class VerifyCsrfToken
+ *
+ * @codeCoverageIgnore
+ */
 class VerifyCsrfToken extends BaseVerifier
 {
     /**
