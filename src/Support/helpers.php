@@ -163,30 +163,3 @@ if ( ! function_exists('cms_trans_choice')) {
         return app('translator')->transChoice($key, $number, $parameters, $domain, $locale);
     }
 }
-
-//if ( ! function_exists('cms_asset')) {
-//    /**
-//     * Generate an asset path for the CMS.
-//     *
-//     * @param  string  $path
-//     * @param  bool    $secure
-//     * @return string
-//     */
-//    function cms_asset($path, $secure = null)
-//    {
-//        return app('url')->asset($path, $secure);
-//    }
-//}
-
-//if ( ! function_exists('cms_secure_asset')) {
-//    /**
-//     * Generate an CMS asset path for the CMS.
-//     *
-//     * @param  string  $path
-//     * @return string
-//     */
-//    function cms_secure_asset($path)
-//    {
-//        return asset($path, true);
-//    }
-//}
