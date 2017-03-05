@@ -24,10 +24,7 @@ if ( ! function_exists('cms_route')) {
      */
     function cms_route($name, $parameters = [], $absolute = true)
     {
-        $prefix = app(\Czim\CmsCore\Support\Enums\Component::CORE)
-            ->config('route.name-prefix');
-
-        $name = starts_with($name, $prefix) ? $name : $prefix . $name;
+        $name = app(\Czim\CmsCore\Support\Enums\Component::CORE)->prefixRoute($name);
 
         return app('url')->route($name, $parameters, $absolute);
     }
