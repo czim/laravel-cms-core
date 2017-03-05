@@ -63,6 +63,10 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
 
                 foreach ($this->attributes[$key] as $index => &$item) {
 
+                    if (null === $item) {
+                        continue;
+                    }
+
                     if ( ! is_a($item, $dataObjectClass)) {
 
                         $item = $this->makeNestedDataObject($dataObjectClass, $item, $key . '.' . $index);
