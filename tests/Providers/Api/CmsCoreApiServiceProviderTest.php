@@ -6,6 +6,7 @@ use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider;
 use Czim\CmsCore\Providers\EventServiceProvider;
+use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Contracts\Foundation\Application;
 
@@ -35,6 +36,8 @@ class CmsCoreApiServiceProviderTest extends TestCase
                 return $default;
             });
 
+        $coreMock->method('bootChecker')->willReturn($checkerMock);
+
         $checkerMock->expects(static::atLeastOnce())
             ->method('shouldCmsApiRegister')
             ->willReturn(true);
@@ -47,8 +50,11 @@ class CmsCoreApiServiceProviderTest extends TestCase
             ->method('register')
             ->with(EventServiceProvider::class);
 
+        $this->app->instance(Component::CORE, $coreMock);
+
+
         $provider = new CmsCoreApiServiceProvider($appMock);
-        $provider->register($coreMock, $checkerMock);
+        $provider->register();
     }
 
     /**
@@ -63,6 +69,8 @@ class CmsCoreApiServiceProviderTest extends TestCase
         $coreMock    = $this->getMockBuilder(CoreInterface::class)->getMock();
         $checkerMock = $this->getMockBuilder(BootCheckerInterface::class)->getMock();
 
+        $coreMock->method('bootChecker')->willReturn($checkerMock);
+
         $checkerMock->expects(static::atLeastOnce())
             ->method('shouldCmsApiRegister')
             ->willReturn(false);
@@ -70,8 +78,11 @@ class CmsCoreApiServiceProviderTest extends TestCase
         $appMock->expects(static::never())->method('singleton');
         $appMock->expects(static::never())->method('register');
 
+        $this->app->instance(Component::CORE, $coreMock);
+
+
         $provider = new CmsCoreApiServiceProvider($appMock);
-        $provider->register($coreMock, $checkerMock);
+        $provider->register();
     }
 
 }
