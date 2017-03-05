@@ -3,11 +3,11 @@ namespace Czim\CmsCore\Test\Support\Data;
 
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceMode;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class MenuPresenceTest extends TestCase
+class MenuPresenceTest extends CmsBootTestCase
 {
 
     /**

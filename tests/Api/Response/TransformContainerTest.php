@@ -2,10 +2,10 @@
 namespace Czim\CmsCore\Test\Api;
 
 use Czim\CmsCore\Api\Response\TransformContainer;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 
-class TransformContainerTest extends TestCase
+class TransformContainerTest extends CmsBootTestCase
 {
 
     /**

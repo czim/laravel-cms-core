@@ -1,7 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test;
 
-abstract class WebTestCase extends TestCase
+abstract class WebTestCase extends CmsBootTestCase
 {
 
     /**

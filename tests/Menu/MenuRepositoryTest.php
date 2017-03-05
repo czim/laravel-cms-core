@@ -11,10 +11,10 @@ use Czim\CmsCore\Contracts\Support\Data\MenuLayoutDataInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuPermissionsIndexDataInterface;
 use Czim\CmsCore\Menu\MenuRepository;
 use Czim\CmsCore\Support\Data\MenuPresence;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 
-class MenuRepositoryTest extends TestCase
+class MenuRepositoryTest extends CmsBootTestCase
 {
 
     /**

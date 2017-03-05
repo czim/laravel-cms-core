@@ -3,9 +3,9 @@ namespace Czim\CmsCore\Test\Core;
 
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Support\Enums\Component;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 
-class BootCheckerTest extends TestCase
+class BootCheckerTest extends CmsBootTestCase
 {
 
     /**

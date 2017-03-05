@@ -2,9 +2,9 @@
 namespace Czim\CmsCore\Console;
 
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 
-class ClearMenuCacheTest extends TestCase
+class ClearMenuCacheTest extends CmsBootTestCase
 {
 
     /**

@@ -3,13 +3,13 @@ namespace Czim\CmsCore\Test\Core;
 
 use Czim\CmsCore\Core\Core;
 use Czim\CmsCore\Support\Enums\Component;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Session\SessionManager;
 use Psr\Log\LoggerInterface;
 
-class CoreTest extends TestCase
+class CoreTest extends CmsBootTestCase
 {
 
     /**

@@ -2,10 +2,10 @@
 namespace Czim\CmsCore\Test\Support\Translation;
 
 use Czim\CmsCore\Support\Translation\CmsTranslator;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Translation\LoaderInterface;
 
-class CmsTranslatorTest extends TestCase
+class CmsTranslatorTest extends CmsBootTestCase
 {
 
     /**

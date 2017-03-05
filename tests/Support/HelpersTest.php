@@ -4,7 +4,7 @@ namespace Czim\CmsCore\Test\Support;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Core\NotifierInterface;
 use Czim\CmsCore\Support\Enums\Component;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -13,7 +13,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * Test for content in the support helpers.php file.
  */
-class HelpersTest extends TestCase
+class HelpersTest extends CmsBootTestCase
 {
 
     /**

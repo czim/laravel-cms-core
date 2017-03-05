@@ -8,10 +8,10 @@ use Czim\CmsCore\Contracts\Support\Data\MenuLayoutDataInterface;
 use Czim\CmsCore\Menu\MenuConfigInterpreter;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 
-class MenuConfigInterpreterTest extends TestCase
+class MenuConfigInterpreterTest extends CmsBootTestCase
 {
 
     /**

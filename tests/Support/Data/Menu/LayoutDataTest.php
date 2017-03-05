@@ -3,9 +3,9 @@ namespace Czim\CmsCore\Test\Support\Data\Menu;
 
 use Czim\CmsCore\Support\Data\Menu\LayoutData;
 use Czim\CmsCore\Support\Data\Menu\LayoutGroupData;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 
-class LayoutDataTest extends TestCase
+class LayoutDataTest extends CmsBootTestCase
 {
 
     /**

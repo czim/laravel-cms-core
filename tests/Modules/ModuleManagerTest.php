@@ -10,11 +10,11 @@ use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithServiceProviders;
 use Czim\CmsCore\Test\Helpers\Modules\TestModuleWithRoutes;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
 
-class ModuleManagerTest extends TestCase
+class ModuleManagerTest extends CmsBootTestCase
 {
 
     /**

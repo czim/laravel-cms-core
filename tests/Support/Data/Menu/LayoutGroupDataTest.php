@@ -2,10 +2,10 @@
 namespace Czim\CmsCore\Test\Support\Data\Menu;
 
 use Czim\CmsCore\Support\Data\Menu\LayoutGroupData;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class LayoutGroupDataTest extends TestCase
+class LayoutGroupDataTest extends CmsBootTestCase
 {
 
     /**

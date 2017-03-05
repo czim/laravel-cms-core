@@ -9,14 +9,6 @@ class CmsFormatterDecoratorTest extends TestCase
 {
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // don't boot CMS
-    }
-
-    /**
      * @test
      */
     function it_relays_batch_formatting_to_wrapped_formatter()

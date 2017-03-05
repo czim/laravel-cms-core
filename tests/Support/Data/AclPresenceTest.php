@@ -2,10 +2,10 @@
 namespace Czim\CmsCore\Test\Support\Data;
 
 use Czim\CmsCore\Support\Data\AclPresence;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class AclPresenceTest extends TestCase
+class AclPresenceTest extends CmsBootTestCase
 {
 
     /**

@@ -10,10 +10,10 @@ use Czim\CmsCore\Menu\MenuModulesInterpreter;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceMode;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 
-class MenuModulesInterpreterTest extends TestCase
+class MenuModulesInterpreterTest extends CmsBootTestCase
 {
 
     /**

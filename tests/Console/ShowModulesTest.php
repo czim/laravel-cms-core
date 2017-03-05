@@ -3,10 +3,10 @@ namespace Czim\CmsCore\Console;
 
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 
-class ShowModulesTest extends TestCase
+class ShowModulesTest extends CmsBootTestCase
 {
 
     /**

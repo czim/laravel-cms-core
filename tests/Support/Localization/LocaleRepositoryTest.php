@@ -3,9 +3,9 @@ namespace Czim\CmsCore\Test\Support\Localization;
 
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Support\Localization\LocaleRepository;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 
-class LocaleRepositoryTest extends TestCase
+class LocaleRepositoryTest extends CmsBootTestCase
 {
 
     public function setUp()

@@ -5,11 +5,11 @@ use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Core\Cache;
 use Czim\CmsCore\Test\Helpers\Spies\CacheSpy;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Cache\Store;
 
-class CacheTest extends TestCase
+class CacheTest extends CmsBootTestCase
 {
 
     /**

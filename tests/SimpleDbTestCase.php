@@ -3,7 +3,7 @@ namespace Czim\CmsCore\Test;
 
 use Illuminate\Support\Facades\Schema;
 
-abstract class SimpleDbTestCase extends TestCase
+abstract class SimpleDbTestCase extends CmsBootTestCase
 {
 
     /**

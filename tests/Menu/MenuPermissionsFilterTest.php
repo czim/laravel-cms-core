@@ -9,9 +9,9 @@ use Czim\CmsCore\Support\Data\Menu\LayoutData;
 use Czim\CmsCore\Support\Data\Menu\PermissionsIndexData;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 
-class MenuPermissionsFilterTest extends TestCase
+class MenuPermissionsFilterTest extends CmsBootTestCase
 {
 
     // ------------------------------------------------------------------------------

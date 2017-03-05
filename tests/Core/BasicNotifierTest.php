@@ -4,10 +4,10 @@ namespace Czim\CmsCore\Test\Core;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Core\BasicNotifier;
 use Czim\CmsCore\Test\Helpers\Spies\SessionSpy;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Session\SessionManager;
 
-class BasicNotifierTest extends TestCase
+class BasicNotifierTest extends CmsBootTestCase
 {
     /**
      * @var SessionManager

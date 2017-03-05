@@ -8,10 +8,10 @@ use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Support\Data\AclPresence;
 use Czim\CmsCore\Support\Enums\AclPresenceType;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 
-class AclRepositoryTest extends TestCase
+class AclRepositoryTest extends CmsBootTestCase
 {
 
     /**

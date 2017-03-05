@@ -4,10 +4,10 @@ namespace Czim\CmsCore\Console;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
-use Czim\CmsCore\Test\TestCase;
+use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
 
-class ShowMenuTest extends TestCase
+class ShowMenuTest extends CmsBootTestCase
 {
 
     /**
