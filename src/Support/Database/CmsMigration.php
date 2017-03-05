@@ -11,8 +11,6 @@ class CmsMigration extends Migration
     /**
      * Get the migration connection name.
      *
-     * @todo This appears not to be used by the Migrator? Weird. Remove or keep?
-     *
      * @return string
      */
     public function getConnection()
@@ -20,7 +18,9 @@ class CmsMigration extends Migration
         $connection = parent::getConnection();
 
         if ( ! app()->bound(Component::CORE)) {
+            // @codeCoverageIgnoreStart
             return $connection;
+            // @codeCoverageIgnoreEnd
         }
 
         /** @var CoreInterface $core */
