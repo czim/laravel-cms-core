@@ -99,17 +99,6 @@ class LayoutGroupData extends AbstractDataObject
     }
 
     /**
-     * Returns icon or image reference for display purposes.
-     *
-     * @return string
-     * @deprecated
-     */
-    public function image()
-    {
-        return $this->getAttribute('icon');
-    }
-
-    /**
      * Converts attributes to specific dataobjects if configured to
      *
      * @param string $key
