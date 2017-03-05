@@ -73,7 +73,9 @@ class ApiRouteServiceProvider extends ServiceProvider
     {
         // If the application has all routes cached, skip registering them
         if ($this->app->routesAreCached()) {
+            // @codeCoverageIgnoreStart
             return $this;
+            // @codeCoverageIgnoreEnd
         }
 
         $this->router->group(
