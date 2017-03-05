@@ -2,7 +2,7 @@
 namespace Czim\CmsCore\Providers\Api;
 
 use Czim\CmsCore\Contracts\Api\Response\ResponseBuilderInterface;
-use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
+use Czim\CmsCore\Support\Enums\Component;
 use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 
@@ -19,11 +19,11 @@ class CmsCoreApiServiceProvider extends ServiceProvider
     {
     }
 
-    public function register(CoreInterface $core, BootCheckerInterface $bootChecker)
+    public function register()
     {
-        $this->core = $core;
+        $this->core = app(Component::CORE);
 
-        if ( ! $bootChecker->shouldCmsApiRegister()) {
+        if ( ! $this->core->bootChecker()->shouldCmsApiRegister()) {
             return;
         }
 
