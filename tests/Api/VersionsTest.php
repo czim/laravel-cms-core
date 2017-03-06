@@ -14,7 +14,7 @@ class VersionsTest extends ApiTestCase
         $response = $this->call('get', 'cms-api/meta/versions');
 
         $response->assertStatus(200)
-             ->assertJsonStructure([
+             ->assertJsonFragment([
                  'data' => [
                      '*' => [ 'id', 'name', 'version' ]
                  ]
