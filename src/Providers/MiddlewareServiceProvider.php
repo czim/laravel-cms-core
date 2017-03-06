@@ -121,7 +121,7 @@ class MiddlewareServiceProvider extends ServiceProvider
     protected function registerWebRouteMiddleware()
     {
         foreach ($this->getWebRouteMiddleware() as $key => $middleware) {
-            $this->router->middleware($key, $middleware);
+            $this->router->aliasMiddleware($key, $middleware);
         }
 
         return $this;
@@ -203,7 +203,7 @@ class MiddlewareServiceProvider extends ServiceProvider
     protected function registerApiRouteMiddleware()
     {
         foreach ($this->getApiRouteMiddleware() as $key => $middleware) {
-            $this->router->middleware($key, $middleware);
+            $this->router->aliasMiddleware($key, $middleware);
         }
 
         return $this;
