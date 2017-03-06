@@ -7,7 +7,7 @@ use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Exception;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use League\Fractal\Manager as FractalManager;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection as FractalCollection;
@@ -128,7 +128,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
             }
 
             /** @var FractalCollection $resource */
-            $resource = app(FractalCollection::class, [ $content, $transformer ]);
+            $resource = new FractalCollection($content, $transformer);
 
             if ($paginator) {
                 $resource->setPaginator(new IlluminatePaginatorAdapter($paginator));
@@ -136,7 +136,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
 
         } else {
             /** @var FractalItem $resource */
-            $resource = app(FractalItem::class, [ $content, $transformer ]);
+            $resource = new FractalItem($content, $transformer);
         }
 
         return $this->fractalManager->createData($resource)->toArray();
