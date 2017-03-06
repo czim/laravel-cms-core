@@ -10,7 +10,7 @@ use Czim\CmsCore\Test\Helpers\Exceptions\WithGetStatusCodeException;
 use Czim\CmsCore\Test\Helpers\Exceptions\WithStatusCodePropertyException;
 use Czim\CmsCore\Test\Helpers\Support\BasicDataObject;
 use Czim\CmsCore\Test\Helpers\Support\TestDataObject;
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use League\Fractal\Manager;
