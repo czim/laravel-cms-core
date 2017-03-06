@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Test\Core;
 
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
+use Czim\CmsCore\Core\BootChecker;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\CmsBootTestCase;
 
@@ -76,6 +77,18 @@ class BootCheckerTest extends CmsBootTestCase
         $checker = $this->getBootChecker();
 
         static::assertFalse($checker->isCmsApiRequest(), "Test env. is not the API");
+    }
+
+    /**
+     * @test
+     */
+    function it_reports_not_to_register_the_cms_if_disabled()
+    {
+        $this->app['config']->set('cms-core.enabled', false);
+
+        $checker = new BootChecker();
+
+        static::assertFalse($checker->shouldCmsRegister());
     }
 
     /**

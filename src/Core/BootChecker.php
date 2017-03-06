@@ -5,6 +5,12 @@ use Illuminate\Support\Str;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 
+/**
+ * Class BootChecker
+ *
+ * @codeCoverageIgnore  There is no way to reliably test this from within the test environment.
+ *                      This class has been extensively manually tested in varying environments.
+ */
 class BootChecker implements BootCheckerInterface
 {
 
