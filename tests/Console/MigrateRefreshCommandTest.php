@@ -40,7 +40,7 @@ class MigrateRefreshCommandTest extends SimpleDbTestCase
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_test_records'));
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_more_test_records'));
 
-        $this->seeInDatabase('cms_test_records', [ 'description' => 'testing!' ]);
+        $this->assertDatabaseHas('cms_test_records', [ 'description' => 'testing!' ]);
     }
 
 }
