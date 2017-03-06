@@ -26,12 +26,11 @@ class MenuTest extends ApiTestCase
      */
     function it_responds_with_a_nested_menu_layout()
     {
-        $this->call('get', 'cms-api/meta/menu');
+        $response = $this->call('get', 'cms-api/meta/menu');
 
-        $this->seeStatusCode(200)
-             ->seeJson();
+        $response->assertStatus(200);
 
-        $response = $this->decodeResponseJson();
+        $response = $response->decodeResponseJson();
 
 
         static::assertArrayHasKey('layout', $response);

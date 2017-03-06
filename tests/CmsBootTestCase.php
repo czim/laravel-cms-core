@@ -18,6 +18,7 @@ abstract class CmsBootTestCase extends TestCase
     {
         // Load the CMS even when unit testing
         $app['config']->set('cms-core.testing', true);
+        $app['config']->set('cms-modules.modules', []);
 
         // Set up service providers for tests, excluding what is not part of this package
         $app['config']->set('cms-core.providers', [
