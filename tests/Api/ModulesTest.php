@@ -25,24 +25,23 @@ class ModulesTest extends ApiTestCase
      */
     function it_responds_with_a_list_of_modules()
     {
-        $this->call('get', 'cms-api/meta/modules');
+        $response = $this->call('get', 'cms-api/meta/modules');
 
-        $this->seeStatusCode(200)
-             ->seeJson()
-             ->seeJsonContains([
+        $response->assertStatus(200)
+             ->assertJsonFragment([
                  'key'  => 'associated-test-module',
                  'name' => 'Test Associated Module',
              ])
-             ->seeJsonContains([
+             ->assertJsonFragment([
                 'key'  => 'test-module',
                 'name' => 'Test Module',
              ])
-             ->seeJsonContains([
+             ->assertJsonFragment([
                 'key'  => 'test-module-with-service-providers',
                 'name' => 'Test Module With Service Providers',
              ]);
 
-        $response = $this->decodeResponseJson();
+        $response = $response->decodeResponseJson();
 
         static::assertArrayHasKey('data', $response);
         static::assertCount(3, $response['data']);
@@ -53,16 +52,15 @@ class ModulesTest extends ApiTestCase
      */
     function it_responds_with_information_on_a_single_module_by_key()
     {
-        $this->call('get', 'cms-api/meta/modules/test-module-with-service-providers');
+        $response = $this->call('get', 'cms-api/meta/modules/test-module-with-service-providers');
 
-        $this->seeStatusCode(200)
-            ->seeJson()
-            ->seeJsonContains([
+        $response->assertStatus(200)
+            ->assertJsonFragment([
                 'key'  => 'test-module-with-service-providers',
                 'name' => 'Test Module With Service Providers',
             ]);
 
-        $response = $this->decodeResponseJson();
+        $response = $response->decodeResponseJson();
 
         static::assertArrayHasKey('data', $response);
     }
@@ -72,9 +70,9 @@ class ModulesTest extends ApiTestCase
      */
     function it_responds_with_404_if_single_module_by_key_was_not_found()
     {
-        $this->call('get', 'cms-api/meta/modules/does-not-exist');
+        $response = $this->call('get', 'cms-api/meta/modules/does-not-exist');
 
-        $this->seeStatusCode(404);
+        $response->assertStatus(404);
     }
 
     /**
