@@ -49,7 +49,7 @@ class ModulesController extends Controller
         $module = $this->modules->get($key);
 
         if ( ! $module) {
-            abort(404, "Module not found or not loaded");
+            return abort(404, "Module not found or not loaded");
         }
 
         return $this->core->api()->response(
@@ -61,8 +61,8 @@ class ModulesController extends Controller
     /**
      * Wraps data in a transform container.
      *
-     * @param array|Arrayable $data
-     * @param bool            $collection
+     * @param object|array|Arrayable $data
+     * @param bool                   $collection
      * @return TransformContainer
      */
     protected function makeContainer($data, $collection = true)
