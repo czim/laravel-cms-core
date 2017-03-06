@@ -68,7 +68,7 @@ class MiddlewareServiceProviderTest extends TestCase
             ->willReturnSelf();
 
         $routerMock->expects(static::once())
-            ->method('middleware')
+            ->method('aliasMiddleware')
             ->with('test_key', NullMiddleware::class)
             ->willReturnSelf();
 
@@ -113,7 +113,7 @@ class MiddlewareServiceProviderTest extends TestCase
             ->willReturnSelf();
 
         $routerMock->expects(static::once())
-            ->method('middleware')
+            ->method('aliasMiddleware')
             ->with('test_key_api', NullMiddleware::class)
             ->willReturnSelf();
 
