@@ -11,21 +11,20 @@ class VersionsTest extends ApiTestCase
      */
     function it_responds_with_versions_for_core_components()
     {
-        $this->call('get', 'cms-api/meta/versions');
+        $response = $this->call('get', 'cms-api/meta/versions');
 
-        $this->seeStatusCode(200)
-             ->seeJson()
-             ->seeJsonStructure([
+        $response->assertStatus(200)
+             ->assertJsonFragment([
                  'data' => [
                      '*' => [ 'id', 'name', 'version' ]
                  ]
              ])
-            ->seeJsonContains([ 'name' => 'core' ])
-            ->seeJsonContains([ 'name' => 'auth' ])
-            ->seeJsonContains([ 'name' => 'module-manager' ]);
+            ->assertJsonFragment([ 'name' => 'core' ])
+            ->assertJsonFragment([ 'name' => 'auth' ])
+            ->assertJsonFragment([ 'name' => 'module-manager' ]);
 
         // see if each item is follows the semantic version format
-        $response = $this->decodeResponseJson();
+        $response = $response->decodeResponseJson();
 
         foreach ($response['data'] as $version) {
             static::assertRegExp('#^\d+\.\d+\.\d+$#', $version['version']);
