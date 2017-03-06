@@ -38,7 +38,7 @@ class LocaleController extends Controller
             return redirect()->back()->withErrors("Locale {$locale} is not available");
         }
 
-        session()->set($this->getSessionKey(), $locale);
+        session()->put($this->getSessionKey(), $locale);
 
         return redirect()->back();
     }
