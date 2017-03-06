@@ -226,7 +226,9 @@ class RestResponseBuilder implements ResponseBuilderInterface
      */
     protected function formatExceptionError(Exception $e, $fallbackMessage = null)
     {
-        if (app()->isLocal() && $this->core->apiConfig('debug.local-exception-trace', true)) {
+        if (    (config('app.debug') || $this->core->config('debug'))
+            &&  $this->core->apiConfig('debug.local-exception-trace', true)
+        ) {
             return $this->formatExceptionErrorForLocal($e, $fallbackMessage);
         }
 
@@ -273,10 +275,6 @@ class RestResponseBuilder implements ResponseBuilderInterface
      */
     protected function getStandardMessageForStatusCode($code)
     {
-        if ( ! $code) {
-            return null;
-        }
-
         switch ($code) {
 
             case 422:
@@ -298,7 +296,9 @@ class RestResponseBuilder implements ResponseBuilderInterface
                 return 'Server Whoops';
 
             default:
+                // @codeCoverageIgnoreStart
                 return null;
+                // @codeCoverageIgnoreEnd
         }
     }
 
