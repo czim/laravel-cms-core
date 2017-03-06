@@ -19,7 +19,7 @@ class RedirectIfAuthenticatedTest extends TestCase
     {
         /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
         /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $authMock = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
+        $authMock    = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
         $requestMock = $this->getMockBuilder(Request::class)->getMock();
 
         $authMock->expects(static::once())->method('check')->willReturn(false);

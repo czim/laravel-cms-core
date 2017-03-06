@@ -102,7 +102,9 @@ class MiddlewareServiceProvider extends ServiceProvider
 
             // Don't add if the middleware is already globally enabled in the kernel
             if ($this->kernel->hasMiddleware($middleware)) {
+                // @codeCoverageIgnoreStart
                 continue;
+                // @codeCoverageIgnoreEnd
             }
 
             $this->router->pushMiddlewareToGroup($this->getConfiguredWebGroupName(), $middleware);
@@ -182,7 +184,9 @@ class MiddlewareServiceProvider extends ServiceProvider
 
             // Don't add if the middleware is already globally enabled in the kernel
             if ($this->kernel->hasMiddleware($middleware)) {
+                // @codeCoverageIgnoreStart
                 continue;
+                // @codeCoverageIgnoreEnd
             }
 
             $this->router->pushMiddlewareToGroup($this->getConfiguredApiGroupName(), $middleware);

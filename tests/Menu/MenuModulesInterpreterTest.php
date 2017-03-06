@@ -361,6 +361,24 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
     /**
      * @test
      * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessageRegExp #must be string or have a non-numeric key#i
+     */
+    function it_throws_an_exception_if_no_key_for_a_module_could_be_determined()
+    {
+        $this->modules = collect([
+            'test-a' => $this->getMockModuleWithPresenceInstance(false),
+        ]);
+
+        $this->menuModulesConfig = [
+            [ 'no' => 'key' ],
+        ];
+
+        $this->makeModulesInterpreter()->interpret();
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_incorrect_presence_data_is_configured_for_a_module_in_a_nesting_array()
     {

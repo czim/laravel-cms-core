@@ -14,6 +14,7 @@ class TranslationServiceProviderTest extends TestCase
     function it_registers_the_cms_translator()
     {
         $provider = new TranslationServiceProvider($this->app);
+        $provider->register();
         $provider->boot();
 
         static::assertTrue($this->app->bound('translator'));
