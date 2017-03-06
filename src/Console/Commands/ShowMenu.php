@@ -100,13 +100,4 @@ class ShowMenu extends Command
         $this->info('');
     }
 
-    /**
-     * @param string $info
-     * @param int    $indents
-     */
-    protected function infoIndent($info, $indents = 1)
-    {
-        $this->info(str_repeat(' ', $indents * 4) . $info);
-    }
-
 }
