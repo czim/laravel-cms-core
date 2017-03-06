@@ -58,8 +58,8 @@ return [
     */
 
     'providers' => [
-        Czim\CmsAuth\Providers\Api\FluentStorageServiceProvider::class,
-        Czim\CmsAuth\Providers\Api\OAuth2ServerServiceProvider::class,
+        //Czim\CmsAuth\Providers\Api\FluentStorageServiceProvider::class,
+        //Czim\CmsAuth\Providers\Api\OAuth2ServerServiceProvider::class,
     ],
 
     /*
