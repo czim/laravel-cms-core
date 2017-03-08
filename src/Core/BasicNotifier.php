@@ -57,7 +57,7 @@ class BasicNotifier implements NotifierInterface
             'level'   => $level,
         ];
 
-        $this->core->session()->set(static::SESSION_FLASH_KEY, $messages);
+        $this->core->session()->put(static::SESSION_FLASH_KEY, $messages);
 
         return $this;
     }
