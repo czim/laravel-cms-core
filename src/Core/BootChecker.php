@@ -5,12 +5,6 @@ use Illuminate\Support\Str;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 
-/**
- * Class BootChecker
- *
- * @codeCoverageIgnore  There is no way to reliably test this from within the test environment.
- *                      This class has been extensively manually tested in varying environments.
- */
 class BootChecker implements BootCheckerInterface
 {
 
@@ -47,7 +41,9 @@ class BootChecker implements BootCheckerInterface
     public function shouldCmsRegister()
     {
         if (null !== $this->shouldRegister) {
+            // @codeCoverageIgnoreStart
             return $this->shouldRegister;
+            // @codeCoverageIgnoreEnd
         }
 
         if ( ! $this->isCmsEnabled()) {
@@ -252,7 +248,9 @@ class BootChecker implements BootCheckerInterface
     protected function isCmsEnabledArtisanCommand()
     {
         if (null !== $this->registeredConsoleCommand) {
+            // @codeCoverageIgnoreStart
             return $this->registeredConsoleCommand;
+            // @codeCoverageIgnoreEnd
         }
 
         if ( ! $this->isConsole()) {
@@ -287,6 +285,7 @@ class BootChecker implements BootCheckerInterface
      * Should only be called after making sure this is CLI.
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     protected function getArtisanBaseCommand()
     {
