@@ -1,7 +1,7 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status](https://travis-ci.org/czim/laravel-dataobject.svg?branch=master)](https://travis-ci.org/czim/laravel-dataobject)
+[![Build Status](https://travis-ci.org/czim/laravel-cms-core.svg?branch=master)](https://travis-ci.org/czim/laravel-cms-core)
 [![Coverage Status](https://coveralls.io/repos/github/czim/laravel-cms-core/badge.svg?branch=master)](https://coveralls.io/github/czim/laravel-cms-core?branch=master)
 
 
