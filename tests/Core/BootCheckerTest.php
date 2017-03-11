@@ -13,6 +13,9 @@ use Mockery;
  *
  * Because of its environment-relative nature, the BootChecker requires
  * bit more 'hacking' to test. See the app() and request() mocks below.
+ *
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  */
 class BootCheckerTest extends TestCase
 {
