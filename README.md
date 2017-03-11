@@ -111,6 +111,7 @@ The documentation for the API endpoints provided by the core may be found here:
  5.1.x (out of date) | 0.9.x
  5.2.x (out of date) | 0.9.x
  5.3.x               | 1.3.x
+ 5.4.x               | dev-laravel-5.4 (WIP)
 
 ## Installation
 
