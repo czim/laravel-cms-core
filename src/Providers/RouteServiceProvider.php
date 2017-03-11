@@ -4,7 +4,6 @@ namespace Czim\CmsCore\Providers;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Http\Controllers\LocaleController;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
