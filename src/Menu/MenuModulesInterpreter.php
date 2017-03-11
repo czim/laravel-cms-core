@@ -203,7 +203,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      */
     protected function isArrayPresenceDefinition(array $configured)
     {
-        return !! count(
+        return (bool) count(
             array_intersect(
                 array_keys($configured),
                 [
