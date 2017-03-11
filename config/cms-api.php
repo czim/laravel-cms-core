@@ -131,8 +131,8 @@ return [
     */
 
     'debug' => [
-        // Disable authentication entirely. Note that this will ONLY work in 'local' env.
-        'disable-local-auth' => env('CMS_API_DISABLE_AUTH', false),
+        // Disable authentication entirely. Never enable this in a production environment.
+        'disable-auth' => env('CMS_API_DISABLE_AUTH', false),
 
         // A user may be faked by setting their ID in the header set here.
         // This can only be done locally, when disable-local-auth is set to true.
