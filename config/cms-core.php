@@ -159,8 +159,8 @@ return [
         Czim\CmsCore\Providers\ViewServiceProvider::class,
         Czim\CmsAuth\Providers\CmsAuthServiceProvider::class,
         Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
-        //Czim\CmsAuth\Providers\Api\OAuthSetupServiceProvider::class,
-        //Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider::class,
+        Czim\CmsAuth\Providers\Api\OAuthSetupServiceProvider::class,
+        Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider::class,
 
         // It is safest to call the route service providers last,
         // since they depend on data provided by modules that
@@ -168,7 +168,7 @@ return [
         \Czim\CmsModels\Providers\CmsModelsServiceProvider::class,
 
         Czim\CmsCore\Providers\RouteServiceProvider::class,
-        //Czim\CmsCore\Providers\Api\ApiRouteServiceProvider::class,
+        Czim\CmsCore\Providers\Api\ApiRouteServiceProvider::class,
     ],
 
     /*
