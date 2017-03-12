@@ -16,9 +16,9 @@ class MenuTest extends ApiTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $this->setUpBasicMenuLayout($app);
-
         parent::getEnvironmentSetUp($app);
+
+        $this->setUpBasicMenuLayout($app);
     }
 
     /**

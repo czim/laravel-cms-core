@@ -15,9 +15,9 @@ class ModulesTest extends ApiTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $this->setUpBasicModules($app);
-
         parent::getEnvironmentSetUp($app);
+
+        $this->setUpBasicModules($app);
     }
 
     /**
