@@ -18,7 +18,22 @@ So you're looking for a Laravel CMS, and ...
 
 Look no further. This CMS was developed with all this in mind.
  
+## Version Compatibility
+
+ Laravel             | Package 
+:--------------------|:--------
+ 5.3.x               | 1.3.x
+ 5.4.x               | 1.4.x
  
+A note on Laravel 5.4 support: The Core and Auth components are fully compatible and tested to work. The theme and ACL module are not fully tested, but should work without problems.
+
+The Models module still has problems and is insufficiently tested for 5.4.
+If you depend on the models module, stick to verions 1.3 in Laravel 5.3 for now.
+Test reports and pull requests are welcome!
+ 
+Also note that Stapler is broken for Laravel 5.4, but [may be fixed](https://github.com/CodeSleeve/laravel-stapler/issues/118).
+
+
 ## A Framework CMS
  
 The core concept behind this CMS: it is a **framework**.
@@ -55,9 +70,6 @@ The core offers:
 
 This project is currently under heavy development. It's best not to use this in production environments yet.   
 Feedback is welcome, as always.
-
-This CMS currently only works (well) with Laravel 5.3.  
-Laravel 5.4 support will be added soon.
 
 
 ## Documentation
@@ -103,15 +115,6 @@ When does not help, posting an issue report is much appreciated.
 The documentation for the API endpoints provided by the core may be found here:  
 [czim.github.io/laravel-cms-core](https://czim.github.io/laravel-cms-core).
 
-
-## Version Compatibility
-
- Laravel             | Package 
-:--------------------|:--------
- 5.1.x (out of date) | 0.9.x
- 5.2.x (out of date) | 0.9.x
- 5.3.x               | 1.3.x
- 5.4.x               | dev-laravel-5.4 (WIP)
 
 ## Installation
 
