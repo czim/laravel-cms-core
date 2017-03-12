@@ -13,7 +13,6 @@
     <testsuites>
         <testsuite name="CMS Core Package Test Suite">
             <directory suffix=".php">./tests/</directory>
-            <exclude>./tests/Api</exclude>
         </testsuite>
     </testsuites>
 
