@@ -9,6 +9,7 @@ It's a good idea to check the following things when anything goes wrong.
 
 1. Run `php artisan vendor:publish` to make sure you have all the required migrations and assets.
 2. Run `php artisan cms:migrate` to make sure any publish migrations for the CMS are applied.
+3. Run `php artisan cms:menu:clear` to force clearing out old menu data.
 
 ### For CMSes using [Models Module](https://github.com/czim/laravel-cms-models)
 
@@ -23,24 +24,21 @@ It's a good idea to check the following things when anything goes wrong.
 
 ### The CMS is slow
 
-One way to speed up the CMS somewhat, is to enable menu caching.
-You can do this by setting `cms-models.repository.cache` to `true`.
-Note that this will require manually clearing the menu cache (using `php artisan cms:menu:clear`) whenever modules are
-added or the menu configuration is altered.
+One way to speed up the CMS somewhat, is to cache menu data.
+You can do this by running `php artisan cms:menu:cache`.
 
 If you are using the Models Module, make sure that you cache model configuration when not developing.
+You can do this by running `php artisan cms:models:cache`.  
 [Further information on model configuration caching](https://github.com/czim/laravel-cms-models/blob/master/documentation/General.md#caching-model-information).
 
 If caching is disabled, the CMS will analyze the database structure, model class files and parse configuration files,
 which can really slow things down as the amount of configured models increases.
 
+
 ### Menu items or menu layout changes don't show up
 
-Make sure the CMS menu configuration cache is cleared.  
-You can clear the menu cache by running `php artisan cms:menu:clear`.
-
+Make sure the CMS menu configuration cache is cleared, using `php artisan cms:menu:clear`.
 It is easiest to leave the cache setting disabled while configuring the CMS.
-You can do this by setting `cms-modules.menu.cache` to `false`, but note that this will make all CMS pageloads slower.
 
 
 ### Model configuration changes don't show up (Models Module)
@@ -99,6 +97,7 @@ Core:
 - `cms:migrate:status`: check if CMS database migrations have all been run.
 - `cms:modules:show`: show currently loaded modules.
 - `cms:menu:show`: show currently loaded menu layout.
+- `cms:menu:cache`: write a fresh menu data cache file.
 - `cms:menu:clear`: clear cached menu data.
 
 Models Module:
