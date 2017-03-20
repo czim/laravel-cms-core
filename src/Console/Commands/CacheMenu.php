@@ -4,12 +4,12 @@ namespace Czim\CmsCore\Console\Commands;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Illuminate\Console\Command;
 
-class ClearMenuCache extends Command
+class CacheMenu extends Command
 {
 
-    protected $signature = 'cms:menu:clear';
+    protected $signature = 'cms:menu:cache';
 
-    protected $description = 'Clears cached menu data';
+    protected $description = 'Caches menu data';
 
 
     /**
@@ -19,9 +19,9 @@ class ClearMenuCache extends Command
      */
     public function handle(MenuRepositoryInterface $repository)
     {
-        $repository->clearCache();
+        $repository->writeCache();
 
-        $this->info('CMS menu cache cleared.');
+        $this->info('CMS menu cached.');
     }
 
 }

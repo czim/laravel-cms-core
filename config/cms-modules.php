@@ -32,9 +32,6 @@ return [
 
     'menu' => [
 
-        // Whether to automatically cache the menu layout
-        'cache' => false,
-
         // A menu layout with groups may be defined here, along with the order in which they appear.
         // Groups are represented by arrays. Menu items for modules are referenced by module key.
         //

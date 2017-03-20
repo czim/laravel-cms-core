@@ -1,32 +1,20 @@
 <?php
 namespace Czim\CmsCore\Menu;
 
+use BadMethodCallException;
+use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
+use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Menu\MenuConfigInterpreterInterface;
 use Czim\CmsCore\Contracts\Menu\MenuPermissionsFilterInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
+use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuLayoutDataInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuPermissionsIndexDataInterface;
-use Exception;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
-use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
-use Czim\CmsCore\Contracts\Core\CoreInterface;
-use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 
 class MenuRepository implements MenuRepositoryInterface
 {
-    /**
-     * The key under which the layout is cached.
-     *
-     * @var string
-     */
-    const CACHE_KEY_LAYOUT = 'cms:menu-layout-data';
-
-    /**
-     * The key under which the permissions index is cached.
-     *
-     * @var string
-     */
-    const CACHE_KEY_INDEX = 'cms:menu-permissions-index';
 
     /**
      * @var CoreInterface
@@ -141,8 +129,20 @@ class MenuRepository implements MenuRepositoryInterface
      */
     public function clearCache()
     {
-        $this->core->cache()->forget(static::CACHE_KEY_LAYOUT);
-        $this->core->cache()->forget(static::CACHE_KEY_INDEX);
+        $this->getFileSystem()->delete($this->getCachePath());
+    }
+
+    /**
+     * Writes menu data cache.
+     */
+    public function writeCache()
+    {
+        list($layout, $index) = $this->interpretMenuData();
+
+        $this->getFileSystem()->put(
+            $this->getCachePath(),
+            $this->serializedInformationForCache($layout, $index)
+        );
     }
 
 
@@ -159,16 +159,11 @@ class MenuRepository implements MenuRepositoryInterface
             return;
         }
 
-        if ( ! ($layout = $this->getCachedLayout())) {
-            $layout = $this->configInterpreter->interpretLayout($this->core->moduleConfig('menu.layout', []));
-            $this->cacheLayout($layout);
+        if ($this->isMenuCached()) {
+            list($layout, $permissionsIndex) = $this->retrieveMenuFromCache();
+        } else {
+            list($layout, $permissionsIndex) = $this->interpretMenuData();
         }
-
-        if ( ! ($permissionsIndex = $this->getCachedPermissionsIndex())) {
-            $permissionsIndex = $this->permissionsFilter->buildPermissionsIndex($layout);
-            $this->cachePermissionsIndex($permissionsIndex);
-        }
-
 
         if ( ! $this->ignorePermission && ! $this->auth->admin()) {
             $layout = $this->permissionsFilter->filterLayout($layout, $this->auth->user(), $permissionsIndex);
@@ -181,97 +176,96 @@ class MenuRepository implements MenuRepositoryInterface
     }
 
     /**
-     * Returns whether the CMS is configured to cache menu data.
+     * Interprets and returns menu data.
+     *
+     * @return array    [ layout, permissionsIndex ]
+     */
+    protected function interpretMenuData()
+    {
+        $layout = $this->configInterpreter->interpretLayout($this->core->moduleConfig('menu.layout', []));
+
+        return [
+            $layout,
+            $this->permissionsFilter->buildPermissionsIndex($layout)
+        ];
+    }
+
+
+    // ------------------------------------------------------------------------------
+    //      Cache
+    // ------------------------------------------------------------------------------
+
+    /**
+     * Returns whether menu data has been cached.
      *
      * @return bool
      */
-    protected function isCacheEnabled()
+    protected function isMenuCached()
     {
-        return (bool) $this->core->moduleConfig('menu.cache');
+        return $this->getFileSystem()->exists($this->getCachePath());
     }
 
     /**
-     * Attempts to retrieve menu layout from cache.
+     * Returns cached menu data: layout and permissions index.
      *
-     * @return MenuLayoutDataInterface|false
+     * @return array    [ layout, permissions index ]
      */
-    protected function getCachedLayout()
+    protected function retrieveMenuFromCache()
     {
-        if ( ! $this->isCacheEnabled() || ! $this->core->cache()->has(static::CACHE_KEY_LAYOUT)) {
-            return false;
+        if ( ! $this->isMenuCached()) {
+            throw new BadMethodCallException("Menu was not cached");
         }
 
-        try {
-            $layout = $this->core->cache()->get(static::CACHE_KEY_LAYOUT);
-
-        } catch (Exception $e) {
-
-            $this->clearCache();
-            return false;
-        }
-
-        if ( ! ($layout instanceof MenuLayoutDataInterface)) {
-            $this->clearCache();
-            return false;
-        }
-
-        return $layout;
+        return $this->deserializeInformationFromCache(
+            require($this->getCachePath())
+        );
     }
 
     /**
-     * Stores built permissions index in cache.
+     * Returns the path to which the model information should be cached.
      *
-     * @param MenuLayoutDataInterface $data
+     * @return string
      */
-    protected function cacheLayout(MenuLayoutDataInterface $data)
+    protected function getCachePath()
     {
-        if ( ! $this->isCacheEnabled()) {
-            return;
-        }
-
-        $this->core->cache()->forever(static::CACHE_KEY_LAYOUT, $data);
+        return app()->bootstrapPath() . '/cache/cms_menu.php';
     }
 
     /**
-     * Attempts to retrieve permissions index from cache.
-     *
-     * @return MenuPermissionsIndexDataInterface|false
+     * @param MenuLayoutDataInterface           $layout
+     * @param MenuPermissionsIndexDataInterface $permissionsIndex
+     * @return string
      */
-    protected function getCachedPermissionsIndex()
-    {
-        if ( ! $this->isCacheEnabled() || ! $this->core->cache()->has(static::CACHE_KEY_INDEX)) {
-            return false;
-        }
+    protected function serializedInformationForCache(
+        MenuLayoutDataInterface $layout,
+        MenuPermissionsIndexDataInterface $permissionsIndex
+    ) {
+        $data = [
+            'layout' => serialize($layout),
+            'index'  => serialize($permissionsIndex),
+        ];
 
-        try {
-            $index = $this->core->cache()->get(static::CACHE_KEY_INDEX);
-
-        } catch (Exception $e) {
-
-            $this->clearCache();
-            return false;
-        }
-
-        if ( ! ($index instanceof MenuPermissionsIndexDataInterface)) {
-            $this->clearCache();
-            return false;
-        }
-
-        return $index;
+        return '<?php return ' . var_export($data, true) . ';' . PHP_EOL;
     }
 
     /**
-     * Stores built permissions index in cache.
-     *
-     * @param MenuPermissionsIndexDataInterface $data
+     * @param array $data
+     * @return array    [ layout, permissions index ]
      */
-    protected function cachePermissionsIndex(MenuPermissionsIndexDataInterface $data)
+    protected function deserializeInformationFromCache(array $data)
     {
-        if ( ! $this->isCacheEnabled()) {
-            return;
-        }
+        return [
+            unserialize($data['layout']),
+            unserialize($data['index']),
+        ];
+    }
 
-        $this->core->cache()->forever(static::CACHE_KEY_INDEX, $data);
+    /**
+     * @return Filesystem
+     */
+    protected function getFileSystem()
+    {
+        return app('files');
     }
 
 }

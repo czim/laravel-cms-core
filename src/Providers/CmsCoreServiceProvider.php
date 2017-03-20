@@ -253,11 +253,13 @@ class CmsCoreServiceProvider extends ServiceProvider
     protected function registerConsoleCommands()
     {
         $this->app->singleton('cms.commands.core-menu-show', Commands\ShowMenu::class);
+        $this->app->singleton('cms.commands.core-menu-cache', Commands\CacheMenu::class);
         $this->app->singleton('cms.commands.core-menu-clear', Commands\ClearMenuCache::class);
         $this->app->singleton('cms.commands.core-modules-show', Commands\ShowModules::class);
 
         $this->commands([
             'cms.commands.core-menu-show',
+            'cms.commands.core-menu-cache',
             'cms.commands.core-menu-clear',
             'cms.commands.core-modules-show',
         ]);

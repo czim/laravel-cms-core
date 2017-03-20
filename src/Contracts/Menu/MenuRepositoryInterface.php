@@ -37,4 +37,9 @@ interface MenuRepositoryInterface
      */
     public function clearCache();
 
+    /**
+     * Writes menu data cache.
+     */
+    public function writeCache();
+
 }
