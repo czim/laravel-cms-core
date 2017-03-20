@@ -192,10 +192,22 @@ class ModuleManager implements ModuleManagerInterface
 
         try {
             $instance = app($class);
+
         } catch (BindingResolutionException $e) {
-            $instance = null;
+
+            throw new InvalidArgumentException(
+                "Failed to instantiate Module or ModuleGenerator instance for '{$class}'",
+                $e->getCode(),
+                $e
+            );
+
         } catch (ReflectionException $e) {
-            $instance = null;
+
+            throw new InvalidArgumentException(
+                "Failed to instantiate Module or ModuleGenerator instance for '{$class}'",
+                $e->getCode(),
+                $e
+            );
         }
 
         if (null === $instance) {
