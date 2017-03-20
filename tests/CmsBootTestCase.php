@@ -1,7 +1,6 @@
 <?php
 namespace Czim\CmsCore\Test;
 
-
 use Czim\CmsCore\Providers\CmsCoreServiceProvider;
 use Czim\CmsCore\Support\Enums\Component;
 
@@ -16,6 +15,8 @@ abstract class CmsBootTestCase extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+        $this->deleteMenuCacheFile();
+
         // Load the CMS even when unit testing
         $app['config']->set('cms-core.testing', true);
 
@@ -55,6 +56,24 @@ abstract class CmsBootTestCase extends TestCase
         $this->mockBoundCoreExternalComponents($app);
 
         $app->register(CmsCoreServiceProvider::class);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getMenuCachePath()
+    {
+        return realpath(__DIR__ .'/../vendor/orchestra/testbench/fixture/bootstrap/cache') . '/cms_menu.php';
+    }
+
+    /**
+     * Deletes the menu cache file if it exists.
+     */
+    protected function deleteMenuCacheFile()
+    {
+        if (file_exists($this->getMenuCachePath())) {
+            unlink($this->getMenuCachePath());
+        }
     }
 
 }

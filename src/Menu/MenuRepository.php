@@ -213,7 +213,9 @@ class MenuRepository implements MenuRepositoryInterface
     protected function retrieveMenuFromCache()
     {
         if ( ! $this->isMenuCached()) {
+            // @codeCoverageIgnoreStart
             throw new BadMethodCallException("Menu was not cached");
+            // @codeCoverageIgnoreEnd
         }
 
         return $this->deserializeInformationFromCache(
