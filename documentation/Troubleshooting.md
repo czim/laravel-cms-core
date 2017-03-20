@@ -13,7 +13,6 @@ It's a good idea to check the following things when anything goes wrong.
 ### For CMSes using [Models Module](https://github.com/czim/laravel-cms-models)
 
 1. Run `php artisan cms:models:clear` to force clearing out old configurations.  
-    This will re-parse and re-cache the model configuration, on the next request that loads the CMS.
 2. Run `php artisan cms:models:show --keys` to see which models are loaded.
 3. Run `php artisan cms:models:show` and browse through the configuration data to see if anything looks out of order.  
     You can restrict the output to that for a specific model: `cms:models:show <key>`.
@@ -48,9 +47,6 @@ You can do this by setting `cms-modules.menu.cache` to `false`, but note that th
 
 Make sure the CMS model configuration cache is cleared.  
 You can clear the models cache by running `php artisan cms:models:clear`.
-
-It is easiest to leave the cache setting disabled while configuring the CMS.
-You can do this by setting `cms-models.repository.cache` to `false`, but note that this will make all CMS pageloads slower.
 
 
 ### The base CMS URL (`<base URL>/cms`) fails to load (with a 404)
