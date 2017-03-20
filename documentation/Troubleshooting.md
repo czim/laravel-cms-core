@@ -29,9 +29,8 @@ You can do this by setting `cms-models.repository.cache` to `true`.
 Note that this will require manually clearing the menu cache (using `php artisan cms:menu:clear`) whenever modules are
 added or the menu configuration is altered.
 
-If you are using the Models Module, make sure that you enable model configuration cache.
-The cache configuration setting is `cms-models.repository.cache`, setting it `true` will cache the models.  
-This is done according to your application (or CMS-specific) cache driver configuration.
+If you are using the Models Module, make sure that you cache model configuration when not developing.
+[Further information on model configuration caching](https://github.com/czim/laravel-cms-models/blob/master/documentation/General.md#caching-model-information).
 
 If caching is disabled, the CMS will analyze the database structure, model class files and parse configuration files,
 which can really slow things down as the amount of configured models increases.
@@ -85,6 +84,16 @@ If you'd rather only update the public directory assets, simply delete the `publ
 For more information on publishing assets, see [the Laravel documentation](https://laravel.com/docs/5.3/packages#public-assets)
 
 
+### CMS Menu or model information is cached with errors, and Artisan commands are not available to clear the cache
+
+Manually delete the following files, if they exist:
+
+- `bootstrap/cache/cms_menu.php`
+- `bootstrap/cache/cms_model_information.php`
+
+Note that this is exactly the same fix for when a cached Laravel configuration cannot be normally cleared using `artisan config:clear`. 
+
+
 ## Helpful Artisan Commands
 
 If you're encountering problems due to modules or configuration, keep the following Artisan commands in mind:
@@ -98,5 +107,6 @@ Core:
 
 Models Module:
 
+- `cms:models:cache`: write a fresh model configuration cache file.
 - `cms:models:clear`: clear cached model configuration.
 - `cms:models:show`: show currently loaded and enriched model configuration.
