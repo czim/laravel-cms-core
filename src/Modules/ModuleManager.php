@@ -186,10 +186,6 @@ class ModuleManager implements ModuleManagerInterface
      */
     protected function instantiateClass($class)
     {
-        if ( ! class_exists($class) && ! interface_exists($class)) {
-            throw new InvalidArgumentException("No instantiable class for '{$class}'");
-        }
-
         try {
             $instance = app($class);
 
@@ -207,12 +203,6 @@ class ModuleManager implements ModuleManagerInterface
                 "Failed to instantiate Module or ModuleGenerator instance for '{$class}'",
                 $e->getCode(),
                 $e
-            );
-        }
-
-        if (null === $instance) {
-            throw new InvalidArgumentException(
-                "Failed to instantiate Module or ModuleGenerator instance for '{$class}'"
             );
         }
 
