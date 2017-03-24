@@ -426,19 +426,16 @@ class BootCheckerTest extends TestCase
         self::$functions = $this->getContainerMockCallback();
         self::$request   = $this->getMockRequest();
 
-        $this->setUpConfig();
-
         if (null !== $this->mockArtisanBaseCommand) {
 
+            /** @var BootChecker|\Mockery\Mock $checker */
             $checker = Mockery::mock(BootChecker::class . '[getArtisanBaseCommand]')->shouldAllowMockingProtectedMethods();
             $checker->shouldReceive('getArtisanBaseCommand')->andReturn($this->mockArtisanBaseCommand);
 
-        } else {
-
-            $checker = new BootChecker;
+            return $checker;
         }
 
-        return $checker;
+        return new BootChecker;
     }
 
     /**
