@@ -35,6 +35,8 @@ class VerifyCsrfToken extends BaseVerifier
             if ( ! $request->ajax()) {
                 return redirect()->back()->withInput()->with('token', csrf_token());
             }
+
+            return response('CSRF Token Mismatch', 500);
         }
     }
 
