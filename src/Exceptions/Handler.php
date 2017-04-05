@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use League\OAuth2\Server\Exception\OAuthException;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -77,7 +78,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Exception  $e
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|Response
      */
     public function render($request, Exception $e)
     {
@@ -100,8 +101,8 @@ class Handler extends ExceptionHandler
      */
     protected function renderCmsWebException($request, Exception $exception)
     {
-        if ($request->ajax()) {
-            return $this->renderAjaxException($exception);
+        if ($request->wantsJson()) {
+            return $this->renderJsonException($exception);
         }
 
         return parent::render($request, $exception);
@@ -111,7 +112,7 @@ class Handler extends ExceptionHandler
      * @param Exception $exception
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function renderAjaxException(Exception $exception)
+    protected function renderJsonException(Exception $exception)
     {
         $statusCode = $this->getStatusCodeFromException($exception);
         $message    = $exception->getMessage();
