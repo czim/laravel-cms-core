@@ -144,11 +144,11 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof HttpResponseException) {
-            return $statusCode = $exception->getResponse()->getStatusCode();
+            return $exception->getResponse()->getStatusCode();
         }
 
         if ($exception instanceof ValidationException) {
-            return $statusCode = 422;
+            return 422;
         }
 
         if (method_exists($exception, 'getStatusCode')) {
