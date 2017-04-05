@@ -147,6 +147,10 @@ class Handler extends ExceptionHandler
             return $statusCode = $exception->getResponse()->getStatusCode();
         }
 
+        if ($exception instanceof ValidationException) {
+            return $statusCode = 422;
+        }
+
         if (method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
