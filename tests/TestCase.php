@@ -9,6 +9,16 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+
+        $app['config']->set('cms-modules.modules', []);
+    }
+
+    /**
      * @return string
      */
     protected function getTestBootCheckerBinding()

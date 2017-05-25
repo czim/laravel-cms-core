@@ -8,13 +8,12 @@ abstract class CmsBootTestCase extends TestCase
 {
 
     /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {
+        parent::getEnvironmentSetUp($app);
+
         $this->deleteMenuCacheFile();
 
         // Load the CMS even when unit testing
