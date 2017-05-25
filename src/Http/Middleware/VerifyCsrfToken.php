@@ -32,7 +32,7 @@ class VerifyCsrfToken extends BaseVerifier
 
         } catch (TokenMismatchException $e) {
 
-            if ( ! $request->ajax()) {
+            if ( ! $request->ajax() && ! $request->wantsJson()) {
                 return redirect()->back()->withInput()->with('token', csrf_token());
             }
 
