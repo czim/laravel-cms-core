@@ -54,7 +54,7 @@ class AssetManager implements AssetManagerInterface
     public function registerStyleAsset($path, $type = null, $media = null, $rel = 'stylesheet')
     {
         if ( ! array_key_exists($path, $this->styleAssets)) {
-            $this->scriptAssets[ $path ] = [
+            $this->styleAssets[ $path ] = [
                 'type'  => $type,
                 'media' => $media,
                 'rel'   => $rel,
@@ -124,7 +124,10 @@ class AssetManager implements AssetManagerInterface
             "\n",
             array_map(
                 function ($asset, $parameters) {
-                    return '<link rel="' . e(array_get($parameters, 'rel')) . '" href="' . $asset . '"></script>';
+                    return '<link rel="' . e(array_get($parameters, 'rel')) . '" href="' . $asset . '"'
+                        . (array_get($parameters, 'type') ? ' type="' . e(array_get($parameters, 'type')) . '"' : '')
+                        . (array_get($parameters, 'media') ? ' media="' . e(array_get($parameters, 'media')) . '"' : '')
+                        . '>';
                 },
                 array_keys($this->styleAssets),
                 array_values($this->styleAssets)
