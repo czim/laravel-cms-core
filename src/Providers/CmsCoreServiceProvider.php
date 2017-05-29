@@ -15,6 +15,7 @@ use Czim\CmsCore\Contracts\Menu\MenuPermissionsFilterInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
+use Czim\CmsCore\Contracts\Support\View\AssetManagerInterface;
 use Czim\CmsCore\Events\CmsHasBooted;
 use Czim\CmsCore\Events\CmsHasRegistered;
 use Czim\CmsCore\Menu\MenuConfigInterpreter;
@@ -22,6 +23,7 @@ use Czim\CmsCore\Menu\MenuModulesInterpreter;
 use Czim\CmsCore\Menu\MenuPermissionsFilter;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Support\Localization\LocaleRepository;
+use Czim\CmsCore\Support\View\AssetManager;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -120,6 +122,7 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->app->singleton(Component::MENU, $this->getCoreConfig('bindings.' . Component::MENU));
         $this->app->singleton(Component::ACL, $this->getCoreConfig('bindings.' . Component::ACL));
         $this->app->singleton(Component::NOTIFIER, $this->getCoreConfig('bindings.' . Component::NOTIFIER));
+        $this->app->singleton(Component::ASSETS, $this->getCoreConfig('bindings.' . Component::ASSETS, AssetManager::class));
 
         $this->app->bind(CoreInterface::class, Component::CORE);
         $this->app->bind(AuthenticatorInterface::class, Component::AUTH);
@@ -129,6 +132,7 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->app->bind(MenuRepositoryInterface::class, Component::MENU);
         $this->app->bind(AclRepositoryInterface::class, Component::ACL);
         $this->app->bind(NotifierInterface::class, Component::NOTIFIER);
+        $this->app->bind(AssetManagerInterface::class, Component::ASSETS);
 
         return $this;
     }

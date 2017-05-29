@@ -5,6 +5,7 @@ use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Contracts\Core\NotifierInterface;
+use Czim\CmsCore\Contracts\Support\View\AssetManagerInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -98,6 +99,14 @@ class Core implements CoreInterface
     public function menu()
     {
         return $this->app[Component::MENU];
+    }
+
+    /**
+     * @return AssetManagerInterface
+     */
+    public function assets()
+    {
+        return $this->app[Component::ASSETS];
     }
 
     /**

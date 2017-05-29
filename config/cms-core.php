@@ -135,6 +135,7 @@ return [
         Czim\CmsCore\Support\Enums\Component::MENU        => Czim\CmsCore\Menu\MenuRepository::class,
         Czim\CmsCore\Support\Enums\Component::ACL         => Czim\CmsCore\Auth\AclRepository::class,
         Czim\CmsCore\Support\Enums\Component::NOTIFIER    => Czim\CmsCore\Core\BasicNotifier::class,
+        Czim\CmsCore\Support\Enums\Component::ASSETS      => Czim\CmsCore\Support\View\AssetManager::class,
     ],
 
     /*

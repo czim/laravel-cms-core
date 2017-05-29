@@ -3,6 +3,7 @@ namespace Czim\CmsCore\Contracts\Core;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
+use Czim\CmsCore\Contracts\Support\View\AssetManagerInterface;
 use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
@@ -42,6 +43,11 @@ interface CoreInterface
      * @return MenuRepositoryInterface
      */
     public function menu();
+
+    /**
+     * @return AssetManagerInterface
+     */
+    public function assets();
 
     /**
      * @return AclRepositoryInterface

@@ -14,6 +14,7 @@ class Component extends Enum
 {
     const ACL         = 'cms-acl';
     const API         = 'cms-api';
+    const ASSETS      = 'cms-assets';
     const AUTH        = 'cms-auth';
     const BOOTCHECKER = 'cms-bootchecker';
     const CACHE       = 'cms-cache';
