@@ -48,6 +48,8 @@ class ViewServiceProvider extends ServiceProvider
 
     /**
      * Registers blade directives for the CMS.
+     *
+     * @codeCoverageIgnore
      */
     protected function registerBladeDirectives()
     {
@@ -107,6 +109,7 @@ class ViewServiceProvider extends ServiceProvider
      * This behaviour was changed with the release of Laravel 5.3.
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     protected function isBladeArgumentStringBracketed()
     {

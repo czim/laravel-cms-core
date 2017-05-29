@@ -97,6 +97,18 @@ class CoreTest extends CmsBootTestCase
     /**
      * @test
      */
+    function it_returns_the_bound_assets_component()
+    {
+        $this->app->instance(Component::ASSETS, 'core-test-string');
+
+        $core = $this->makeCore();
+
+        static::assertEquals('core-test-string', $core->assets());
+    }
+
+    /**
+     * @test
+     */
     function it_returns_the_bound_acl_component()
     {
         $this->app->instance(Component::ACL, 'core-test-string');
