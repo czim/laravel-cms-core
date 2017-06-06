@@ -25,11 +25,7 @@ Look no further. This CMS was developed with all this in mind.
  5.3.x               | 1.3.x
  5.4.x               | 1.4.x
  
-A note on Laravel 5.4 support: The Core and Auth components are fully compatible and tested to work. The theme and ACL module are not fully tested, but should work without problems.
-
-The Models module still has problems and is insufficiently tested for 5.4.
-If you depend on the models module, stick to version 1.3 in Laravel 5.3 for now.
-Test reports and pull requests are welcome!
+A note on Laravel 5.4 support: The Core and Auth components are fully compatible and tested to work. The theme and ACL module are not fully tested, but should work without problems. The Models module has been tested with 5.4 for the most part, and will work.
  
 Also note that Stapler is broken for Laravel 5.4, but [may be fixed](https://github.com/CodeSleeve/laravel-stapler/issues/118).
 
