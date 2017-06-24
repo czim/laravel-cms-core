@@ -64,7 +64,7 @@ The core offers:
 
 ## Heads-up / Disclaimer
 
-This project is currently under heavy development. It's best not to use this in production environments yet.   
+This project is currently under heavy development, but it is ready for production environments. It is only recommended for experienced programmers, however.   
 Feedback is welcome, as always.
 
 
