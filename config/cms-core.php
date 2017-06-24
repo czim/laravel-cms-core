@@ -143,9 +143,9 @@ return [
     | Service Providers
     |--------------------------------------------------------------------------
     |
-    | Services providers that the CMS should load, on top of its own.
-    | Note that normally, modules provide their own service providers,
-    | which, through the ModuleManager, get loaded by the core.
+    | Services providers that the CMS should load additionally.
+    | Note that service providers for modules should be added separately,
+    | in the cms-modules configuration file.
     |
     */
 
@@ -161,12 +161,12 @@ return [
         Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
         Czim\CmsAuth\Providers\Api\OAuthSetupServiceProvider::class,
         Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider::class,
+    ],
 
-        // It is safest to call the route service providers last,
-        // since they depend on data provided by modules that
-        // should be registered and prepared beforehand.
-        \Czim\CmsModels\Providers\CmsModelsServiceProvider::class,
-
+    // Service providers to load after the providers listed above and the module providers are loaded.
+    'providers-after' => [
+        // It is safest to call these route service providers last, since they depend
+        // on data provided by modules that should be registered beforehand.
         Czim\CmsCore\Providers\RouteServiceProvider::class,
         Czim\CmsCore\Providers\Api\ApiRouteServiceProvider::class,
     ],

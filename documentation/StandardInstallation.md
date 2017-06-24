@@ -9,15 +9,31 @@ This includes the setup of the following:
 - The models module for managing data described by Eloquent models
 - A standard ACL module for managing users and permissions
 - The default bootstrap theme
+- A file uploader module, for nicer AJAX file uploads.
 
 
 ## Core Installation
 
 1. Add the composer packages:
 
+In **Laravel 5.3**: 
+
 ```bash
-composer require czim/laravel-cms-core czim/laravel-cms-auth czim/laravel-cms-models czim/laravel-cms-acl-module czim/laravel-cms-theme
+# The base components
+composer require czim/laravel-cms-core:~1.3.0 czim/laravel-cms-auth:~1.3.0 czim/laravel-cms-theme
+# Standard modules
+composer require czim/laravel-cms-models:~1.3.0 czim/laravel-cms-acl-module czim/laravel-cms-upload-module
 ```
+
+In **Laravel 5.4**:
+
+```bash
+# The base components
+composer require czim/laravel-cms-core:~1.4.0 czim/laravel-cms-auth:~1.4.0 czim/laravel-cms-theme
+# Standard modules
+composer require czim/laravel-cms-models:~1.4.0 czim/laravel-cms-acl-module czim/laravel-cms-upload-module
+```
+
 
 2. Add the Core service provider to `app.php` providers array:
 
@@ -39,6 +55,7 @@ php artisan vendor:publish
     'modules' => [
         Czim\CmsModels\Modules\ModelModuleGenerator::class,
         Czim\CmsAclModule\AclModule::class,
+        Czim\CmsUploadModule\Modules\UploadModule::class,
     ],
 ```
 
@@ -50,12 +67,13 @@ php artisan vendor:publish
                 
         Czim\CmsModels\Providers\CmsModelsServiceProvider::class,
         Czim\CmsAclModule\Providers\CmsAclModuleServiceProvider::class,
+        Czim\CmsUploadModule\Providers\CmsUploadModuleServiceProvider::class,
         
         // ...
     ],
 ```
 
-Make sure that the route related service providers still come after the additions.
+Make sure that the route related service providers come after the additions.
 
 3. Publish the configuration files for the modules, making use of the service providers that were just defined:
  

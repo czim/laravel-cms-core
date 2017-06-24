@@ -156,13 +156,27 @@ class CmsCoreServiceProvider extends ServiceProvider
      */
     protected function registerConfiguredServiceProviders()
     {
-        $providers = $this->getCoreConfig('providers', []);
+        $providers = $this->collectConfiguredServiceProviders();
 
         foreach ($providers as $provider) {
             $this->app->register($provider);
         }
 
         return $this;
+    }
+
+    /**
+     * Collects an ordered list of service providers defined by core and modules configuration.
+     *
+     * @return string[]
+     */
+    protected function collectConfiguredServiceProviders()
+    {
+        return array_merge(
+            $this->getCoreConfig('providers', []),
+            $this->getModulesConfig('providers', []),
+            $this->getCoreConfig('providers-after', [])
+        );
     }
 
     /**
@@ -298,13 +312,26 @@ class CmsCoreServiceProvider extends ServiceProvider
      * Returns core CMS configuration array entry.
      * Note that this must be able to function before the Core is bound.
      *
-     * @param string $key
-     * @param null   $default
+     * @param string     $key
+     * @param mixed|null $default
      * @return mixed
      */
     protected function getCoreConfig($key, $default = null)
     {
         return array_get($this->app['config']['cms-core'], $key, $default);
+    }
+
+    /**
+     * Returns modules CMS configuration array entry.
+     * Note that this must be able to function before the Core is bound.
+     *
+     * @param string     $key
+     * @param mixed|null $default
+     * @return mixed
+     */
+    protected function getModulesConfig($key, $default = null)
+    {
+        return array_get($this->app['config']['cms-modules'], $key, $default);
     }
 
 }
