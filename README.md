@@ -97,6 +97,7 @@ You can find more information here:
 
 - [Installing and setting up standard modules](documentation/Modules.md) for the CMS.
 - [The way the menu works](documentation/Menu.md) and how you can customize it.
+- [Resources for developers](documentation/Development.md) customizing and extending the CMS.
 
 
 ## Troubleshooting
