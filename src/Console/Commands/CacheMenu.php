@@ -19,7 +19,9 @@ class CacheMenu extends Command
      */
     public function handle(MenuRepositoryInterface $repository)
     {
-        $repository->writeCache();
+        $repository
+            ->clearCache()
+            ->writeCache();
 
         $this->info('CMS menu cached.');
     }

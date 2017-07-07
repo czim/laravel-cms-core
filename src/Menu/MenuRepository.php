@@ -126,14 +126,20 @@ class MenuRepository implements MenuRepositoryInterface
 
     /**
      * Clears cached menu data.
+     *
+     * @return $this
      */
     public function clearCache()
     {
         $this->getFileSystem()->delete($this->getCachePath());
+
+        return $this;
     }
 
     /**
      * Writes menu data cache.
+     *
+     * @return $this
      */
     public function writeCache()
     {
@@ -143,6 +149,8 @@ class MenuRepository implements MenuRepositoryInterface
             $this->getCachePath(),
             $this->serializedInformationForCache($layout, $index)
         );
+
+        return $this;
     }
 
 
