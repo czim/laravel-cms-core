@@ -34,11 +34,15 @@ interface MenuRepositoryInterface
 
     /**
      * Clears cached menu data.
+     *
+     * @return $this
      */
     public function clearCache();
 
     /**
      * Writes menu data cache.
+     *
+     * @return $this
      */
     public function writeCache();
 
