@@ -63,7 +63,7 @@ abstract class CmsBootTestCase extends TestCase
      */
     protected function getMenuCachePath()
     {
-        return realpath(__DIR__ .'/../vendor/orchestra/testbench/fixture/bootstrap/cache') . '/cms_menu.php';
+        return realpath(__DIR__ .'/../vendor/orchestra/testbench-core/fixture/bootstrap/cache') . '/cms_menu.php';
     }
 
     /**
