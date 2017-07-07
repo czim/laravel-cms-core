@@ -13,8 +13,8 @@ class CacheMenuTest extends CmsBootTestCase
     function it_caches_using_the_menu_repository()
     {
         $repositoryMock = $this->getMockBuilder(MenuRepositoryInterface::class)->getMock();
-        $repositoryMock->expects(static::once())
-            ->method('writeCache');
+        $repositoryMock->expects(static::once())->method('clearCache')->willReturnSelf();
+        $repositoryMock->expects(static::once())->method('writeCache')->willReturnSelf();
 
         $this->app->instance(MenuRepositoryInterface::class, $repositoryMock);
 
