@@ -24,10 +24,12 @@ Look no further. This CMS was developed with all this in mind.
 :--------------------|:--------
  5.3.x               | 1.3.x
  5.4.x               | 1.4.x
+ 5.5.x               | 1.5.x
  
-A note on Laravel 5.4 support: The Core and Auth components are fully compatible and tested to work. The theme and ACL module are not fully tested, but should work without problems. The Models module has been tested with 5.4 for the most part, and will work.
+A note on Laravel 5.5 support: The core has been tested and updated for 5.5, the other modules are currently being tested and updated where needed. This will be done soon. 
  
-Also note that Stapler is broken for Laravel 5.4, but [may be fixed](https://github.com/CodeSleeve/laravel-stapler/issues/118).
+Also note that Stapler is broken for Laravel 5.4+, but [may be fixed](https://github.com/CodeSleeve/laravel-stapler/issues/118).
+Alternatively, you may use [Laravel Paperclip](https://github.com/czim/laravel-paperclip), that offers (at least) the same functionality.
 
 
 ## A Framework CMS
