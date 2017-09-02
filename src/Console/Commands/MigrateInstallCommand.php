@@ -36,7 +36,7 @@ class MigrateInstallCommand extends InstallCommand
      *
      * @inheritdoc
      */
-    public function fire()
+    public function handle()
     {
         $this->repository->setSource($this->determineConnection());
 
