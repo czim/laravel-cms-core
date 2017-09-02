@@ -16,7 +16,7 @@ class MigrateStatusCommand extends StatusCommand
      *
      * {@inheritdoc}
      */
-    public function fire()
+    public function handle()
     {
         // Set the connection before checking whether the table on it
         // exists! Otherwise, how could the table be found in the correct place?

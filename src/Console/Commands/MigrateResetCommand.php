@@ -15,7 +15,7 @@ class MigrateResetCommand extends ResetCommand
      *
      * {@inheritdoc}
      */
-    public function fire()
+    public function handle()
     {
         if (! $this->confirmToProceed()) {
             // @codeCoverageIgnoreStart
