@@ -3,7 +3,7 @@ namespace Czim\CmsCore\Test\Support\Translation;
 
 use Czim\CmsCore\Support\Translation\CmsTranslator;
 use Czim\CmsCore\Test\CmsBootTestCase;
-use Illuminate\Translation\LoaderInterface;
+use Illuminate\Contracts\Translation\Loader;
 
 class CmsTranslatorTest extends CmsBootTestCase
 {
@@ -13,8 +13,8 @@ class CmsTranslatorTest extends CmsBootTestCase
      */
     function it_falls_back_to_application_translation_if_cms_translation_key_not_found()
     {
-        /** @var LoaderInterface|\PHPUnit_Framework_MockObject_MockObject $loaderMock */
-        $loaderMock = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        /** @var Loader|\PHPUnit_Framework_MockObject_MockObject $loaderMock */
+        $loaderMock = $this->getMockBuilder(Loader::class)->getMock();
 
         $translator = new CmsTranslator($loaderMock, 'en');
 
@@ -28,8 +28,8 @@ class CmsTranslatorTest extends CmsBootTestCase
      */
     function it_does_not_fall_back_to_application_translation_if_key_already_prefixed()
     {
-        /** @var LoaderInterface|\PHPUnit_Framework_MockObject_MockObject $loaderMock */
-        $loaderMock = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        /** @var Loader|\PHPUnit_Framework_MockObject_MockObject $loaderMock */
+        $loaderMock = $this->getMockBuilder(Loader::class)->getMock();
 
         $translator = new CmsTranslator($loaderMock, 'en');
 
@@ -43,8 +43,8 @@ class CmsTranslatorTest extends CmsBootTestCase
      */
     function it_prefixes_a_translation_key_using_cms_translation_if_available()
     {
-        /** @var LoaderInterface|\PHPUnit_Framework_MockObject_MockObject $loaderMock */
-        $loaderMock = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        /** @var Loader|\PHPUnit_Framework_MockObject_MockObject $loaderMock */
+        $loaderMock = $this->getMockBuilder(Loader::class)->getMock();
 
         $translator = new CmsTranslator($loaderMock, 'en');
 
