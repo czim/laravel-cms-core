@@ -129,7 +129,7 @@ return [
         Czim\CmsCore\Support\Enums\Component::BOOTCHECKER => Czim\CmsCore\Core\BootChecker::class,
         Czim\CmsCore\Support\Enums\Component::CACHE       => Czim\CmsCore\Core\Cache::class,
         Czim\CmsCore\Support\Enums\Component::CORE        => Czim\CmsCore\Core\Core::class,
-        Czim\CmsCore\Support\Enums\Component::MODULES     => \Czim\CmsCore\Modules\ModuleManager::class,
+        Czim\CmsCore\Support\Enums\Component::MODULES     => Czim\CmsCore\Modules\ModuleManager::class,
         Czim\CmsCore\Support\Enums\Component::AUTH        => Czim\CmsAuth\Auth\Authenticator::class,
         Czim\CmsCore\Support\Enums\Component::API         => Czim\CmsCore\Api\ApiCore::class,
         Czim\CmsCore\Support\Enums\Component::MENU        => Czim\CmsCore\Menu\MenuRepository::class,
