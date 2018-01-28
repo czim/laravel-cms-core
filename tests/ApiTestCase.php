@@ -35,12 +35,12 @@ abstract class ApiTestCase extends WebTestCase
     protected function bindNullMiddleware(Application $app)
     {
         $app->bind(
-            \Czim\CmsAuth\Http\Middleware\Api\OAuthMiddleware::class,
+            \Czim\CmsAuthApi\Http\Middleware\OAuthMiddleware::class,
             \Czim\CmsCore\Test\Helpers\Http\NullMiddleware::class
         );
 
         $app->bind(
-            \Czim\CmsAuth\Http\Middleware\Api\OAuthUserOwnerMiddleware::class,
+            \Czim\CmsAuthApi\Http\Middleware\OAuthUserOwnerMiddleware::class,
             \Czim\CmsCore\Test\Helpers\Http\NullMiddleware::class
         );
     }
