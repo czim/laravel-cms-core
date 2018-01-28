@@ -58,7 +58,7 @@ The core offers:
 
 - Module management, including module based routing and authorization,
 - CMS provision, loading required service providers,
-- The basics for a dedicated OAuth2 API for the CMS,
+- The basics for a dedicated API for the CMS,
 - Segregated database migrations and the commands to manage them,
 - The basics for user notification,
 - Some basic debugging tools to help analyze loaded modules.
