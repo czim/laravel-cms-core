@@ -58,8 +58,10 @@ return [
     */
 
     'providers' => [
-        Czim\CmsAuth\Providers\Api\FluentStorageServiceProvider::class,
-        Czim\CmsAuth\Providers\Api\OAuth2ServerServiceProvider::class,
+
+        // You can use the following if czim/laravel-cms-auth-api is installed.
+        //Czim\CmsAuthApi\Providers\FluentStorageServiceProvider::class,
+        //Czim\CmsAuthApi\Providers\OAuth2ServerServiceProvider::class,
     ],
 
     /*
@@ -83,12 +85,14 @@ return [
         'load' => [
             Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
 
-            Czim\CmsCore\Support\Enums\CmsMiddleware::API_AUTHENTICATED =>
-                Czim\CmsAuth\Http\Middleware\Api\OAuthMiddleware::class,
-            Czim\CmsCore\Support\Enums\CmsMiddleware::API_AUTH_OWNER =>
-                Czim\CmsAuth\Http\Middleware\Api\OAuthUserOwnerMiddleware::class,
             Czim\CmsCore\Support\Enums\CmsMiddleware::PERMISSION =>
                 Czim\CmsCore\Http\Middleware\CheckPermission::class,
+
+            // You can use the following if czim/laravel-cms-auth-api is installed.
+            Czim\CmsCore\Support\Enums\CmsMiddleware::API_AUTHENTICATED =>
+                Czim\CmsAuthApi\Http\Middleware\OAuthMiddleware::class,
+            Czim\CmsCore\Support\Enums\CmsMiddleware::API_AUTH_OWNER =>
+                Czim\CmsAuthApi\Http\Middleware\OAuthUserOwnerMiddleware::class,
         ],
     ],
 
