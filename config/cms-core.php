@@ -159,7 +159,6 @@ return [
         Czim\CmsCore\Providers\ViewServiceProvider::class,
         Czim\CmsAuth\Providers\CmsAuthServiceProvider::class,
         Czim\CmsTheme\Providers\CmsThemeServiceProvider::class,
-        Czim\CmsAuth\Providers\Api\OAuthSetupServiceProvider::class,
         Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider::class,
     ],
 
