@@ -1,5 +1,7 @@
 <?php
 
+use Czim\CmsCore\Support\Logging\CmsCustomizeFormatter;
+
 return [
 
     /*
@@ -330,22 +332,20 @@ return [
 
     'log' => [
 
-        // Whether to write to a separate log file for the CMS.
-        // If this is set to false, the standard laravel log will be used.
-        'separate' => true,
+        // If set, the CMS will log its messages using this channel.
+        // If the channel is not configured in the logging.php config,
+        // the defaults below will be used instead.
+        'channel' => 'cms',
 
-        // If using a separate log, the (path or) file to write to,
-        // relative to the storage/logs directory.
-        'file' => 'cms.log',
-
-        // Whether to split files over days, rather than use a single log file.
-        'daily' => true,
-
-        // If set, limits that amount of (daily) files kept as history by the logger.
-        'max_files' => null,
-
-        // Minimal log level to write log lines for
-        'threshold' => Monolog\Logger::INFO,
+        // Defaults to use if no custom 'cms' channel entry is set in the
+        // logging.php configuration file.
+        'default' => [
+            'driver' => 'daily',
+            'tap'    => [CmsCustomizeFormatter::class],
+            'path'   => storage_path('logs/cms.log'),
+            'level'  => 'debug',
+            'days'   => 7,
+        ],
     ],
 
     /*

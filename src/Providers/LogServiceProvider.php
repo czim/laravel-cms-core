@@ -1,13 +1,8 @@
 <?php
 namespace Czim\CmsCore\Providers;
 
-use Illuminate\Contracts\Logging\Log;
-use Illuminate\Log\Writer;
+use Czim\CmsCore\Support\Logging\CmsLogManager;
 use Illuminate\Support\ServiceProvider;
-use Monolog\Handler\HandlerInterface;
-use Monolog\Logger;
-use Czim\CmsCore\Contracts\Core\CoreInterface;
-use Czim\CmsCore\Support\Logging\CmsFormatterDecorator;
 use Czim\CmsCore\Support\Enums\Component;
 
 class LogServiceProvider extends ServiceProvider
@@ -20,80 +15,71 @@ class LogServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->registerLogger();
+        if ( ! $this->registerLogger()) {
+            // If the logger failed to register,
+            // fall back on the default Laravel log manager.
+            $this->app->instance(Component::LOG, app('log'));
+        }
     }
 
     /**
-     * @return $this
+     * @return bool
      */
     protected function registerLogger()
     {
-        $log = new Logger("cms.{$this->app->environment()}");
+        $channel = $this->getConfiguredDefaultChannel();
 
-        // Bind dedicated log writer for the CMS
-        $writer = new Writer($log);
-        $this->app->instance(Component::LOG, $writer);
-
-
-        if ($this->getCore()->config('log.separate')) {
-            // For separate logs, configure the writer to use a different file/path
-
-            $this->configureSeparateWriter($writer);
-
-        } else {
-            // For shared logs, decorate the entries for the CMS
-
-            // Clone all handlers defined for the main app, but decorate
-            // the formatters to include a prefix
-            foreach ($this->getAppLog()->getMonolog()->getHandlers() as $handler) {
-                /** @var HandlerInterface $handler */
-                $log->pushHandler($handler = clone $handler);
-
-                $handler
-                    ->setFormatter(new CmsFormatterDecorator($handler->getFormatter()))
-                    ->setLevel($this->getCore()->config('log.threshold'));
-            }
+        if (null === $channel) {
+            return false;
         }
 
-        return $this;
+        $config = $this->getCmsChannelConfiguration($channel);
+
+        if ( ! is_array($config)) {
+            return false;
+        }
+
+        $this->defineChannelConfigurationIfNotSet($channel, $config);
+
+
+        // Make the log manager for the CMS with the given channel as its default.
+        $cmsLogManager = new CmsLogManager($this->app, $channel);
+
+        $this->app->instance(Component::LOG, $cmsLogManager);
+
+        return true;
     }
 
     /**
-     * Configures log writer for logging to files separately from the application.
+     * Defines config entry for CMS channel if it does not exist.
      *
-     * @param Writer $writer
+     * @param string $channel
+     * @param array  $configuration
      */
-    protected function configureSeparateWriter(Writer $writer)
+    protected function defineChannelConfigurationIfNotSet($channel, array $configuration)
     {
-        $path = 'logs/' . ltrim($this->getCore()->config('log.file', 'cms'), '/');
-
-        if ($this->getCore()->config('log.daily')) {
-            $writer->useDailyFiles(
-                storage_path($path),
-                (int) $this->getCore()->config('log.max_files')
-            );
+        if (array_has(config('logging.channels'), $channel)) {
+            return;
         }
 
-        foreach ($writer->getMonolog()->getHandlers() as $handler) {
-
-            $handler->setLevel($this->getCore()->config('log.threshold'));
-        }
+        config()->set("logging.channels.{$channel}", $configuration);
     }
 
     /**
-     * @return Log
+     * @return string
      */
-    protected function getAppLog()
+    protected function getConfiguredDefaultChannel()
     {
-        return $this->app['log'];
+        return config('cms-core.log.channel', 'cms');
     }
 
     /**
-     * @return CoreInterface
+     * @param string $channel
+     * @return array
      */
-    protected function getCore()
+    protected function getCmsChannelConfiguration($channel)
     {
-        return $this->app[Component::CORE];
+        return config("logging.channels.{$channel}", config('cms-core.log.default'));
     }
 
 }
