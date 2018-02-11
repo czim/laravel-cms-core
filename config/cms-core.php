@@ -294,6 +294,7 @@ return [
         'patterns' => [
             'cms:*',
             'help',
+            'list',
             'package:discover',
             'route:*',
             'tinker',
