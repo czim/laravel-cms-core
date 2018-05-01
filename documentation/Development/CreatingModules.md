@@ -19,9 +19,8 @@ A single module class may be registered with the CMS.
 3. Register the module in the `cms-modules.php` config.  
     Add the fully qualified namespace for the module class to the `cms-modules.modules` array.
     
-4. If relevant, add service providers to the `cms-core.php` config.  
-    Add the fully qualified namespaces for any service providers to the `cms-core.providers` array.
-    Be sure to add this *after* the normal core providers, and *before* the route providers.
+4. If relevant, add service providers to the `cms-modules.php` config.  
+    Add the fully qualified namespaces for any service providers to the `cms-modules.providers` array.
 
 
 ## Module Generators
