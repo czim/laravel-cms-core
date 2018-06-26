@@ -39,4 +39,4 @@ Please check each module's documentation for further information.
 
 The above list is not exhaustive, if only because making custom modules is encouraged.
 
-For more information, see [creating custom modules](development/CreatingModules.md).
+For more information, see [creating custom modules](Development/CreatingModules.md).
