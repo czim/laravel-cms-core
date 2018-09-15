@@ -25,7 +25,7 @@ Look no further. This CMS was developed with all this in mind.
  5.3.x               | 1.3.x
  5.4.x               | 1.4.x
  5.5.x               | 1.5.x
- 5.6.x               | 1.6.x
+ 5.6.x, 5.7.x        | 1.6.x
  
  
 Please note that Stapler is broken since Laravel 5.4, but [may be fixed](https://github.com/CodeSleeve/laravel-stapler/issues/118). In 5.5 Stapler has [an additional issue](https://github.com/CodeSleeve/stapler/issues/186).  
