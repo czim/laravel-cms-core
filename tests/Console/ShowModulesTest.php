@@ -10,6 +10,16 @@ class ShowModulesTest extends CmsBootTestCase
 {
 
     /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->withoutMockingConsoleOutput();
+    }
+
+    /**
      * @test
      */
     function it_shows_the_keys_of_loaded_modules()

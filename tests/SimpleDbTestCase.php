@@ -27,12 +27,13 @@ abstract class SimpleDbTestCase extends CmsBootTestCase
      */
     protected function createMigrationTable()
     {
-        static::assertEquals(0, $this->artisan('cms:migrate:install'));
+        $result = $this->artisan('cms:migrate:install');
 
-        static::assertTrue(
-            Schema::connection('testbench')->hasTable('cms_migrations'),
-            'CMS migration table should exist for setup'
-        );
+        if ($result instanceof \Illuminate\Foundation\Testing\PendingCommand) {
+            $result->assertExitCode(0);
+        } else {
+            static::assertEquals(0, $result);
+        }
     }
 
     /**

@@ -18,7 +18,7 @@ class CacheMenuTest extends CmsBootTestCase
 
         $this->app->instance(MenuRepositoryInterface::class, $repositoryMock);
 
-        static::assertEquals(0, $this->artisan('cms:menu:cache'));
+        $this->artisan('cms:menu:cache')->assertExitCode(0);
     }
 
 }

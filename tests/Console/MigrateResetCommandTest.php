@@ -1,7 +1,6 @@
 <?php
 namespace Czim\CmsCore\Console;
 
-use CreateMoreTestRecordsTable;
 use CreateTestRecordsTable;
 use Czim\CmsCore\Test\SimpleDbTestCase;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +14,7 @@ class MigrateResetCommandTest extends SimpleDbTestCase
         parent::setUp();
 
         $this->setHelperCmsMigrationPath();
+        $this->withoutMockingConsoleOutput();
     }
 
     /**

@@ -21,7 +21,7 @@ class MigrateCommandTest extends SimpleDbTestCase
     {
         $this->createMigrationTable();
 
-        static::assertEquals(0, $this->artisan('cms:migrate'));
+        $this->artisan('cms:migrate')->assertExitCode(0);
 
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_test_records'));
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_more_test_records'));
@@ -32,7 +32,7 @@ class MigrateCommandTest extends SimpleDbTestCase
      */
     function it_installs_the_migrations_table_if_it_does_not_exist()
     {
-        static::assertEquals(0, $this->artisan('cms:migrate'));
+        $this->artisan('cms:migrate')->assertExitCode(0);
 
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_migrations'));
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_test_records'));
@@ -50,9 +50,9 @@ class MigrateCommandTest extends SimpleDbTestCase
             'prefix'   => '',
         ]);
 
-        static::assertEquals(0, $this->artisan('cms:migrate', [
+        $this->artisan('cms:migrate', [
             '--database' => 'alternative',
-        ]));
+        ])->assertExitCode(0);
 
         static::assertFalse(Schema::connection('testbench')->hasTable('cms_migrations'));
         static::assertTrue(Schema::connection('alternative')->hasTable('cms_migrations'));
@@ -67,9 +67,9 @@ class MigrateCommandTest extends SimpleDbTestCase
     {
         $this->createMigrationTable();
 
-        static::assertEquals(0, $this->artisan('cms:migrate', [
+        $this->artisan('cms:migrate', [
             '--path' => '../../../../tests/Helpers/migrations/alt',
-        ]));
+        ])->assertExitCode(0);
 
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_test_alternative_records'));
     }
@@ -87,7 +87,7 @@ class MigrateCommandTest extends SimpleDbTestCase
 
         $this->app['config']->set('cms-core.database.driver', 'alternative');
 
-        static::assertEquals(0, $this->artisan('cms:migrate'));
+        $this->artisan('cms:migrate')->assertExitCode(0);
 
         static::assertTrue(Schema::connection('cms_testing')->hasTable('cms_migrations'));
         static::assertTrue(Schema::connection('cms_testing')->hasTable('cms_test_records'));

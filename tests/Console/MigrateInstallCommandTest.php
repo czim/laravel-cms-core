@@ -17,7 +17,7 @@ class MigrateInstallCommandTest extends SimpleDbTestCase
             CMS migration table should not exist yet'
         );
 
-        static::assertEquals(0, $this->artisan('cms:migrate:install'));
+        $this->artisan('cms:migrate:install')->assertExitCode(0);
 
         static::assertTrue(
             Schema::connection('testbench')->hasTable('cms_migrations'),

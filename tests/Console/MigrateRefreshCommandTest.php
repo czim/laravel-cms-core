@@ -35,7 +35,7 @@ class MigrateRefreshCommandTest extends SimpleDbTestCase
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_test_records'), 'Failed to fake migration');
 
         // Test
-        static::assertEquals(0, $this->artisan('cms:migrate:refresh', ['--seed' => true]));
+        $this->artisan('cms:migrate:refresh', ['--seed' => true])->assertExitCode(0);
 
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_test_records'));
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_more_test_records'));

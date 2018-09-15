@@ -42,7 +42,7 @@ class MigrateRollbackCommandTest extends SimpleDbTestCase
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_more_test_records'), 'Failed to fake migration');
 
         // Test
-        static::assertEquals(0, $this->artisan('cms:migrate:rollback'));
+        $this->artisan('cms:migrate:rollback')->assertExitCode(0);
 
         static::assertTrue(Schema::connection('testbench')->hasTable('cms_test_records'));
         static::assertFalse(Schema::connection('testbench')->hasTable('cms_more_test_records'));

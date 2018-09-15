@@ -11,6 +11,16 @@ class ShowMenuTest extends CmsBootTestCase
 {
 
     /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->withoutMockingConsoleOutput();
+    }
+
+    /**
      * @test
      */
     function it_shows_the_menu_layout_using_the_menu_repository()

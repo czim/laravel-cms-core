@@ -18,7 +18,7 @@ class ClearMenuCacheTest extends CmsBootTestCase
 
         $this->app->instance(MenuRepositoryInterface::class, $repositoryMock);
 
-        static::assertEquals(0, $this->artisan('cms:menu:clear'));
+        $this->artisan('cms:menu:clear')->assertExitCode(0);
     }
 
 }

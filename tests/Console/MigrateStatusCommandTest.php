@@ -9,6 +9,16 @@ class MigrateStatusCommandTest extends SimpleDbTestCase
 {
 
     /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->withoutMockingConsoleOutput();
+    }
+
+    /**
      * @test
      */
     function it_reports_no_migrations_if_the_migration_table_is_not_installed()
