@@ -282,12 +282,12 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
 
                 case MenuPresenceMode::DELETE:
                     $removals[] = $index;
-                    continue;
+                    break;
 
                 case MenuPresenceMode::REPLACE:
                     $this->enrichConfiguredPresenceData($presence);
                     $oldPresences[ $index] = $presence;
-                    continue;
+                    break;
 
                 // Modify is the default mode
                 default:
@@ -312,7 +312,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                     }
 
                     $oldPresences[ $index ] = $this->mergeMenuPresenceData($oldPresences[ $index ], $presence);
-                    continue;
+                    break;
             }
         }
 
