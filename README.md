@@ -22,14 +22,12 @@ Look no further. This CMS was developed with all this in mind.
 
  Laravel             | Package 
 :--------------------|:--------
- 5.3.x               | 1.3.x
- 5.4.x               | 1.4.x
- 5.5.x               | 1.5.x
- 5.6.x, 5.7.x        | 1.6.x
+ 5.3                 | 1.3
+ 5.4                 | 1.4
+ 5.5                 | 1.5
+ 5.6, 5.7            | 1.6
  
- 
-Please note that Stapler is broken since Laravel 5.4, but [may be fixed](https://github.com/CodeSleeve/laravel-stapler/issues/118). In 5.5 Stapler has [an additional issue](https://github.com/CodeSleeve/stapler/issues/186).  
-Alternatively, you may use [Laravel Paperclip](https://github.com/czim/laravel-paperclip), that offers (at least) the same functionality.
+ Note that version 1.7+ requires `czim/laravel-dataobject` 2.0+.
 
 
 ## A Framework CMS
