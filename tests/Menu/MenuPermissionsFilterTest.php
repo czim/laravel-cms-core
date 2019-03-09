@@ -45,7 +45,7 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
             ]
         ]);
 
-        $filter = new MenuPermissionsFilter();
+        $filter = new MenuPermissionsFilter;
         $index = $filter->buildPermissionsIndex($layout);
 
         static::assertInstanceOf(MenuPermissionsIndexDataInterface::class, $index);

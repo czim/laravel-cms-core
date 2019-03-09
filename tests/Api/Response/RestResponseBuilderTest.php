@@ -44,7 +44,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
     {
         $builder = new RestResponseBuilder($this->getMockCore(), $this->getMockFractalManager());
 
-        $container = new TransformContainer();
+        $container = new TransformContainer;
         $container->content     = 'testing';
         $container->transformer = null;
 
@@ -80,7 +80,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
         /** @var TransformerAbstract|\PHPUnit_Framework_MockObject_MockObject $transformerMock */
         $transformerMock = $this->getMockBuilder(TransformerAbstract::class)->getMock();
 
-        $container = new TransformContainer();
+        $container = new TransformContainer;
         $container->content     = 'testing';
         $container->transformer = $transformerMock;
 
@@ -111,7 +111,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
                 ]);
             });
 
-        $container = new TransformContainer();
+        $container = new TransformContainer;
         $container->content     = 'testing';
         $container->transformer = TestTransformer::class;
 
@@ -133,7 +133,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
         $manager = $this->getMockFractalManager();
         $builder = new RestResponseBuilder($this->getMockCore(), $manager);
 
-        $container = new TransformContainer();
+        $container = new TransformContainer;
         $container->content     = 'testing';
         $container->transformer = TestDataObject::class;
 
@@ -166,7 +166,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
         /** @var TransformerAbstract|\PHPUnit_Framework_MockObject_MockObject $transformerMock */
         $transformerMock = $this->getMockBuilder(TransformerAbstract::class)->getMock();
 
-        $container = new TransformContainer();
+        $container = new TransformContainer;
         $container->content     = ['test-a', 'test-b'];
         $container->transformer = $transformerMock;
         $container->collection  = true;
@@ -206,7 +206,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
 
         $paginator = new LengthAwarePaginator(['test-a', 'test-b'], 4, 2);
 
-        $container = new TransformContainer();
+        $container = new TransformContainer;
         $container->content     = $paginator;
         $container->transformer = $transformerMock;
         $container->collection  = true;
