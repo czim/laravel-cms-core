@@ -50,7 +50,7 @@ class MenuRepositoryTest extends CmsBootTestCase
      */
     protected $cacheEnabled = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

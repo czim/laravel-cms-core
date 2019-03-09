@@ -14,6 +14,7 @@ use League\OAuth2\Server\Exception\OAuthException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
  * Class Handler
@@ -186,8 +187,10 @@ class Handler extends ExceptionHandler
 
     /**
      * {@inheritdoc}
+     *
+     * @param HttpException|HttpExceptionInterface $e
      */
-    protected function renderHttpException(HttpException $e)
+    protected function renderHttpException(HttpExceptionInterface $e)
     {
         $status = $e->getStatusCode();
 

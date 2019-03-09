@@ -28,7 +28,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
      */
     protected $modules;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

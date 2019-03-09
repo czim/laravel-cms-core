@@ -9,7 +9,7 @@ use Illuminate\Contracts\Config\Repository;
 class LocaleRepositoryTest extends CmsBootTestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

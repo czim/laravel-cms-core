@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 class MigrateRollbackCommandTest extends SimpleDbTestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

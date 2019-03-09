@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 class MigrateResetCommandTest extends SimpleDbTestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

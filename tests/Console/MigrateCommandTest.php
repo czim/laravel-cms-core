@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class MigrateCommandTest extends SimpleDbTestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
