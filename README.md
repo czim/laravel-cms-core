@@ -26,6 +26,7 @@ Look no further. This CMS was developed with all this in mind.
  5.4                 | 1.4
  5.5                 | 1.5
  5.6, 5.7            | 1.6
+ 5.7, 5.8            | 1.7
  
  Note that version 1.7+ requires `czim/laravel-dataobject` 2.0+.
 
