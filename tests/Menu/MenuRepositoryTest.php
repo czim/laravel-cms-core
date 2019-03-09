@@ -61,16 +61,6 @@ class MenuRepositoryTest extends CmsBootTestCase
     /**
      * @test
      */
-    function it_initializes_succesfully()
-    {
-        $menu = $this->makeMenuRepository();
-
-        $menu->initialize();
-    }
-
-    /**
-     * @test
-     */
     function it_only_initializes_once()
     {
         $menu = new MenuRepository(

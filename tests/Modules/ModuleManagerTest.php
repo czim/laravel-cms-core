@@ -30,16 +30,6 @@ class ModuleManagerTest extends CmsBootTestCase
     /**
      * @test
      */
-    function it_initializes_succesfully()
-    {
-        $manager = $this->makeManager();
-
-        $manager->initialize();
-    }
-
-    /**
-     * @test
-     */
     function it_returns_whether_it_was_initialized()
     {
         $manager = $this->makeManager();
