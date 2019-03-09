@@ -36,7 +36,7 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
      * @param string $key
      * @return mixed|DataObjectInterface
      */
-    public function &getAttributeValue($key)
+    public function &getAttributeValue(string $key)
     {
         if (    ! count($this->objects)
             ||  ! array_key_exists($key, $this->objects)
@@ -93,7 +93,7 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
      * @param string $key
      * @return mixed
      */
-    protected function makeNestedDataObject($class, $data, $key)
+    protected function makeNestedDataObject(string $class, $data, string $key)
     {
         $data = ($data instanceof Arrayable) ? $data->toArray() : $data;
 
@@ -130,7 +130,7 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
      * @param string $key
      * @param mixed  $mergeValue
      */
-    protected function mergeAttribute($key, $mergeValue)
+    protected function mergeAttribute(string $key, $mergeValue)
     {
         $current = $this[$key];
 
@@ -164,7 +164,7 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
      *
      * @return $this
      */
-    public function clear()
+    public function clear(): DataObjectInterface
     {
         foreach ($this->getKeys() as $key) {
             $this->attributes[ $key ] = null;

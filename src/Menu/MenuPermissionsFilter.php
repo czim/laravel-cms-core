@@ -57,7 +57,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      */
     public function buildPermissionsIndex(MenuLayoutDataInterface $layout)
     {
-        $this->permissionsIndex = new PermissionsIndexData();
+        $this->permissionsIndex = new PermissionsIndexData;
         $this->permissions      = [];
 
         $this->compileIndexForLayoutLayer($layout->layout());
@@ -204,7 +204,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
             // the children of this node: not if all children are unconditional
             // (index is empty array) or user has all permissions.
 
-            $combinedParentKeys = $parentKeys;
+            $combinedParentKeys   = $parentKeys;
             $combinedParentKeys[] = $key;
 
             $index = $this->permissionsIndex->getForNode($combinedParentKeys);
@@ -244,7 +244,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
             return true;
         }
 
-        return !! count(
+        return (bool) count(
             array_filter($permissions, function ($permission) {
                 return array_get($this->userPermissions, $permission);
             })

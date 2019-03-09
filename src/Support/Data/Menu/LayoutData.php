@@ -75,7 +75,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
      * @param string $key
      * @return mixed|DataObjectInterface
      */
-    public function &getAttributeValue($key)
+    public function &getAttributeValue(string $key)
     {
         if ($key !== 'layout') {
             return parent::getAttributeValue($key);
@@ -95,7 +95,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
     /**
      * @param string $topKey
      */
-    protected function decorateLayoutAttribute($topKey = 'layout')
+    protected function decorateLayoutAttribute(string $topKey = 'layout')
     {
         foreach ($this->attributes[$topKey] as $key => &$value) {
 

@@ -104,7 +104,7 @@ class LayoutGroupData extends AbstractDataObject
      * @param string $key
      * @return mixed|DataObjectInterface
      */
-    public function &getAttributeValue($key)
+    public function &getAttributeValue(string $key)
     {
         if ($key !== 'children') {
             return parent::getAttributeValue($key);
@@ -126,7 +126,7 @@ class LayoutGroupData extends AbstractDataObject
     /**
      * @param string $topKey
      */
-    protected function decorateChildrenAttribute($topKey = 'children')
+    protected function decorateChildrenAttribute(string $topKey = 'children')
     {
         foreach ($this->attributes[$topKey] as $key => &$value) {
 
