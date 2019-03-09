@@ -1,7 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test;
 
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Contracts\Config\Repository;
 
 abstract class SimpleDbTestCase extends CmsBootTestCase
 {
@@ -13,9 +13,12 @@ abstract class SimpleDbTestCase extends CmsBootTestCase
     {
         parent::getEnvironmentSetUp($app);
 
+        /** @var Repository $config */
+        $config = $app['config'];
+
         // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
+        $config->set('database.default', 'testbench');
+        $config->set('database.connections.testbench', [
             'driver'   => 'sqlite',
             'database' => ':memory:',
             'prefix'   => '',

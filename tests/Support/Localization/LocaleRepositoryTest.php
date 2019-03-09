@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Test\Support\Localization;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Support\Localization\LocaleRepository;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Illuminate\Contracts\Config\Repository;
 
 class LocaleRepositoryTest extends CmsBootTestCase
 {
@@ -12,8 +13,11 @@ class LocaleRepositoryTest extends CmsBootTestCase
     {
         parent::setUp();
 
-        $this->app['config']->set('app.locale', 'nl');
-        $this->app['config']->set('app.fallback_locale', 'nl');
+        /** @var Repository $config */
+        $config = $this->app['config'];
+
+        $config->set('app.locale', 'nl');
+        $config->set('app.fallback_locale', 'nl');
     }
 
     /**

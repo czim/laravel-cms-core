@@ -3,12 +3,15 @@ namespace Czim\CmsCore\Test;
 
 use Czim\CmsCore\Providers\CmsCoreServiceProvider;
 use Czim\CmsCore\Support\Enums\Component;
+use Illuminate\Contracts\Config\Repository;
 
 abstract class CmsBootTestCase extends TestCase
 {
 
     /**
      * {@inheritdoc}
+     *
+     * @param \Illuminate\Foundation\Application $app
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -16,12 +19,15 @@ abstract class CmsBootTestCase extends TestCase
 
         $this->deleteMenuCacheFile();
 
+        /** @var Repository $config */
+        $config = $app['config'];
+
         // Load the CMS even when unit testing
-        $app['config']->set('cms-core.testing', true);
-        $app['config']->set('cms-modules.modules', []);
+        $config->set('cms-core.testing', true);
+        $config->set('cms-modules.modules', []);
 
         // Set up service providers for tests, excluding what is not part of this package
-        $app['config']->set('cms-core.providers', [
+        $config->set('cms-core.providers', [
             \Czim\CmsCore\Providers\ModuleManagerServiceProvider::class,
             \Czim\CmsCore\Providers\LogServiceProvider::class,
             \Czim\CmsCore\Providers\MiddlewareServiceProvider::class,
@@ -35,13 +41,13 @@ abstract class CmsBootTestCase extends TestCase
             \Czim\CmsCore\Providers\Api\ApiRouteServiceProvider::class,
         ]);
 
-        $app['config']->set('cms-api.providers', [
+        $config->set('cms-api.providers', [
             //\Czim\CmsAuth\Providers\Api\FluentStorageServiceProvider::class,
             //\Czim\CmsAuth\Providers\Api\OAuth2ServerServiceProvider::class,
         ]);
 
         // Mock component bindings in the config
-        $app['config']->set(
+        $config->set(
             'cms-core.bindings', [
                 Component::BOOTCHECKER => $this->getTestBootCheckerBinding(),
                 Component::CACHE       => \Czim\CmsCore\Core\Cache::class,

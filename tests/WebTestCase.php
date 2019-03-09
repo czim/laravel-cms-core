@@ -12,11 +12,4 @@ abstract class WebTestCase extends CmsBootTestCase
         return \Czim\CmsCore\Test\Helpers\Core\MockWebBootChecker::class;
     }
 
-
-
-    protected function getTestCoreConfig()
-    {
-        // todo
-    }
-
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Contracts\Foundation\Application;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -15,7 +16,10 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::getEnvironmentSetUp($app);
 
-        $app['config']->set('cms-modules.modules', []);
+        /** @var Repository $config */
+        $config = $app['config'];
+
+        $config->set('cms-modules.modules', []);
     }
 
     /**
