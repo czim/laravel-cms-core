@@ -188,9 +188,9 @@ class Handler extends ExceptionHandler
     /**
      * {@inheritdoc}
      *
-     * @param HttpException|HttpExceptionInterface $e
+     * @param HttpException $e
      */
-    protected function renderHttpException(HttpExceptionInterface $e)
+    protected function renderHttpException(HttpException $e)
     {
         $status = $e->getStatusCode();
 
