@@ -28,9 +28,13 @@ Look no further. This CMS was developed with all this in mind.
  5.6, 5.7            | 1.6
  5.7                 | 1.7
  5.8                 | 1.8
+ 6.0                 | 2.0
  
  Note that version 1.7+ requires `czim/laravel-dataobject` 2.0+.
 
+## Changelog
+
+[View the changelog](CHANGELOG.md).
 
 ## A Framework CMS
  
