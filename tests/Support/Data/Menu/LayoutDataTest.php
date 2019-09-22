@@ -100,7 +100,7 @@ class LayoutDataTest extends CmsBootTestCase
 
         $layout = $data->layout();
 
-        static::assertInternalType('array', $layout);
+        static::assertIsArray($layout);
         static::assertInstanceOf(LayoutGroupData::class, head($layout));
         static::assertEquals('test-group', head($layout)['id']);
     }

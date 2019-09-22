@@ -13,12 +13,12 @@ class SimpleTestModuleGenerator implements ModuleGeneratorInterface
      *
      * @return Collection|ModuleInterface[]
      */
-    public function modules()
+    public function modules(): Collection
     {
-        return [
+        return new Collection([
             new SimpleTestModule(),
             new SimpleAssociatedTestModule(),
-        ];
+        ]);
     }
 
 }

@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Core;
 
 use Czim\CmsCore\Contracts\Core\CoreInterface;
@@ -29,10 +32,9 @@ class BasicNotifierTest extends CmsBootTestCase
 
         $flashed = $notifier->getFlashed();
 
-        static::assertInternalType('array', $flashed);
+        static::assertIsArray($flashed);
         static::assertCount(1, $flashed);
-        static::assertArraySubset(['level' => 'info', 'message' => 'testing message'], head($flashed));
-        static::assertArraySubset(['level' => 'info', 'message' => 'testing message'], head($flashed));
+        static::assertEquals(['level' => 'info', 'message' => 'testing message'], head($flashed));
     }
 
     /**

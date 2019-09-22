@@ -9,7 +9,7 @@ abstract class SimpleDbTestCase extends CmsBootTestCase
     /**
      * {@inheritdoc}
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
@@ -28,7 +28,7 @@ abstract class SimpleDbTestCase extends CmsBootTestCase
     /**
      * Creates and verifies the cms migrations table.
      */
-    protected function createMigrationTable()
+    protected function createMigrationTable(): void
     {
         $result = $this->artisan('cms:migrate:install');
 
@@ -42,7 +42,7 @@ abstract class SimpleDbTestCase extends CmsBootTestCase
     /**
      * Sets the migrations cms path to a directory with test migrations.
      */
-    protected function setHelperCmsMigrationPath()
+    protected function setHelperCmsMigrationPath(): void
     {
         $this->app['config']->set(
             'cms-core.database.migrations.path',

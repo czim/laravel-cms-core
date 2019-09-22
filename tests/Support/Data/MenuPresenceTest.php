@@ -4,8 +4,8 @@ namespace Czim\CmsCore\Test\Support\Data;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceMode;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Support\Collection;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class MenuPresenceTest extends CmsBootTestCase
 {
@@ -92,11 +92,11 @@ class MenuPresenceTest extends CmsBootTestCase
      */
     function it_returns_label_translation_if_available()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
+        $transMock = $this->getMockBuilder(Translator::class)
+            ->setMethods(['has', 'get', 'choice', 'getLocale', 'setLocale'])
             ->getMock();
 
-        $transMock->expects(static::once())->method('trans')->willReturn('testing_translated');
+        $transMock->expects(static::once())->method('get')->willReturn('testing_translated');
 
         $this->app->instance('translator', $transMock);
 
@@ -112,11 +112,11 @@ class MenuPresenceTest extends CmsBootTestCase
      */
     function it_returns_untranslated_label_if_translation_not_available()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
+        $transMock = $this->getMockBuilder(Translator::class)
+            ->setMethods(['has', 'get', 'choice', 'getLocale', 'setLocale'])
             ->getMock();
 
-        $transMock->expects(static::once())->method('trans')->willReturn('translation_key');
+        $transMock->expects(static::once())->method('get')->willReturn('translation_key');
 
         $this->app->instance('translator', $transMock);
 

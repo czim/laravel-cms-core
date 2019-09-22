@@ -18,7 +18,7 @@ class AnotherTestDataObject extends AbstractDataObject
      *
      * @param AnotherTestDataObject $new
      */
-    public function merge(AnotherTestDataObject $new)
+    public function merge(AnotherTestDataObject $new): void
     {
         $this->key   = $new->key   ?: $this->key;
         $this->value = $new->value ?: $this->value;

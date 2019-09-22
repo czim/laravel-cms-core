@@ -1,6 +1,10 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Czim\CmsAuthApi\Http\Middleware\OAuthMiddleware;
+use Czim\CmsAuthApi\Http\Middleware\OAuthUserOwnerMiddleware;
+use Czim\CmsCore\Test\Helpers\Core\MockApiBootChecker;
+use Czim\CmsCore\Test\Helpers\Http\NullMiddleware;
 use Illuminate\Foundation\Application;
 
 abstract class ApiTestCase extends WebTestCase
@@ -9,22 +13,18 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
+     * @param Application $app
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
         $this->bindNullMiddleware($app);
     }
 
-    /**
-     * @return string
-     */
-    protected function getTestBootCheckerBinding()
+    protected function getTestBootCheckerBinding(): string
     {
-        return \Czim\CmsCore\Test\Helpers\Core\MockApiBootChecker::class;
+        return MockApiBootChecker::class;
     }
 
     /**
@@ -32,16 +32,16 @@ abstract class ApiTestCase extends WebTestCase
      *
      * @param Application $app
      */
-    protected function bindNullMiddleware(Application $app)
+    protected function bindNullMiddleware(Application $app): void
     {
         $app->bind(
-            \Czim\CmsAuthApi\Http\Middleware\OAuthMiddleware::class,
-            \Czim\CmsCore\Test\Helpers\Http\NullMiddleware::class
+            OAuthMiddleware::class,
+            NullMiddleware::class
         );
 
         $app->bind(
-            \Czim\CmsAuthApi\Http\Middleware\OAuthUserOwnerMiddleware::class,
-            \Czim\CmsCore\Test\Helpers\Http\NullMiddleware::class
+            OAuthUserOwnerMiddleware::class,
+            NullMiddleware::class
         );
     }
 

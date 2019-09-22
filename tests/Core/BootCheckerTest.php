@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Core; // Uses package namespace to allow mocking global functions
 
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
@@ -441,14 +444,14 @@ class BootCheckerTest extends TestCase
 
     /**
      * @param Container|\Mockery\MockInterface|null $mock
-     * @return \Closure
+     * @return callable
      */
     protected function getContainerMockCallback($mock = null)
     {
         $mock = $mock ?: $this->getMockContainer();
 
         return function ($make, $parameters = []) use ($mock) {
-            if (is_null($make)) {
+            if ($make === null) {
                 return $mock;
             }
 
@@ -529,7 +532,7 @@ class BootCheckerTest extends TestCase
 function app($make = null, $parameters = [])
 {
     if ( ! BootCheckerTest::$functions) {
-        if (is_null($make)) {
+        if ($make === null) {
             return Container::getInstance();
         }
 

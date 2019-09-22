@@ -15,7 +15,7 @@ class SimpleTestModule implements ModuleInterface
      *
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return 'test-module';
     }
@@ -25,7 +25,7 @@ class SimpleTestModule implements ModuleInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Test Module';
     }
@@ -35,7 +35,7 @@ class SimpleTestModule implements ModuleInterface
      *
      * @return string|null
      */
-    public function getAssociatedClass()
+    public function getAssociatedClass(): ?string
     {
         return null;
     }
@@ -45,7 +45,7 @@ class SimpleTestModule implements ModuleInterface
      *
      * @return string[]
      */
-    public function getServiceProviders()
+    public function getServiceProviders(): array
     {
         return [];
     }
@@ -56,7 +56,7 @@ class SimpleTestModule implements ModuleInterface
      *
      * @param Router $router
      */
-    public function mapWebRoutes(Router $router)
+    public function mapWebRoutes(Router $router): void
     {
 
     }
@@ -67,7 +67,7 @@ class SimpleTestModule implements ModuleInterface
      *
      * @param Router $router
      */
-    public function mapApiRoutes(Router $router)
+    public function mapApiRoutes(Router $router): void
     {
 
     }
@@ -93,9 +93,9 @@ class SimpleTestModule implements ModuleInterface
     /**
      * Returns release or version number of module.
      *
-     * @return string|null
+     * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return '1.0.0';
     }

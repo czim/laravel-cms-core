@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Menu;
 
 use Czim\CmsCore\Contracts\Core\CoreInterface;
@@ -175,7 +178,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
         static::assertCount(1, $data->standard());
         static::assertTrue($data->standard()->has('test-a'));
-        static::assertInternalType('array', $data->standard()->get('test-a'));
+        static::assertIsArray($data->standard()->get('test-a'));
         static::assertCount(1, $data->standard()->get('test-a'));
         static::assertInstanceOf(MenuPresenceInterface::class, head($data->standard()->get('test-a')));
         static::assertEquals('test-a', head($data->standard()->get('test-a'))->id());
@@ -200,7 +203,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
         static::assertCount(1, $data->standard());
         static::assertTrue($data->standard()->has('test'));
-        static::assertInternalType('array', $data->standard()->get('test'));
+        static::assertIsArray($data->standard()->get('test'));
         static::assertCount(1, $data->standard()->get('test'));
         static::assertInstanceOf(MenuPresenceInterface::class, head($data->standard()->get('test')));
         static::assertEquals('test', head($data->standard()->get('test'))->id());
@@ -232,7 +235,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
         static::assertCount(1, $data->standard());
         static::assertTrue($data->standard()->has('test'));
-        static::assertInternalType('array', $data->standard()->get('test'));
+        static::assertIsArray($data->standard()->get('test'));
         static::assertCount(2, $data->standard()->get('test'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
@@ -271,7 +274,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
         static::assertCount(1, $data->standard());
         static::assertTrue($data->standard()->has('test'));
-        static::assertInternalType('array', $data->standard()->get('test'));
+        static::assertIsArray($data->standard()->get('test'));
         static::assertCount(1, $data->standard()->get('test'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
@@ -310,7 +313,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
         static::assertCount(1, $data->standard());
         static::assertTrue($data->standard()->has('test'));
-        static::assertInternalType('array', $data->standard()->get('test'));
+        static::assertIsArray($data->standard()->get('test'));
         static::assertCount(1, $data->standard()->get('test'));
 
         static::assertInstanceOf(MenuPresenceInterface::class, $data->standard()->get('test')[0]);
@@ -323,10 +326,11 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_incorrect_presence_data_is_defined_for_a_module()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence([
                 'invalid',
@@ -343,10 +347,11 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_incorrect_presence_data_is_configured_for_a_module()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->modules = collect([
             'test-a' => $this->getMockModuleWithPresenceInstance(false),
         ]);
@@ -360,11 +365,12 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessageRegExp #must be string or have a non-numeric key#i
      */
     function it_throws_an_exception_if_no_key_for_a_module_could_be_determined()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessageRegExp('#must be string or have a non-numeric key#i');
+
         $this->modules = collect([
             'test-a' => $this->getMockModuleWithPresenceInstance(false),
         ]);
@@ -378,10 +384,11 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_incorrect_presence_data_is_configured_for_a_module_in_a_nesting_array()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->modules = collect([
             'test-a' => $this->getMockModuleWithPresenceInstance(false),
         ]);

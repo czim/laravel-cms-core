@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Api;
 
 use Czim\CmsCore\Test\ApiTestCase;

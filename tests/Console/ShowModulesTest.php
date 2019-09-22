@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Console;
 
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
@@ -70,7 +73,7 @@ class ShowModulesTest extends CmsBootTestCase
         static::assertRegexp('#test-a\s+name\s*:\s*Test Module\s+version\s*:\s*1\.0\.0#i', $output);
         static::assertRegexp(
             '#test-b\s+name\s*:\s*Test B\s+version\s*:\s*1\.0\.0\s+'
-            . 'associated class\s*:\s*' . preg_quote(static::class) . '#i',
+            . 'associated class\s*:\s*' . preg_quote(static::class, '#') . '#i',
             $output
         );
     }
@@ -97,7 +100,7 @@ class ShowModulesTest extends CmsBootTestCase
         static::assertNotRegexp('#test-c#i', $output);
         static::assertRegexp(
             '#test-b\s+name\s*:\s*Test B\s+version\s*:\s*1\.0\.0\s+'
-            . 'associated class\s*:\s*' . preg_quote(static::class) . '#i',
+            . 'associated class\s*:\s*' . preg_quote(static::class, '#') . '#i',
             $output
         );
     }

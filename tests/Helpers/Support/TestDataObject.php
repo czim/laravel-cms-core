@@ -27,7 +27,7 @@ class TestDataObject extends AbstractDataObject
      * @param string $attribute
      * @param mixed  $newValue
      */
-    public function testMerge($attribute, $newValue)
+    public function testMerge(string $attribute, $newValue): void
     {
         $this->mergeAttribute($attribute, $newValue);
     }

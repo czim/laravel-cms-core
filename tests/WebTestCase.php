@@ -1,15 +1,14 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Czim\CmsCore\Test\Helpers\Core\MockWebBootChecker;
+
 abstract class WebTestCase extends CmsBootTestCase
 {
 
-    /**
-     * @return string
-     */
-    protected function getTestBootCheckerBinding()
+    protected function getTestBootCheckerBinding(): string
     {
-        return \Czim\CmsCore\Test\Helpers\Core\MockWebBootChecker::class;
+        return MockWebBootChecker::class;
     }
 
 }

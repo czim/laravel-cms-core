@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Modules;
 
 use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
@@ -151,10 +154,11 @@ class ModuleManagerTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
     function it_throws_an_exception_if_the_same_module_key_is_encountered_more_than_once()
     {
+        $this->expectException(\Exception::class);
+
         $manager = $this->makeManager();
 
         $manager->initialize([
@@ -250,10 +254,11 @@ class ModuleManagerTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     function it_throws_an_exception_when_trying_to_load_a_nonexistant_class()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $manager = $this->makeManager();
 
         $manager->initialize([
@@ -263,10 +268,11 @@ class ModuleManagerTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     function it_throws_an_exception_when_trying_to_load_a_noninstantiable_class()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $manager = $this->makeManager();
 
         $manager->initialize([
@@ -276,10 +282,11 @@ class ModuleManagerTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     function it_throws_an_exception_when_trying_to_load_a_class_with_uninstantiable_dependencies()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $manager = $this->makeManager();
 
         $manager->initialize([
@@ -289,10 +296,11 @@ class ModuleManagerTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     function it_throws_an_exception_when_trying_to_load_an_invalid_module_class()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $manager = $this->makeManager();
 
         $manager->initialize([

@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Auth;
 
 use Czim\CmsCore\Auth\AclRepository;
@@ -10,6 +13,7 @@ use Czim\CmsCore\Support\Data\AclPresence;
 use Czim\CmsCore\Support\Enums\AclPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
+use UnexpectedValueException;
 
 class AclRepositoryTest extends CmsBootTestCase
 {
@@ -170,8 +174,8 @@ class AclRepositoryTest extends CmsBootTestCase
 
         $permissions = $acl->getAllPermissions();
 
-        static::assertInternalType('array', $permissions);
-        static::assertCount(5, $permissions, "Combined permissions should be complete without duplicates");
+        static::assertIsArray($permissions);
+        static::assertCount(5, $permissions, 'Combined permissions should be complete without duplicates');
     }
 
     /**
@@ -188,7 +192,7 @@ class AclRepositoryTest extends CmsBootTestCase
 
         $permissions = $acl->getModulePermissions('test-a');
 
-        static::assertInternalType('array', $permissions);
+        static::assertIsArray($permissions);
         static::assertCount(3, $permissions);
     }
 
@@ -201,7 +205,7 @@ class AclRepositoryTest extends CmsBootTestCase
 
         $permissions = $acl->getAllPermissions();
 
-        static::assertInternalType('array', $permissions);
+        static::assertIsArray($permissions);
         static::assertCount(0, $permissions);
     }
 
@@ -214,16 +218,17 @@ class AclRepositoryTest extends CmsBootTestCase
 
         $permissions = $acl->getModulePermissions('does-not-exist');
 
-        static::assertInternalType('array', $permissions);
+        static::assertIsArray($permissions);
         static::assertCount(0, $permissions);
     }
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_invalid_nested_presence_data_is_set()
     {
+        $this->expectException(UnexpectedValueException::class);
+
         $acl = new AclRepository($this->getMockCore(
             new Collection([
                 'test' => $this->getMockModuleWithCustomPresence([ false ]),

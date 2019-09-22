@@ -15,7 +15,7 @@ class SimpleTestModuleWithSameServiceProvider implements ModuleInterface
      *
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return 'test-module-with-the-same-service-provider';
     }
@@ -25,7 +25,7 @@ class SimpleTestModuleWithSameServiceProvider implements ModuleInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Test Module With Service Providers (2)';
     }
@@ -35,7 +35,7 @@ class SimpleTestModuleWithSameServiceProvider implements ModuleInterface
      *
      * @return string|null
      */
-    public function getAssociatedClass()
+    public function getAssociatedClass(): ?string
     {
         return null;
     }
@@ -45,7 +45,7 @@ class SimpleTestModuleWithSameServiceProvider implements ModuleInterface
      *
      * @return string[]
      */
-    public function getServiceProviders()
+    public function getServiceProviders(): array
     {
         return [
             'ServiceProvider\\That\\Does\\Not\\Exist',
@@ -58,7 +58,7 @@ class SimpleTestModuleWithSameServiceProvider implements ModuleInterface
      *
      * @param Router $router
      */
-    public function mapWebRoutes(Router $router)
+    public function mapWebRoutes(Router $router): void
     {
     }
 
@@ -68,7 +68,7 @@ class SimpleTestModuleWithSameServiceProvider implements ModuleInterface
      *
      * @param Router $router
      */
-    public function mapApiRoutes(Router $router)
+    public function mapApiRoutes(Router $router): void
     {
     }
 
@@ -93,9 +93,9 @@ class SimpleTestModuleWithSameServiceProvider implements ModuleInterface
     /**
      * Returns release or version number of module.
      *
-     * @return string|null
+     * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return '1.0.0';
     }

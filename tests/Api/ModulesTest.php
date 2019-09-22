@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Api;
 
 use Czim\CmsCore\Test\ApiTestCase;
@@ -13,7 +16,7 @@ class ModulesTest extends ApiTestCase
     /**
      * {@inheritdoc}
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 

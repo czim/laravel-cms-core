@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Api;
 
 use Czim\CmsCore\Api\Response\RestResponseBuilder;
@@ -125,11 +128,12 @@ class RestResponseBuilderTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessageRegExp #Czim\\CmsCore\\Test\\Helpers\\Support\\TestDataObject#
      */
     function it_throws_an_exception_if_transformer_class_is_invalid()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessageRegExp('#Czim\\\\CmsCore\\\\Test\\\\Helpers\\\\Support\\\\TestDataObject#');
+
         $manager = $this->getMockFractalManager();
         $builder = new RestResponseBuilder($this->getMockCore(), $manager);
 
@@ -418,16 +422,16 @@ class RestResponseBuilderTest extends CmsBootTestCase
 
         static::assertArrayHasKey('file', $data);
         static::assertArrayHasKey('line', $data);
-        static::assertInternalType('integer', $data['line']);
+        static::assertIsInt($data['line']);
         static::assertArrayHasKey('trace', $data);
-        static::assertInternalType('array', $data['trace']);
+        static::assertIsArray($data['trace']);
     }
 
 
     // ------------------------------------------------------------------------------
     //      Helpers
     // ------------------------------------------------------------------------------
-    
+
     /**
      * @param int    $status
      * @param string $message

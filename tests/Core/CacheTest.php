@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Core;
 
 use Czim\CmsCore\Contracts\Core\CacheInterface;
@@ -62,7 +65,7 @@ class CacheTest extends CmsBootTestCase
                 ->willReturn(true);
         });
 
-        static::assertSame(true, $this->makeCache()->has('test-key'));
+        static::assertTrue($this->makeCache()->has('test-key'));
     }
 
     /**
@@ -156,7 +159,7 @@ class CacheTest extends CmsBootTestCase
                 ->willReturn(true);
         });
 
-        static::assertSame(true, $this->makeCache()->add('test-key', 'test-value', 10));
+        static::assertTrue($this->makeCache()->add('test-key', 'test-value', 10));
     }
 
     /**
@@ -223,7 +226,7 @@ class CacheTest extends CmsBootTestCase
                 ->willReturn(true);
         });
 
-        static::assertSame(true, $this->makeCache()->forget('test-key'));
+        static::assertTrue($this->makeCache()->forget('test-key'));
     }
 
 
@@ -250,9 +253,9 @@ class CacheTest extends CmsBootTestCase
                 ->willReturnCallback(function ($key, $default) use ($store, $tags) {
                     switch ($key) {
                         case 'cache.store':
-                            return null !== $store ? $store : $default;
+                            return $store ?? $default;
                         case 'cache.tags':
-                            return null !== $tags ? $tags : $default;
+                            return $tags ?? $default;
 
                     }
                     return $default;

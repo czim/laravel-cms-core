@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Providers;
 
 use Czim\CmsCore\Contracts\Core\CoreInterface;
@@ -18,7 +21,7 @@ class BladeDirectivesTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
@@ -27,7 +30,7 @@ class BladeDirectivesTest extends TestCase
         /** @var CoreInterface|Mockery\Mock $core */
         $core = Mockery::mock(CoreInterface::class);
         $core->shouldReceive('assets')->andReturn($this->assetManager);
-        $core->shouldReceive('config')->andReturnUsing(function () { return func_get_args(2); });
+        $core->shouldReceive('config')->andReturnUsing(function () { return func_get_args(); });
 
         $app->instance(CoreInterface::class, $core);
         $app->instance(AssetManagerInterface::class, $this->assetManager);

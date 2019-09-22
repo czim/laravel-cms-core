@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Test;
 
+use Czim\CmsCore\Core\BootChecker;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Contracts\Foundation\Application;
@@ -12,7 +13,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
@@ -22,12 +23,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $config->set('cms-modules.modules', []);
     }
 
-    /**
-     * @return string
-     */
-    protected function getTestBootCheckerBinding()
+    protected function getTestBootCheckerBinding(): string
     {
-        return \Czim\CmsCore\Core\BootChecker::class;
+        return BootChecker::class;
     }
 
     /**
@@ -36,7 +34,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      * @param Application $app
      * @return $this
      */
-    protected function mockBoundCoreExternalComponents(Application $app)
+    protected function mockBoundCoreExternalComponents(Application $app): TestCase
     {
         $app->bind('mock-cms-auth', function () {
 
@@ -64,7 +62,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      *
      * @return string
      */
-    protected function getArtisanOutput()
+    protected function getArtisanOutput(): string
     {
         return $this->app[ConsoleKernelContract::class]->output();
     }

@@ -1,12 +1,26 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Core;
 
+use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
+use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
+use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
+use Czim\CmsCore\Contracts\Core\CacheInterface;
+use Czim\CmsCore\Contracts\Core\NotifierInterface;
+use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
+use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
+use Czim\CmsCore\Contracts\Support\View\AssetManagerInterface;
 use Czim\CmsCore\Core\Core;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Exception;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Session\SessionManager;
+use Mockery;
 use Psr\Log\LoggerInterface;
 
 class CoreTest extends CmsBootTestCase
@@ -27,11 +41,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_bootchecker_component()
     {
-        $this->app->instance(Component::BOOTCHECKER, 'core-test-string');
+        $instance = Mockery::mock(BootCheckerInterface::class);
+        $this->app->instance(Component::BOOTCHECKER, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->bootChecker());
+        static::assertSame($instance, $core->bootChecker());
     }
 
     /**
@@ -39,11 +54,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_auth_component()
     {
-        $this->app->instance(Component::AUTH, 'core-test-string');
+        $instance = Mockery::mock(AuthenticatorInterface::class);
+        $this->app->instance(Component::AUTH, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->auth());
+        static::assertSame($instance, $core->auth());
     }
 
     /**
@@ -51,11 +67,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_api_component()
     {
-        $this->app->instance(Component::API, 'core-test-string');
+        $instance = Mockery::mock(ApiCoreInterface::class);
+        $this->app->instance(Component::API, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->api());
+        static::assertSame($instance, $core->api());
     }
 
     /**
@@ -63,11 +80,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_cache_component()
     {
-        $this->app->instance(Component::CACHE, 'core-test-string');
+        $instance = Mockery::mock(CacheInterface::class);
+        $this->app->instance(Component::CACHE, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->cache());
+        static::assertSame($instance, $core->cache());
     }
 
     /**
@@ -75,11 +93,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_module_manager_component()
     {
-        $this->app->instance(Component::MODULES, 'core-test-string');
+        $instance = Mockery::mock(ModuleManagerInterface::class);
+        $this->app->instance(Component::MODULES, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->modules());
+        static::assertSame($instance, $core->modules());
     }
 
     /**
@@ -87,11 +106,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_menu_component()
     {
-        $this->app->instance(Component::MENU, 'core-test-string');
+        $instance = Mockery::mock(MenuRepositoryInterface::class);
+        $this->app->instance(Component::MENU, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->menu());
+        static::assertSame($instance, $core->menu());
     }
 
     /**
@@ -99,11 +119,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_assets_component()
     {
-        $this->app->instance(Component::ASSETS, 'core-test-string');
+        $instance = Mockery::mock(AssetManagerInterface::class);
+        $this->app->instance(Component::ASSETS, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->assets());
+        static::assertSame($instance, $core->assets());
     }
 
     /**
@@ -111,11 +132,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_acl_component()
     {
-        $this->app->instance(Component::ACL, 'core-test-string');
+        $instance = Mockery::mock(AclRepositoryInterface::class);
+        $this->app->instance(Component::ACL, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->acl());
+        static::assertSame($instance, $core->acl());
     }
 
     /**
@@ -123,11 +145,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_notifier_component()
     {
-        $this->app->instance(Component::NOTIFIER, 'core-test-string');
+        $instance = Mockery::mock(NotifierInterface::class);
+        $this->app->instance(Component::NOTIFIER, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->notifier());
+        static::assertSame($instance, $core->notifier());
     }
 
     /**
@@ -238,11 +261,12 @@ class CoreTest extends CmsBootTestCase
      */
     function it_returns_the_bound_logger_component_if_no_parameters_are_given()
     {
-        $this->app->instance(Component::LOG, 'core-test-string');
+        $instance = Mockery::mock(LoggerInterface::class);
+        $this->app->instance(Component::LOG, $instance);
 
         $core = $this->makeCore();
 
-        static::assertEquals('core-test-string', $core->log());
+        static::assertSame($instance, $core->log());
     }
 
     /**
@@ -318,7 +342,7 @@ class CoreTest extends CmsBootTestCase
      */
     function it_logs_exceptions_with_level_error()
     {
-        $exception = new \Exception('test');
+        $exception = new Exception('test');
 
         $loggerMock = $this->makeLoggerMock('error', $exception, []);
         $this->app->instance(Component::LOG, $loggerMock);

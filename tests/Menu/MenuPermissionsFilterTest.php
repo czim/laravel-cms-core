@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Menu;
 
 use Czim\CmsCore\Contracts\Auth\UserInterface;
@@ -171,10 +174,11 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
     function it_throws_an_exception_if_no_permissions_index_is_set()
     {
+        $this->expectException(\Exception::class);
+
         /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
         $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
 
@@ -230,11 +234,11 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         static::assertArrayHasKey('group-a', $array, 'Topmost layer should have "group-a" key');
 
         static::assertCount(5, $array['group-a']->children(), 'Group-a layer should have 3 entries');
-        static::assertArraySubset(
-            [1, 2, 'group-b','group-c', 'group-d'], // 0 is filtered out
-            array_keys($array['group-a']->children()),
-            'Group-a layer should have keys: 1, 2, group-b, group-c, group-d'
-        );
+        static::assertArrayHasKey(1, $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey(2, $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey('group-b', $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey('group-c', $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey('group-d', $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
 
         // Group b
         static::assertCount(
@@ -274,7 +278,7 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         $user = $this->getMockUser();
 
         $user->method('can')
-            ->willReturnCallback(function ($permission) {
+            ->willReturnCallback(static function ($permission) {
                 switch ($permission) {
                     case 'permission-z':
                     case 'permission-y':
@@ -321,10 +325,11 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_incorrect_value_is_given_for_user_parameter()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
         $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
 
@@ -473,12 +478,12 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         static::assertCount(1, $array, 'Topmost layer should have 1 entry');
         static::assertArrayHasKey('group-a', $array, 'Topmost layer should have "group-a" key');
 
-        static::assertCount(5, $array['group-a']->children(), 'Group-a layer should have 3 entries');
-        static::assertArraySubset(
-            [1, 2, 'group-b','group-c', 'group-d'], // 0 is filtered out
-            array_keys($array['group-a']->children()),
-            'Group-a layer should have keys: 1, 2, group-b, group-c, group-d'
-        );
+        static::assertCount(5, $array['group-a']->children(), 'Group-a layer should have 5 entries');
+        static::assertArrayHasKey(1, $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey(2, $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey('group-b', $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey('group-c', $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
+        static::assertArrayHasKey('group-d', $array['group-a']->children(), 'Group-a layer should have keys: 1, 2, group-b, group-c, group-d');
 
         // Group b
         static::assertCount(

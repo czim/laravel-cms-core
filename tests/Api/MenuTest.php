@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Api;
 
 use Czim\CmsCore\Support\Enums\MenuPresenceMode;
@@ -14,7 +17,7 @@ class MenuTest extends ApiTestCase
     /**
      * {@inheritdoc}
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
@@ -34,42 +37,35 @@ class MenuTest extends ApiTestCase
 
 
         static::assertArrayHasKey('layout', $response);
+
         static::assertCount(1, $response['layout']);
-        static::assertArraySubset([
-            'id'          => 'group-a',
-            'type'        => 'group',
-            'label'       => 'display name',
-            'icon'        => 'home',
-            'action'      => null,
-            'parameters'  => [],
-            'permissions' => [],
-        ], $response['layout'][0]);
+        static::assertEquals('group-a', $response['layout'][0]['id']);
+        static::assertEquals('group', $response['layout'][0]['type']);
+        static::assertEquals('display name', $response['layout'][0]['label']);
+        static::assertEquals('home', $response['layout'][0]['icon']);
+        static::assertNull($response['layout'][0]['action']);
+        static::assertEquals([], $response['layout'][0]['parameters']);
+        static::assertEquals([], $response['layout'][0]['permissions']);
 
         static::assertCount(2, $response['layout'][0]['children']);
-        static::assertArraySubset([
-            'id'          => 'test-1',
-            'type'        => 'action',
-            'label'       => 'Testing A',
-            'icon'        => null,
-            'action'      => 'cms::test.route.a',
-        ], $response['layout'][0]['children'][0]);
+        static::assertEquals('test-1', $response['layout'][0]['children'][0]['id']);
+        static::assertEquals('action', $response['layout'][0]['children'][0]['type']);
+        static::assertEquals('Testing A', $response['layout'][0]['children'][0]['label']);
+        static::assertNull($response['layout'][0]['children'][0]['icon']);
+        static::assertEquals('cms::test.route.a', $response['layout'][0]['children'][0]['action']);
 
-        static::assertArraySubset([
-            'id'          => 'group-b',
-            'type'        => 'group',
-            'label'       => 'display name nested',
-            'icon'        => null,
-            'action'      => null,
-        ], $response['layout'][0]['children'][1]);
+        static::assertEquals('group-b', $response['layout'][0]['children'][1]['id']);
+        static::assertEquals('group', $response['layout'][0]['children'][1]['type']);
+        static::assertEquals('display name nested', $response['layout'][0]['children'][1]['label']);
+        static::assertNull($response['layout'][0]['children'][1]['icon']);
+        static::assertNull($response['layout'][0]['children'][1]['action']);
 
         static::assertCount(1, $response['layout'][0]['children'][1]['children']);
-        static::assertArraySubset([
-            'id'     => 'test-2',
-            'type'   => 'link',
-            'icon'   => 'shopping-cart',
-            'label'  => 'Testing B',
-            'action' => 'https://www.google.com',
-        ], $response['layout'][0]['children'][1]['children'][0]);
+        static::assertEquals('test-2', $response['layout'][0]['children'][1]['children'][0]['id']);
+        static::assertEquals('link', $response['layout'][0]['children'][1]['children'][0]['type']);
+        static::assertEquals('Testing B', $response['layout'][0]['children'][1]['children'][0]['label']);
+        static::assertEquals('shopping-cart', $response['layout'][0]['children'][1]['children'][0]['icon']);
+        static::assertEquals('https://www.google.com', $response['layout'][0]['children'][1]['children'][0]['action']);
     }
 
     /**

@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Api;
 
 use Czim\CmsCore\Api\Response\TransformContainer;
@@ -18,7 +21,7 @@ class TransformContainerTest extends CmsBootTestCase
             'collection' => null,
         ]);
 
-        static::assertSame(true, $container->isCollection());
+        static::assertTrue($container->isCollection());
     }
 
 }

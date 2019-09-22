@@ -4,10 +4,7 @@ namespace Czim\CmsCore\Test\Helpers\Exceptions;
 class WithGetStatusCodeException extends \Exception
 {
 
-    /**
-     * @return int
-     */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return 418;
     }

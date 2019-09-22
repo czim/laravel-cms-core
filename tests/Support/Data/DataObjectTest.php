@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Support\Data;
 
 use Czim\CmsCore\Test\Helpers\Support\AnotherTestDataObject;
@@ -18,7 +21,7 @@ class DataObjectTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         // don't boot CMS
     }
@@ -117,10 +120,11 @@ class DataObjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_an_objects_definition_value_is_not_an_array_or_arrayable()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $data = new TestDataObject([
             'test' => 'test',
         ]);
@@ -148,7 +152,7 @@ class DataObjectTest extends TestCase
 
         $value = $data->others;
 
-        static::assertInternalType('array', $value);
+        static::assertIsArray($value);
         static::assertInstanceOf(AnotherTestDataObject::class, $value[0]);
         static::assertInstanceOf(AnotherTestDataObject::class, $value[1]);
         static::assertEquals('test', $value[0]->key);
@@ -173,7 +177,7 @@ class DataObjectTest extends TestCase
 
         $value = $data->others;
 
-        static::assertInternalType('array', $value);
+        static::assertIsArray($value);
         static::assertInstanceOf(AnotherTestDataObject::class, $value[0]);
         static::assertEquals('test', $value[0]->key);
         static::assertEquals('a', $value[0]->value);
@@ -196,7 +200,7 @@ class DataObjectTest extends TestCase
 
         $value = $data->others;
 
-        static::assertInternalType('array', $value);
+        static::assertIsArray($value);
         static::assertNull($data->others[1]);
     }
 
@@ -216,7 +220,7 @@ class DataObjectTest extends TestCase
 
         $value = $data['others'];
 
-        static::assertInternalType('array', $value);
+        static::assertIsArray($value);
         static::assertInstanceOf(AnotherTestDataObject::class, $value[0]);
         static::assertEquals('test', $value[0]->key);
         static::assertEquals('a', $value[0]->value);
@@ -224,10 +228,11 @@ class DataObjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_an_objects_definition_value_is_not_an_array_for_array_of_dataobjects()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $data = new TestDataObject([
             'others' => [
                 (object) ['test' => 'fail'],

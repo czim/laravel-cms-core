@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Test;
 use Czim\CmsCore\Providers\CmsCoreServiceProvider;
 use Czim\CmsCore\Support\Enums\Component;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Foundation\Application;
 
 abstract class CmsBootTestCase extends TestCase
 {
@@ -11,9 +12,9 @@ abstract class CmsBootTestCase extends TestCase
     /**
      * {@inheritdoc}
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
@@ -64,10 +65,7 @@ abstract class CmsBootTestCase extends TestCase
         $app->register(CmsCoreServiceProvider::class);
     }
 
-    /**
-     * @return string
-     */
-    protected function getMenuCachePath()
+    protected function getMenuCachePath(): string
     {
         return realpath(__DIR__ .'/../vendor/orchestra/testbench-core/laravel/bootstrap/cache') . '/cms_menu.php';
     }
@@ -75,7 +73,7 @@ abstract class CmsBootTestCase extends TestCase
     /**
      * Deletes the menu cache file if it exists.
      */
-    protected function deleteMenuCacheFile()
+    protected function deleteMenuCacheFile(): void
     {
         if (file_exists($this->getMenuCachePath())) {
             unlink($this->getMenuCachePath());

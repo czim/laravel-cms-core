@@ -1,12 +1,17 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Support;
 
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Core\NotifierInterface;
+use Czim\CmsCore\Support\Enums\CmsMiddleware;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Symfony\Component\Translation\TranslatorInterface;
+use Illuminate\Contracts\Translation\Translator;
+use Mockery;
 
 /**
  * Class HelpersTest
@@ -25,7 +30,7 @@ class HelpersTest extends CmsBootTestCase
 
         static::assertEquals('testing', cms());
     }
-    
+
     /**
      * @test
      */
@@ -78,7 +83,7 @@ class HelpersTest extends CmsBootTestCase
     function its_cms_mw_permission_function_returns_a_permission_prefixed_middleware_string()
     {
         static::assertEquals(
-            \Czim\CmsCore\Support\Enums\CmsMiddleware::PERMISSION  . ':testing-permission',
+            CmsMiddleware::PERMISSION  . ':testing-permission',
             cms_mw_permission('testing-permission')
         );
     }
@@ -111,15 +116,10 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_trans_function_returns_prefixed_translation()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
-            ->getMock();
-
-        $transMock->expects(static::once())
-            ->method('trans')
+        $transMock = Mockery::mock(Translator::class);
+        $transMock->shouldReceive('has')->andReturn(true);
+        $transMock->shouldReceive('get')->once()
             ->with('cms::test-id', ['testparam' => 'value'], 'test-messages', 'en');
-
-        $transMock->method('has')->willReturn(true);
 
         $this->app->instance('translator', $transMock);
 
@@ -131,15 +131,10 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_trans_function_falls_back_to_app_translation_if_cms_translation_does_not_exist()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
-            ->getMock();
-
-        $transMock->expects(static::once())
-            ->method('trans')
+        $transMock = Mockery::mock(Translator::class);
+        $transMock->shouldReceive('has')->andReturn(false);
+        $transMock->shouldReceive('get')->once()
             ->with('test-id', ['testparam' => 'value'], 'test-messages', 'en');
-
-        $transMock->method('has')->willReturn(false);
 
         $this->app->instance('translator', $transMock);
 
@@ -151,15 +146,10 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_trans_choice_function_returns_prefixed_translation()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
-            ->getMock();
-
-        $transMock->expects(static::once())
-            ->method('transChoice')
+        $transMock = Mockery::mock(Translator::class);
+        $transMock->shouldReceive('has')->andReturn(true);
+        $transMock->shouldReceive('choice')->once()
             ->with('cms::test-id', 2, ['testparam' => 'value'], 'test-messages', 'en');
-
-        $transMock->method('has')->willReturn(true);
 
         $this->app->instance('translator', $transMock);
 
@@ -171,15 +161,10 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_trans_choice_function_falls_back_to_app_translation_if_cms_translation_does_not_exist()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
-            ->getMock();
-
-        $transMock->expects(static::once())
-            ->method('transChoice')
+        $transMock = Mockery::mock(Translator::class);
+        $transMock->shouldReceive('has')->andReturn(false);
+        $transMock->shouldReceive('choice')->once()
             ->with('test-id', 2, ['testparam' => 'value'], 'test-messages', 'en');
-
-        $transMock->method('has')->willReturn(false);
 
         $this->app->instance('translator', $transMock);
 

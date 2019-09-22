@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Menu;
 
 use Czim\CmsCore\Contracts\Menu\MenuModulesInterpreterInterface;
@@ -156,11 +159,12 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessageRegExp #'test-does-not-exist'#
      */
     function it_throws_an_exception_if_a_module_key_is_unknown()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessageRegExp('#\'test-does-not-exist\'#');
+
         $this->menuModulesStandard = $this->getMockModulePresences();
 
         $interpreter = $this->makeConfigInterpreter();
@@ -179,11 +183,12 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessageRegExp #'test-a'#
      */
     function it_throws_an_exception_if_a_module_key_is_assigned_more_than_once_in_a_layout()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessageRegExp('#\'test-a\'#');
+
         $this->menuModulesStandard = $this->getMockModulePresences();
 
         $interpreter = $this->makeConfigInterpreter();
@@ -202,10 +207,11 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_an_incorrect_value_is_present_in_the_layout_tree()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->menuModulesStandard = $this->getMockModulePresences();
 
         $interpreter = $this->makeConfigInterpreter();

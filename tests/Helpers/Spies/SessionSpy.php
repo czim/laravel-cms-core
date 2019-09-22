@@ -21,7 +21,7 @@ class SessionSpy
      * @param mixed $default
      * @return mixed
      */
-    public function get($key, $default)
+    public function get(string $key, $default)
     {
         return Arr::get($this->stored, $key, $default);
     }
@@ -30,7 +30,7 @@ class SessionSpy
      * @param string $key
      * @param mixed  $value
      */
-    public function put($key, $value)
+    public function put(string $key, $value): void
     {
         Arr::set($this->stored, $key, $value);
     }
@@ -39,7 +39,7 @@ class SessionSpy
      * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return Arr::has($this->stored, $key);
     }
@@ -47,7 +47,7 @@ class SessionSpy
     /**
      * @param string $key
      */
-    public function remove($key)
+    public function remove(string $key): void
     {
         Arr::forget($this->stored, $key);
     }

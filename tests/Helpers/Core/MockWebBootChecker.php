@@ -16,7 +16,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldCmsRegister()
+    public function shouldCmsRegister(): bool
     {
         return true;
     }
@@ -26,7 +26,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldCmsApiRegister()
+    public function shouldCmsApiRegister(): bool
     {
         return true;
     }
@@ -36,7 +36,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldCmsBoot()
+    public function shouldCmsBoot(): bool
     {
         return true;
     }
@@ -46,14 +46,14 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @param bool $registered
      */
-    public function markCmsRegistered($registered = true)
+    public function markCmsRegistered(bool $registered = true): void
     {
     }
 
     /**
      * @return bool
      */
-    public function isCmsRegistered()
+    public function isCmsRegistered(): bool
     {
         return true;
     }
@@ -63,14 +63,14 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @param bool $booted
      */
-    public function markCmsBooted($booted = true)
+    public function markCmsBooted(bool $booted = true): void
     {
     }
 
     /**
      * @return bool
      */
-    public function isCmsBooted()
+    public function isCmsBooted(): bool
     {
         return true;
     }
@@ -80,7 +80,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldLoadCmsMiddleware()
+    public function shouldLoadCmsMiddleware(): bool
     {
         return true;
     }
@@ -90,7 +90,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldLoadCmsWebMiddleware()
+    public function shouldLoadCmsWebMiddleware(): bool
     {
         return true;
     }
@@ -100,7 +100,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldLoadCmsApiMiddleware()
+    public function shouldLoadCmsApiMiddleware(): bool
     {
         return false;
     }
@@ -110,7 +110,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldRegisterCmsWebRoutes()
+    public function shouldRegisterCmsWebRoutes(): bool
     {
         return true;
     }
@@ -120,7 +120,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldRegisterCmsApiRoutes()
+    public function shouldRegisterCmsApiRoutes(): bool
     {
         return false;
     }
@@ -130,7 +130,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function isCmsWebRequest()
+    public function isCmsWebRequest(): bool
     {
         return true;
     }
@@ -140,7 +140,7 @@ class MockWebBootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function isCmsApiRequest()
+    public function isCmsApiRequest(): bool
     {
         return false;
     }

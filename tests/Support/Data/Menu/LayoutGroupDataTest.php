@@ -3,7 +3,7 @@ namespace Czim\CmsCore\Test\Support\Data\Menu;
 
 use Czim\CmsCore\Support\Data\Menu\LayoutGroupData;
 use Czim\CmsCore\Test\CmsBootTestCase;
-use Symfony\Component\Translation\TranslatorInterface;
+use Illuminate\Contracts\Translation\Translator;
 
 class LayoutGroupDataTest extends CmsBootTestCase
 {
@@ -56,11 +56,11 @@ class LayoutGroupDataTest extends CmsBootTestCase
      */
     function it_returns_label_translation_if_available()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
+        $transMock = $this->getMockBuilder(Translator::class)
+            ->setMethods(['has', 'get', 'choice', 'getLocale', 'setLocale'])
             ->getMock();
 
-        $transMock->expects(static::once())->method('trans')->willReturn('testing_translated');
+        $transMock->expects(static::once())->method('get')->willReturn('testing_translated');
 
         $this->app->instance('translator', $transMock);
 
@@ -76,11 +76,11 @@ class LayoutGroupDataTest extends CmsBootTestCase
      */
     function it_returns_untranslated_label_if_translation_not_available()
     {
-        $transMock = $this->getMockBuilder(TranslatorInterface::class)
-            ->setMethods(['has', 'trans', 'transChoice', 'getLocale', 'setLocale'])
+        $transMock = $this->getMockBuilder(Translator::class)
+            ->setMethods(['has', 'get', 'choice', 'getLocale', 'setLocale'])
             ->getMock();
 
-        $transMock->expects(static::once())->method('trans')->willReturn('translation_key');
+        $transMock->expects(static::once())->method('get')->willReturn('translation_key');
 
         $this->app->instance('translator', $transMock);
 
@@ -118,7 +118,7 @@ class LayoutGroupDataTest extends CmsBootTestCase
 
         $children = $data->children();
 
-        static::assertInternalType('array', $children);
+        static::assertIsArray($children);
         static::assertInstanceOf(LayoutGroupData::class, head($children));
         static::assertEquals('test-group', head($children)['id']);
     }

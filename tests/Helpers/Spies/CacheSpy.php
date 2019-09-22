@@ -21,7 +21,7 @@ class CacheSpy
      * @param mixed $parameter
      * @return $this
      */
-    public function store($parameter)
+    public function store($parameter): CacheSpy
     {
         $this->storeParameter = $parameter;
         $this->storeCalled++;
@@ -33,7 +33,7 @@ class CacheSpy
      * @param mixed $parameter
      * @return $this
      */
-    public function tags($parameter)
+    public function tags($parameter): CacheSpy
     {
         $this->tagsParameter = $parameter;
         $this->tagsCalled++;
