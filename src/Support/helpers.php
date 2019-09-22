@@ -109,7 +109,7 @@ if ( ! function_exists('cms_trans')) {
      * @param  array   $parameters
      * @param  string  $domain
      * @param  string  $locale
-     * @return \Symfony\Component\Translation\TranslatorInterface|string
+     * @return string|null
      */
     function cms_trans($id = null, $parameters = [], $domain = 'messages', $locale = null)
     {
