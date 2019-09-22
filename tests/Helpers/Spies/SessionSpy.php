@@ -1,6 +1,8 @@
 <?php
 namespace Czim\CmsCore\Test\Helpers\Spies;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class SessionSpy
  *
@@ -21,7 +23,7 @@ class SessionSpy
      */
     public function get($key, $default)
     {
-        return array_get($this->stored, $key, $default);
+        return Arr::get($this->stored, $key, $default);
     }
 
     /**
@@ -30,7 +32,7 @@ class SessionSpy
      */
     public function put($key, $value)
     {
-        array_set($this->stored, $key, $value);
+        Arr::set($this->stored, $key, $value);
     }
 
     /**
@@ -39,7 +41,7 @@ class SessionSpy
      */
     public function has($key)
     {
-        return array_has($this->stored, $key);
+        return Arr::has($this->stored, $key);
     }
 
     /**
@@ -47,7 +49,7 @@ class SessionSpy
      */
     public function remove($key)
     {
-        array_forget($this->stored, $key);
+        Arr::forget($this->stored, $key);
     }
 
 }

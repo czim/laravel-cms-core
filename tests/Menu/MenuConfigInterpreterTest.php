@@ -9,6 +9,7 @@ use Czim\CmsCore\Menu\MenuConfigInterpreter;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class MenuConfigInterpreterTest extends CmsBootTestCase
@@ -43,7 +44,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
 
         static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
         static::assertCount(4, $layout->layout());
-        static::assertEquals(['test-a', 'test-b', 'test-c', 'test-d'], array_pluck($layout->layout(), 'id'));
+        static::assertEquals(['test-a', 'test-b', 'test-c', 'test-d'], Arr::pluck($layout->layout(), 'id'));
     }
 
     /**
@@ -77,11 +78,11 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
         static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
 
         static::assertCount(3, $layout->layout());
-        static::assertEquals(['group-a', 'test-d', 'test-a'], array_pluck($layout->layout(), 'id'));
-        static::assertEquals(['group-b'], array_pluck($layout->layout()['group-a']->children(), 'id'));
+        static::assertEquals(['group-a', 'test-d', 'test-a'], Arr::pluck($layout->layout(), 'id'));
+        static::assertEquals(['group-b'], Arr::pluck($layout->layout()['group-a']->children(), 'id'));
         static::assertEquals(
             ['test-c', 'test-b'],
-            array_pluck(head($layout->layout()['group-a']->children())->children(), 'id')
+            Arr::pluck(head($layout->layout()['group-a']->children())->children(), 'id')
         );
     }
 
@@ -108,10 +109,10 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
         static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
 
         static::assertCount(1, $layout->layout());
-        static::assertEquals(['group-a'], array_pluck($layout->layout(), 'id'));
+        static::assertEquals(['group-a'], Arr::pluck($layout->layout(), 'id'));
         static::assertEquals(
             ['test-c', 'test-d', 'test-a', 'test-b'],
-            array_pluck($layout->layout()['group-a']->children(), 'id')
+            Arr::pluck($layout->layout()['group-a']->children(), 'id')
         );
     }
 

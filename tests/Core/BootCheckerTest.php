@@ -6,6 +6,7 @@ use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Mockery;
 
 /**
@@ -479,7 +480,7 @@ class BootCheckerTest extends TestCase
         $mock = Mockery::mock(Request::class);
 
         $mock->shouldReceive('segment')->withAnyArgs()->andReturnUsing(function ($index) {
-            return array_get(explode('/', $this->mockWebRoute), ((int) $index) - 1);
+            return Arr::get(explode('/', $this->mockWebRoute), ((int) $index) - 1);
         });
 
         return $mock;

@@ -10,6 +10,7 @@ use Czim\CmsCore\Support\Data\Menu\PermissionsIndexData;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Illuminate\Support\Arr;
 
 class MenuPermissionsFilterTest extends CmsBootTestCase
 {
@@ -413,10 +414,12 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         static::assertArrayHasKey('group-a', $array, 'Topmost layer should have "group-a" key');
 
         static::assertCount(3, $array['group-a']->children(), 'Group-a layer should have 3 entries');
-        static::assertArraySubset(['test-c','group-c', 'group-d'], array_pluck($array['group-a']->children(), 'id'));
-        
+        static::assertContains('test-c', Arr::pluck($array['group-a']->children(), 'id'));
+        static::assertContains('group-c', Arr::pluck($array['group-a']->children(), 'id'));
+        static::assertContains('group-d', Arr::pluck($array['group-a']->children(), 'id'));
+
         static::assertCount(1, $array['group-a']->children()['group-c']->children(), 'Group-a layer should have 1 entry');
-        static::assertArraySubset(['test-f'], array_pluck($array['group-a']->children()['group-c']->children(), 'id'));
+        static::assertContains('test-f', Arr::pluck($array['group-a']->children()['group-c']->children(), 'id'));
     }
 
     /**

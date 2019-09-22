@@ -8,6 +8,7 @@ use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Providers\RouteServiceProvider;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
 
 /**
  * Class RouteServiceProviderTest
@@ -89,7 +90,7 @@ class RouteServiceProviderTest extends TestCase
             ->with(static::isType('array'), static::isType('callable'))
             ->willReturnCallback(function (array $context, callable $callable) use ($routerMockAuth, $routerMockAuthed) {
                 // At this level, two groups should be created: the auth group and the main cms group with auth middleware set
-                if (array_get($context, 'prefix') == 'auth') {
+                if (Arr::get($context, 'prefix') === 'auth') {
                     $callable($routerMockAuth);
                 } else {
                     $callable($routerMockAuthed);
