@@ -136,7 +136,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
 
             $stringKey = is_string($key) && ! is_numeric($key);
 
-            if ($value instanceof MenuPresenceInterface && $value->type() == MenuPresenceType::GROUP) {
+            if ($value instanceof MenuPresenceInterface && $value->type() === MenuPresenceType::GROUP) {
                 $value->setChildren($this->mergeModulePresencesIntoLayoutLayer($value->children, $presencesPerModule));
 
                 if ($stringKey) {
