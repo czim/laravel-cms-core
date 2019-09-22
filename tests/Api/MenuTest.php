@@ -71,7 +71,7 @@ class MenuTest extends ApiTestCase
     /**
      * @param Application $app
      */
-    protected function setUpBasicMenuLayout(Application $app)
+    protected function setUpBasicMenuLayout(Application $app): void
     {
         $app['config']->set('cms-modules.modules', [
             SimpleTestModule::class,

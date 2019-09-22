@@ -13,6 +13,7 @@ use Czim\CmsCore\Test\Helpers\Exceptions\WithGetStatusCodeException;
 use Czim\CmsCore\Test\Helpers\Exceptions\WithStatusCodePropertyException;
 use Czim\CmsCore\Test\Helpers\Support\BasicDataObject;
 use Czim\CmsCore\Test\Helpers\Support\TestDataObject;
+use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -414,7 +415,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
         $builder = new RestResponseBuilder($coreMock, $manager);
 
         /** @var JsonResponse $result */
-        $result = $builder->error(new \Exception());
+        $result = $builder->error(new Exception());
 
         $data = (array) $result->getData();
 
