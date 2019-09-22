@@ -8,14 +8,23 @@ use Czim\CmsCore\Contracts\Auth\AclRepositoryInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Modules\ModuleManager;
+use Czim\CmsCore\Test\Helpers\Core\MockApiBootChecker;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleAssociatedTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModule;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleGenerator;
 use Czim\CmsCore\Test\Helpers\Modules\SimpleTestModuleWithServiceProviders;
 use Czim\CmsCore\Test\Helpers\Modules\TestModuleWithRoutes;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Czim\CmsCore\Test\Helpers\NonInstantiableClassWithDependency;
+use Czim\CmsCore\Test\Helpers\NonInstantiableInterface;
+use Exception;
+use Hamcrest\Matchers;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class ModuleManagerTest extends CmsBootTestCase
 {
@@ -157,7 +166,7 @@ class ModuleManagerTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_the_same_module_key_is_encountered_more_than_once()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         $manager = $this->makeManager();
 
@@ -174,11 +183,13 @@ class ModuleManagerTest extends CmsBootTestCase
     {
         $manager = $this->makeManager();
 
-        $manager->initialize([ TestModuleWithRoutes::class ]);
+        $manager->initialize([
+            TestModuleWithRoutes::class,
+        ]);
 
         $router = $this->getMockRouter();
-        $router->expects(static::once())->method('get')->with('test', 'SomeController@index');
-        $router->expects(static::once())->method('post')->with('test', 'SomeController@store');
+        $router->shouldReceive('get')->once()->with('test', 'SomeController@index');
+        $router->shouldReceive('post')->once()->with('test', 'SomeController@store');
 
         $manager->mapWebRoutes($router);
     }
@@ -190,11 +201,13 @@ class ModuleManagerTest extends CmsBootTestCase
     {
         $manager = $this->makeManager();
 
-        $manager->initialize([ TestModuleWithRoutes::class ]);
+        $manager->initialize([
+            TestModuleWithRoutes::class,
+        ]);
 
         $router = $this->getMockRouter();
-        $router->expects(static::once())->method('get')->with('test', 'SomeApiController@index');
-        $router->expects(static::once())->method('post')->with('test', 'SomeApiController@store');
+        $router->shouldReceive('get')->once()->with('test', 'SomeApiController@index');
+        $router->shouldReceive('post')->once()->with('test', 'SomeApiController@store');
 
         $manager->mapApiRoutes($router);
     }
@@ -225,9 +238,7 @@ class ModuleManagerTest extends CmsBootTestCase
     {
         $mockAcl = $this->getMockAcl();
 
-        $mockAcl->expects(static::once())
-                ->method('getAllPermissions')
-                ->willReturn(['test']);
+        $mockAcl->shouldReceive('getAllPermissions')->once()->andReturn(['test']);
 
         $manager = new ModuleManager($this->getMockCore(), $mockAcl);
 
@@ -241,10 +252,8 @@ class ModuleManagerTest extends CmsBootTestCase
     {
         $mockAcl = $this->getMockAcl();
 
-        $mockAcl->expects(static::once())
-            ->method('getModulePermissions')
-            ->with('testing')
-            ->willReturn(['test']);
+        $mockAcl->shouldReceive('getModulePermissions')->once()
+            ->with('testing')->andReturn(['test']);
 
         $manager = new ModuleManager($this->getMockCore(), $mockAcl);
 
@@ -257,7 +266,7 @@ class ModuleManagerTest extends CmsBootTestCase
      */
     function it_throws_an_exception_when_trying_to_load_a_nonexistant_class()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $manager = $this->makeManager();
 
@@ -271,12 +280,12 @@ class ModuleManagerTest extends CmsBootTestCase
      */
     function it_throws_an_exception_when_trying_to_load_a_noninstantiable_class()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $manager = $this->makeManager();
 
         $manager->initialize([
-            \Czim\CmsCore\Test\Helpers\NonInstantiableInterface::class,
+            NonInstantiableInterface::class,
         ]);
     }
 
@@ -285,12 +294,12 @@ class ModuleManagerTest extends CmsBootTestCase
      */
     function it_throws_an_exception_when_trying_to_load_a_class_with_uninstantiable_dependencies()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $manager = $this->makeManager();
 
         $manager->initialize([
-            \Czim\CmsCore\Test\Helpers\NonInstantiableClassWithDependency::class,
+            NonInstantiableClassWithDependency::class,
         ]);
     }
 
@@ -299,26 +308,26 @@ class ModuleManagerTest extends CmsBootTestCase
      */
     function it_throws_an_exception_when_trying_to_load_an_invalid_module_class()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $manager = $this->makeManager();
 
         $manager->initialize([
-            \Czim\CmsCore\Test\Helpers\Core\MockApiBootChecker::class,
+            MockApiBootChecker::class,
         ]);
     }
 
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CoreInterface
+     * @return Mock|MockInterface|CoreInterface
      */
     protected function getMockCore()
     {
-        $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
+        $mock = Mockery::mock(CoreInterface::class);
 
-        $mock->method('moduleConfig')
-             ->with('modules', static::anything())
-             ->willReturn([
+        $mock->shouldReceive('moduleConfig')
+             ->with('modules', Matchers::anything())
+             ->andReturn([
                  SimpleTestModule::class,
                  SimpleAssociatedTestModule::class,
              ]);
@@ -326,30 +335,29 @@ class ModuleManagerTest extends CmsBootTestCase
         return $mock;
     }
 
-    /**
-     * @return ModuleManager
-     */
-    protected function makeManager()
+    protected function makeManager(): ModuleManager
     {
         return new ModuleManager($this->getMockCore(), $this->getMockAcl());
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Router
+     * @return Mock|MockInterface|Router
      */
     protected function getMockRouter()
     {
-        return $this->getMockBuilder(Router::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return Mockery::mock(Router::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AclRepositoryInterface
+     * @return Mock|MockInterface|AclRepositoryInterface
      */
     protected function getMockAcl()
     {
-        return $this->getMockBuilder(AclRepositoryInterface::class)
-            ->getMock();
+        /** @var Mock|MockInterface|AclRepositoryInterface $mock */
+        $mock = Mockery::mock(AclRepositoryInterface::class);
+
+        $mock->shouldReceive('initialize');
+
+        return $mock;
     }
 }

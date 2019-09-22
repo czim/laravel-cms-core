@@ -7,11 +7,13 @@ namespace Czim\CmsCore\Test\Providers;
 use Czim\CmsCore\Contracts\Core\BootCheckerInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Providers\MiddlewareServiceProvider;
+use Czim\CmsCore\Test\Helpers\Http\KernelWithRemoveMiddlewareMethod;
 use Czim\CmsCore\Test\Helpers\Http\NullMiddleware;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Routing\Router;
+use Mockery;
 
 class MiddlewareServiceProviderTest extends TestCase
 {
@@ -26,12 +28,11 @@ class MiddlewareServiceProviderTest extends TestCase
         $coreMock    = $this->getMockCore();
         $checkerMock = $this->getMockBootChecker();
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldLoadCmsMiddleware')
-            ->willReturn(false);
+        $checkerMock->shouldReceive('shouldLoadCmsMiddleware')
+            ->atLeast()->once()
+            ->andReturn(false);
 
-        $checkerMock->expects(static::never())
-            ->method('shouldLoadCmsWebMiddleware');
+        $checkerMock->shouldReceive('shouldLoadCmsWebMiddleware')->never();
 
         $provider = new MiddlewareServiceProvider($this->app);
         $provider->register();
@@ -48,32 +49,32 @@ class MiddlewareServiceProviderTest extends TestCase
         $coreMock    = $this->getMockCore();
         $checkerMock = $this->getMockBootChecker();
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldLoadCmsMiddleware')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldLoadCmsMiddleware')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldLoadCmsWebMiddleware')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldLoadCmsWebMiddleware')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $routerMock->expects(static::atLeastOnce())
-            ->method('middlewareGroup')
-            ->willReturn('web');
+        $routerMock->shouldReceive('middlewareGroup')
+            ->atLeast()->once()
+            ->andReturn('web');
 
-        $kernelMock->expects(static::once())
-            ->method('hasMiddleware')
+        $kernelMock->shouldReceive('hasMiddleware')
+            ->atLeast()->once()
             ->with(NullMiddleware::class)
-            ->willReturn(false);
+            ->andReturn(false);
 
-        $routerMock->expects(static::once())
-            ->method('pushMiddlewareToGroup')
+        $routerMock->shouldReceive('pushMiddlewareToGroup')
+            ->once()
             ->with('cms_test', NullMiddleware::class)
-            ->willReturnSelf();
+            ->andReturnSelf();
 
-        $routerMock->expects(static::once())
-            ->method('aliasMiddleware')
+        $routerMock->shouldReceive('aliasMiddleware')
+            ->once()
             ->with('test_key', NullMiddleware::class)
-            ->willReturnSelf();
+            ->andReturnSelf();
 
         $provider = new MiddlewareServiceProvider($this->app);
         $provider->register();
@@ -90,35 +91,35 @@ class MiddlewareServiceProviderTest extends TestCase
         $coreMock    = $this->getMockCore();
         $checkerMock = $this->getMockBootChecker();
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldLoadCmsMiddleware')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldLoadCmsMiddleware')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $checkerMock->method('shouldLoadCmsWebMiddleware')
-            ->willReturn(false);
+        $checkerMock->shouldReceive('shouldLoadCmsWebMiddleware')
+            ->andReturn(false);
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldLoadCmsApiMiddleware')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldLoadCmsApiMiddleware')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $routerMock->expects(static::atLeastOnce())
-            ->method('middlewareGroup')
-            ->willReturn('api');
+        $routerMock->shouldReceive('middlewareGroup')
+            ->atLeast()->once()
+            ->andReturn('api');
 
-        $kernelMock->expects(static::once())
-            ->method('hasMiddleware')
+        $kernelMock->shouldReceive('hasMiddleware')
+            ->once()
             ->with(NullMiddleware::class)
-            ->willReturn(false);
+            ->andReturn(false);
 
-        $routerMock->expects(static::once())
-            ->method('pushMiddlewareToGroup')
+        $routerMock->shouldReceive('pushMiddlewareToGroup')
+            ->once()
             ->with('cms_test_api', NullMiddleware::class)
-            ->willReturnSelf();
+            ->andReturnSelf();
 
-        $routerMock->expects(static::once())
-            ->method('aliasMiddleware')
+        $routerMock->shouldReceive('aliasMiddleware')
+            ->once()
             ->with('test_key_api', NullMiddleware::class)
-            ->willReturnSelf();
+            ->andReturnSelf();
 
         $provider = new MiddlewareServiceProvider($this->app);
         $provider->register();
@@ -135,16 +136,19 @@ class MiddlewareServiceProviderTest extends TestCase
         $coreMock    = $this->getMockCore();
         $checkerMock = $this->getMockBootChecker();
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldLoadCmsMiddleware')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldLoadCmsMiddleware')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldLoadCmsWebMiddleware')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldLoadCmsWebMiddleware')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $kernelMock->expects(static::once())
-            ->method('removeGlobalMiddleware');
+        $routerMock->shouldReceive('middlewareGroup');
+        $routerMock->shouldReceive('aliasMiddleware');
+
+        $kernelMock->shouldReceive('hasMiddleware')->andReturn(true);
+        $kernelMock->shouldReceive('removeGlobalMiddleware')->once();
 
         $provider = new MiddlewareServiceProvider($this->app);
         $provider->register();
@@ -152,57 +156,42 @@ class MiddlewareServiceProviderTest extends TestCase
     }
 
     /**
-     * @return Router|\PHPUnit_Framework_MockObject_MockObject
+     * @return Router|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockRouter()
     {
-        return $this->getMockBuilder(Router::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return Mockery::mock(Router::class);
     }
 
     /**
      * @param bool $hasRemoveGlobalMiddleware
-     * @return HttpKernel|\PHPUnit_Framework_MockObject_MockObject
+     * @return HttpKernel|Mockery\Mock|Mockery\MockInterface
      */
-    protected function getMockHttpKernel($hasRemoveGlobalMiddleware = false)
+    protected function getMockHttpKernel(bool $hasRemoveGlobalMiddleware = false)
     {
-        $methods = [
-            'hasMiddleware',
-        ];
-
         if ($hasRemoveGlobalMiddleware) {
-            $methods[] = 'removeGlobalMiddleware';
+            return Mockery::mock(KernelWithRemoveMiddlewareMethod::class);
         }
 
-        $mock = $this->getMockBuilder(HttpKernel::class)
-            ->disableOriginalConstructor()
-            ->setMethods($methods)
-            ->getMock();
-
-        return $mock;
+        return Mockery::mock(HttpKernel::class);
     }
 
     /**
-     * @return ConsoleKernel|\PHPUnit_Framework_MockObject_MockObject
+     * @return ConsoleKernel|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockConsoleKernel()
     {
-        $mock = $this->getMockBuilder(ConsoleKernel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
+        return Mockery::mock(ConsoleKernel::class);
     }
 
     /**
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return CoreInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockCore()
     {
-        $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
+        $mock = Mockery::mock(CoreInterface::class);
 
-        $mock->method('config')->willReturnCallback(
+        $mock->shouldReceive('config')->andReturnUsing(
             function ($key, $default = null) {
                 switch ($key) {
 
@@ -220,7 +209,7 @@ class MiddlewareServiceProviderTest extends TestCase
             }
         );
 
-        $mock->method('apiConfig')->willReturnCallback(
+        $mock->shouldReceive('apiConfig')->andReturnUsing(
             function ($key, $default = null) {
                 switch ($key) {
 
@@ -242,11 +231,11 @@ class MiddlewareServiceProviderTest extends TestCase
     }
 
     /**
-     * @return BootCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return BootCheckerInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockBootChecker()
     {
-        return $this->getMockBuilder(BootCheckerInterface::class)->getMock();
+        return Mockery::mock(BootCheckerInterface::class);
     }
 
 }

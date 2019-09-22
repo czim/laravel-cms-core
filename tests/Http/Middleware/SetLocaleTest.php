@@ -9,7 +9,11 @@ use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
 use Czim\CmsCore\Http\Middleware\SetLocale;
 use Czim\CmsCore\Test\Helpers\Http\MockRequest;
 use Czim\CmsCore\Test\TestCase;
+use Hamcrest\Matchers;
 use Illuminate\Http\Request;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class SetLocaleTest extends TestCase
 {
@@ -19,19 +23,21 @@ class SetLocaleTest extends TestCase
      */
     function it_passes_through_if_cms_is_not_localized()
     {
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var LocaleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $coreMock       = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $repositoryMock = $this->getMockBuilder(LocaleRepositoryInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(Request::class)->getMock();
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var LocaleRepositoryInterface|Mock|MockInterface $repositoryMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $coreMock       = Mockery::mock(CoreInterface::class);
+        $repositoryMock = Mockery::mock(LocaleRepositoryInterface::class);
+        $requestMock    = Mockery::mock(Request::class);
 
-        $repositoryMock->expects(static::once())->method('isLocalized')->willReturn(false);
-        $repositoryMock->expects(static::never())->method('isAvailable');
+        $repositoryMock->shouldReceive('isLocalized')->once()->andReturn(false);
+        $repositoryMock->shouldReceive('isAvailable')->never();
 
         $middleware = new SetLocale($coreMock, $repositoryMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next));
     }
@@ -41,21 +47,20 @@ class SetLocaleTest extends TestCase
      */
     function it_applies_a_valid_locale_set_in_session()
     {
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var LocaleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $coreMock       = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $repositoryMock = $this->getMockBuilder(LocaleRepositoryInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(Request::class)->getMock();
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var LocaleRepositoryInterface|Mock|MockInterface $repositoryMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $coreMock       = Mockery::mock(CoreInterface::class);
+        $repositoryMock = Mockery::mock(LocaleRepositoryInterface::class);
+        $requestMock    = Mockery::mock(Request::class);
 
-        $repositoryMock->expects(static::once())->method('isLocalized')->willReturn(true);
-        $repositoryMock->expects(static::once())
-            ->method('isAvailable')
-            ->with('nl')
-            ->willReturn(true);
+        $repositoryMock->shouldReceive('isLocalized')->once()->andReturn(true);
+        $repositoryMock
+            ->shouldReceive('isAvailable')->once()
+            ->with('nl')->andReturn(true);
 
-        $coreMock->method('config')
-            ->willReturnCallback(function ($key, $default = null) {
+        $coreMock->shouldReceive('config')
+            ->andReturnUsing(function ($key, $default = null) {
                 if ($key === 'session.prefix') {
                     return 'cms::';
                 }
@@ -66,7 +71,9 @@ class SetLocaleTest extends TestCase
 
         $middleware = new SetLocale($coreMock, $repositoryMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next));
 
@@ -78,26 +85,23 @@ class SetLocaleTest extends TestCase
      */
     function it_applies_a_valid_locale_set_in_request()
     {
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var LocaleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $coreMock       = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $repositoryMock = $this->getMockBuilder(LocaleRepositoryInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(MockRequest::class)
-            ->setMethods(['getPreferredLanguage'])
-            ->getMock();
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var LocaleRepositoryInterface|Mock|MockInterface $repositoryMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $coreMock       = Mockery::mock(CoreInterface::class);
+        $repositoryMock = Mockery::mock(LocaleRepositoryInterface::class);
+        $requestMock    = Mockery::mock(MockRequest::class);
 
-        $repositoryMock->expects(static::once())->method('isLocalized')->willReturn(true);
-        $repositoryMock->method('getDefault')->willReturn('nl');
-        $repositoryMock->method('getAvailable')->willReturn(['nl', 'fr']);
+        $repositoryMock->shouldReceive('isLocalized')->once()->andReturn(true);
+        $repositoryMock->shouldReceive('getDefault')->andReturn('nl');
+        $repositoryMock->shouldReceive('getAvailable')->andReturn(['nl', 'fr']);
 
-        $requestMock->expects(static::once())
-            ->method('getPreferredLanguage')
-            ->with(static::isType('array'))
-            ->willReturn('fr');
+        $requestMock->shouldReceive('getPreferredLanguage')->once()
+            ->with(Matchers::nonEmptyArray())
+            ->andReturn('fr');
 
-        $coreMock->method('config')
-            ->willReturnCallback(function ($key, $default = null) {
+        $coreMock->shouldReceive('config')
+            ->andReturnUsing(function ($key, $default = null) {
                 switch ($key) {
                     case 'session.prefix':
                         return 'cms::';
@@ -109,7 +113,9 @@ class SetLocaleTest extends TestCase
 
         $middleware = new SetLocale($coreMock, $repositoryMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next));
 
@@ -121,21 +127,22 @@ class SetLocaleTest extends TestCase
      */
     function it_does_not_apply_invalid_session_locale()
     {
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var LocaleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $coreMock       = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $repositoryMock = $this->getMockBuilder(LocaleRepositoryInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(Request::class)->getMock();
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var LocaleRepositoryInterface|Mock|MockInterface $repositoryMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $coreMock       = Mockery::mock(CoreInterface::class);
+        $repositoryMock = Mockery::mock(LocaleRepositoryInterface::class);
+        $requestMock    = Mockery::mock(Request::class);
 
-        $repositoryMock->expects(static::once())->method('isLocalized')->willReturn(true);
-        $repositoryMock->expects(static::once())
-            ->method('isAvailable')
+        $repositoryMock->shouldReceive('getDefault');
+
+        $repositoryMock->shouldReceive('isLocalized')->once()->andReturn(true);
+        $repositoryMock->shouldReceive('isAvailable')->once()
             ->with('nl')
-            ->willReturn(false);
+            ->andReturn(false);
 
-        $coreMock->method('config')
-            ->willReturnCallback(function ($key, $default = null) {
+        $coreMock->shouldReceive('config')
+            ->andReturnUsing(function ($key, $default = null) {
                 switch ($key) {
                     case 'session.prefix':
                         return 'cms::';
@@ -149,7 +156,9 @@ class SetLocaleTest extends TestCase
 
         $middleware = new SetLocale($coreMock, $repositoryMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next));
 

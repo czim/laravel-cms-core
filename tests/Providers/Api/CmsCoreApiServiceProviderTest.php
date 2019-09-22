@@ -11,7 +11,11 @@ use Czim\CmsCore\Providers\Api\CmsCoreApiServiceProvider;
 use Czim\CmsCore\Providers\EventServiceProvider;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\TestCase;
+use Hamcrest\Matchers;
 use Illuminate\Contracts\Foundation\Application;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class CmsCoreApiServiceProviderTest extends TestCase
 {
@@ -21,15 +25,15 @@ class CmsCoreApiServiceProviderTest extends TestCase
      */
     function it_registers_interfaces_and_service_providers()
     {
-        /** @var Application|\PHPUnit_Framework_MockObject_MockObject $appMock */
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var BootCheckerInterface|\PHPUnit_Framework_MockObject_MockObject $checkerMock */
-        $appMock     = $this->getMockBuilder(Application::class)->getMock();
-        $coreMock    = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $checkerMock = $this->getMockBuilder(BootCheckerInterface::class)->getMock();
+        /** @var Application|Mock|MockInterface $appMock */
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var BootCheckerInterface|Mock|MockInterface $checkerMock */
+        $appMock     = Mockery::mock(Application::class);
+        $coreMock    = Mockery::mock(CoreInterface::class);
+        $checkerMock = Mockery::mock(BootCheckerInterface::class);
 
-        $coreMock->method('apiConfig')
-            ->willReturnCallback(function ($key, $default = null) {
+        $coreMock->shouldReceive('apiConfig')
+            ->andReturnUsing(function ($key, $default = null) {
                 switch ($key) {
                     case 'response-builder':
                         return 'test-builder';
@@ -39,18 +43,18 @@ class CmsCoreApiServiceProviderTest extends TestCase
                 return $default;
             });
 
-        $coreMock->method('bootChecker')->willReturn($checkerMock);
+        $coreMock->shouldReceive('bootChecker')->andReturn($checkerMock);
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldCmsApiRegister')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldCmsApiRegister')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $appMock->expects(static::once())
-            ->method('singleton')
-            ->with(ResponseBuilderInterface::class);
+        $appMock->shouldReceive('singleton')
+            ->once()
+            ->with(ResponseBuilderInterface::class, Matchers::anything());
 
-        $appMock->expects(static::once())
-            ->method('register')
+        $appMock->shouldReceive('register')
+            ->once()
             ->with(EventServiceProvider::class);
 
         $this->app->instance(Component::CORE, $coreMock);
@@ -65,21 +69,21 @@ class CmsCoreApiServiceProviderTest extends TestCase
      */
     function it_skips_registration_if_bootcheckers_says_to()
     {
-        /** @var Application|\PHPUnit_Framework_MockObject_MockObject $appMock */
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var BootCheckerInterface|\PHPUnit_Framework_MockObject_MockObject $checkerMock */
-        $appMock     = $this->getMockBuilder(Application::class)->getMock();
-        $coreMock    = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $checkerMock = $this->getMockBuilder(BootCheckerInterface::class)->getMock();
+        /** @var Application|Mock|MockInterface $appMock */
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var BootCheckerInterface|Mock|MockInterface $checkerMock */
+        $appMock     = Mockery::mock(Application::class);
+        $coreMock    = Mockery::mock(CoreInterface::class);
+        $checkerMock = Mockery::mock(BootCheckerInterface::class);
 
-        $coreMock->method('bootChecker')->willReturn($checkerMock);
+        $coreMock->shouldReceive('bootChecker')->andReturn($checkerMock);
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldCmsApiRegister')
-            ->willReturn(false);
+        $checkerMock->shouldReceive('shouldCmsApiRegister')
+            ->atLeast()->once()
+            ->andReturn(false);
 
-        $appMock->expects(static::never())->method('singleton');
-        $appMock->expects(static::never())->method('register');
+        $appMock->shouldReceive('singleton')->never();
+        $appMock->shouldReceive('register')->never();
 
         $this->app->instance(Component::CORE, $coreMock);
 

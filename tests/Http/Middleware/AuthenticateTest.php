@@ -13,6 +13,9 @@ use Czim\CmsCore\Test\TestCase;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class AuthenticateTest extends TestCase
 {
@@ -22,16 +25,18 @@ class AuthenticateTest extends TestCase
      */
     function it_passes_through_if_authenticated()
     {
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $authMock = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $requestMock = $this->getMockBuilder(Request::class)->getMock();
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var MockRequest|Mock|MockInterface $requestMock */
+        $authMock    = Mockery::mock(AuthenticatorInterface::class);
+        $requestMock = Mockery::mock(Request::class);
 
-        $authMock->expects(static::once())->method('check')->willReturn(true);
+        $authMock->shouldReceive('check')->once()->andReturn(true);
 
         $middleware = new Authenticate($authMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next));
     }
@@ -41,27 +46,29 @@ class AuthenticateTest extends TestCase
      */
     function it_redirects_if_not_authenticated_for_non_ajax_request()
     {
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var MockRequest|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        $authMock    = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $requestMock = $this->getMockBuilder(MockRequest::class)->setMethods(['ajax', 'wantsJson'])->getMock();
-        $coreMock    = $this->getMockBuilder(CoreInterface::class)->getMock();
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var MockRequest|Mock|MockInterface $requestMock */
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        $authMock    = Mockery::mock(AuthenticatorInterface::class);
+        $requestMock = Mockery::mock(MockRequest::class);
+        $coreMock    = Mockery::mock(CoreInterface::class);
 
-        $authMock->expects(static::once())->method('check')->willReturn(false);
+        $authMock->shouldReceive('check')->once()->andReturn(false);
 
-        $requestMock->method('ajax')->willReturn(false);
-        $requestMock->method('wantsJson')->willReturn(false);
+        $requestMock->shouldReceive('ajax')->andReturn(false);
+        $requestMock->shouldReceive('wantsJson')->andReturn(false);
 
         // Register and fake the redirect route
         $this->app['router']->get('testing/ignore', ['as' => 'testing', 'uses' => 'NoController@nowhere']);
-        $coreMock->method('prefixRoute')->willReturn('testing');
+        $coreMock->shouldReceive('prefixRoute')->andReturn('testing');
 
         $this->app->instance(Component::CORE, $coreMock);
 
         $middleware = new Authenticate($authMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertInstanceOf(RedirectResponse::class, $middleware->handle($requestMock, $next));
     }
@@ -71,19 +78,21 @@ class AuthenticateTest extends TestCase
      */
     function it_returns_unauthorized_response_if_not_authenticated_for_ajax_request()
     {
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var MockRequest|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $authMock    = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $requestMock = $this->getMockBuilder(MockRequest::class)->setMethods(['ajax', 'wantsJson'])->getMock();
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var MockRequest|Mock|MockInterface $requestMock */
+        $authMock    = Mockery::mock(AuthenticatorInterface::class);
+        $requestMock = Mockery::mock(MockRequest::class);
 
-        $authMock->expects(static::once())->method('check')->willReturn(false);
+        $authMock->shouldReceive('check')->once()->andReturn(false);
 
-        $requestMock->method('ajax')->willReturn(true);
-        $requestMock->method('wantsJson')->willReturn(true);
+        $requestMock->shouldReceive('ajax')->andReturn(true);
+        $requestMock->shouldReceive('wantsJson')->andReturn(true);
 
         $middleware = new Authenticate($authMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         /** @var Response $response */
         $response = $middleware->handle($requestMock, $next);

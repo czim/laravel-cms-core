@@ -9,6 +9,9 @@ use Czim\CmsCore\Core\BasicNotifier;
 use Czim\CmsCore\Test\Helpers\Spies\SessionSpy;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Session\SessionManager;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class BasicNotifierTest extends CmsBootTestCase
 {
@@ -68,30 +71,25 @@ class BasicNotifierTest extends CmsBootTestCase
     }
 
 
-    /**
-     * @return BasicNotifier
-     */
-    protected function makeNotifier()
+    protected function makeNotifier(): BasicNotifier
     {
         return new BasicNotifier($this->getMockCore());
     }
 
     /**
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MockInterface|Mock|CoreInterface $mockCore
      */
     protected function getMockCore()
     {
-        $mockCore = $this->getMockBuilder(CoreInterface::class)->getMock();
+        /** @var MockInterface|Mock|CoreInterface $mockCore */
+        $mockCore = Mockery::mock(CoreInterface::class);
 
-        $mockCore->method('session')->willReturn($this->sessionMock);
+        $mockCore->shouldReceive('session')->andReturn($this->sessionMock);
 
         return $mockCore;
     }
 
-    /**
-     * @return SessionSpy
-     */
-    protected function getSessionSpy()
+    protected function getSessionSpy(): SessionSpy
     {
         return new SessionSpy;
     }

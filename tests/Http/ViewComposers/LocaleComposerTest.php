@@ -8,6 +8,9 @@ use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
 use Czim\CmsCore\Http\ViewComposers\LocaleComposer;
 use Czim\CmsCore\Test\TestCase;
 use Illuminate\Contracts\View\View;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class LocaleComposerTest extends TestCase
 {
@@ -17,26 +20,23 @@ class LocaleComposerTest extends TestCase
      */
     function it_composes_locale_data()
     {
-        /** @var LocaleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        /** @var View|\PHPUnit_Framework_MockObject_MockObject $viewMock */
-        $repositoryMock = $this->getMockBuilder(LocaleRepositoryInterface::class)->getMock();
-        $viewMock       = $this->getMockBuilder(View::class)->getMock();
+        /** @var LocaleRepositoryInterface|Mock|MockInterface $repositoryMock */
+        /** @var View|Mock|MockInterface $viewMock */
+        $repositoryMock = Mockery::mock(LocaleRepositoryInterface::class);
+        $viewMock       = Mockery::mock(View::class);
 
-        $viewMock->expects(static::once())
-            ->method('with')
+        $viewMock->shouldReceive('with')->once()
             ->with([
                 'localized'        => true,
                 'currentLocale'    => 'en',
                 'availableLocales' => ['nl', 'en'],
             ]);
 
-        $repositoryMock->expects(static::once())
-            ->method('isLocalized')
-            ->willReturn(true);
+        $repositoryMock->shouldReceive('isLocalized')->once()
+            ->andReturn(true);
 
-        $repositoryMock->expects(static::once())
-            ->method('getAvailable')
-            ->willReturn(['nl', 'en']);
+        $repositoryMock->shouldReceive('getAvailable')->once()
+            ->andReturn(['nl', 'en']);
 
         $composer = new LocaleComposer($repositoryMock);
         $composer->compose($viewMock);

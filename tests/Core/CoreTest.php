@@ -160,11 +160,10 @@ class CoreTest extends CmsBootTestCase
     {
         $this->app['config']->set('cms-core.database.driver', 'cms-connection-test');
 
-        $dbMock = $this->getMockBuilder(ConnectionResolverInterface::class)->getMock();
-        $dbMock->expects(static::once())
-            ->method('connection')
-            ->with('cms-connection-test')
-            ->willReturnSelf();
+        /** @var Mockery\Mock|Mockery\MockInterface|ConnectionResolverInterface */
+        $dbMock = Mockery::mock(ConnectionResolverInterface::class);
+        $dbMock->shouldReceive('connection')->once()
+            ->with('cms-connection-test')->andReturnSelf();
 
         $this->app->instance('db', $dbMock);
 
@@ -180,14 +179,11 @@ class CoreTest extends CmsBootTestCase
     {
         $this->app['config']->set('cms-core.session.driver', 'cms-driver-test');
 
-        $sessionMock = $this->getMockBuilder(SessionManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var SessionManager|Mockery\Mock|Mockery\MockInterface $sessionMock */
+        $sessionMock = Mockery::mock(SessionManager::class);
 
-        $sessionMock->expects(static::once())
-            ->method('driver')
-            ->with('cms-driver-test')
-            ->willReturnSelf();
+        $sessionMock->shouldReceive('driver')->once()
+            ->with('cms-driver-test')->andReturnSelf();
 
         $this->app->instance('session', $sessionMock);
 
@@ -402,12 +398,12 @@ class CoreTest extends CmsBootTestCase
     {
         $this->app['config']->set('cms-core.route.name-prefix', 'test::');
 
-        $urlMock = $this->getMockBuilder(UrlGenerator::class)->getMock();
+        /** @var UrlGenerator|Mockery\Mock|Mockery\MockInterface $urlMock */
+        $urlMock = Mockery::mock(UrlGenerator::class);
 
-        $urlMock->expects(static::once())
-            ->method('route')
+        $urlMock->shouldReceive('route')->once()
             ->with('test::route-test', ['param'], false)
-            ->willReturn('test-return-value');
+            ->andReturn('test-return-value');
 
         $this->app->instance('url', $urlMock);
 
@@ -423,12 +419,12 @@ class CoreTest extends CmsBootTestCase
     {
         $this->app['config']->set('cms-api.route.name-prefix', 'test::');
 
-        $urlMock = $this->getMockBuilder(UrlGenerator::class)->getMock();
+        /** @var UrlGenerator|Mockery\Mock|Mockery\MockInterface $urlMock */
+        $urlMock = Mockery::mock(UrlGenerator::class);
 
-        $urlMock->expects(static::once())
-            ->method('route')
+        $urlMock->shouldReceive('route')->once()
             ->with('test::route-test', ['param'], false)
-            ->willReturn('test-return-value');
+            ->andReturn('test-return-value');
 
         $this->app->instance('url', $urlMock);
 
@@ -438,37 +434,35 @@ class CoreTest extends CmsBootTestCase
     }
 
     /**
-     * @return LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LoggerInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function makeLoggerMock()
     {
-        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        /** @var Mockery\Mock|Mockery\MockInterface|LoggerInterface $loggerMock */
+        $loggerMock = Mockery::mock(LoggerInterface::class);
 
         $parameters = func_get_args();
 
         if (count($parameters) > 2) {
 
-            $loggerMock->expects(static::once())->method('log')
+            $loggerMock->shouldReceive('log')->once()
                 ->with($parameters[0], $parameters[1], $parameters[2]);
 
         } elseif (count($parameters) > 1) {
 
-            $loggerMock->expects(static::once())->method('log')
+            $loggerMock->shouldReceive('log')->once()
                 ->with($parameters[0], $parameters[1]);
 
         } elseif (count($parameters)) {
 
-            $loggerMock->expects(static::once())->method('log')
+            $loggerMock->shouldReceive('log')->once()
                 ->with($parameters[0]);
         }
 
         return $loggerMock;
     }
 
-    /**
-     * @return Core
-     */
-    protected function makeCore()
+    protected function makeCore(): Core
     {
         return new Core($this->app);
     }

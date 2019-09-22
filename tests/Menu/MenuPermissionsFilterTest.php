@@ -13,8 +13,13 @@ use Czim\CmsCore\Support\Data\Menu\PermissionsIndexData;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Exception;
 use Illuminate\Support\Arr;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 use RuntimeException;
+use UnexpectedValueException;
 
 class MenuPermissionsFilterTest extends CmsBootTestCase
 {
@@ -175,10 +180,10 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_no_permissions_index_is_set()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
-        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
-        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+        /** @var MenuLayoutDataInterface|Mock|MockInterface $layoutMock */
+        $layoutMock = Mockery::mock(MenuLayoutDataInterface::class);
 
         $filter = new MenuPermissionsFilter();
 
@@ -192,8 +197,10 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
     {
         $user = $this->getMockUser();
 
-        $user->method('can')
-            ->willReturnCallback(function ($permission) {
+        $user->shouldReceive('isAdmin')->andReturn(false);
+
+        $user->shouldReceive('can')
+            ->andReturnUsing(function ($permission) {
                 switch ($permission) {
                     case 'permission-a':
                     case 'permission-z':
@@ -206,7 +213,7 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
             });
 
         $filter = new MenuPermissionsFilter();
-        $index = new PermissionsIndexData([
+        $index  = new PermissionsIndexData([
             'index' => [
                 base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a', 'permission-b'],
                 base64_encode('group-a') .'.' . base64_encode('group-c') => [],
@@ -275,8 +282,10 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
     {
         $user = $this->getMockUser();
 
-        $user->method('can')
-            ->willReturnCallback(static function ($permission) {
+        $user->shouldReceive('isAdmin')->andReturn(false);
+
+        $user->shouldReceive('can')
+            ->andReturnUsing(static function ($permission) {
                 switch ($permission) {
                     case 'permission-z':
                     case 'permission-y':
@@ -288,7 +297,7 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
             });
 
         $filter = new MenuPermissionsFilter();
-        $index = new PermissionsIndexData([
+        $index  = new PermissionsIndexData([
             'index' => [
                 base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a', 'permission-b'],
                 base64_encode('group-a') .'.' . base64_encode('group-c') => [],
@@ -326,10 +335,10 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_incorrect_value_is_given_for_user_parameter()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
-        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
-        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+        /** @var MenuLayoutDataInterface|Mock|MockInterface $layoutMock */
+        $layoutMock = Mockery::mock(MenuLayoutDataInterface::class);
 
         $filter = new MenuPermissionsFilter();
 
@@ -342,18 +351,18 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
     function it_does_not_attempt_to_filter_if_user_is_admin()
     {
         $user = $this->getMockUser();
-        $user->expects(static::atLeastOnce())->method('isAdmin')->willReturn(true);
+        $user->shouldReceive('isAdmin')->atLeast()->once()->andReturn(true);
 
-        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
-        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
-        $layoutMock->method('setLayout')
-            ->willThrowException(new RuntimeException('setLayout should not be called'));
+        /** @var MenuLayoutDataInterface|Mock|MockInterface $layoutMock */
+        $layoutMock = Mockery::mock(MenuLayoutDataInterface::class);
+        $layoutMock->shouldReceive('setLayout')
+            ->andThrow(new RuntimeException('setLayout should not be called'));
 
-        $indexMock = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
-        $indexMock->method('index')
-            ->willThrowException(new RuntimeException('index should not be called'));
-        $indexMock->method('permissions')
-            ->willThrowException(new RuntimeException('permissions should not be called'));
+        $indexMock = Mockery::mock(MenuPermissionsIndexDataInterface::class);
+        $indexMock->shouldReceive('index')
+            ->andThrow(new RuntimeException('index should not be called'));
+        $indexMock->shouldReceive('permissions')
+            ->andThrow(new RuntimeException('permissions should not be called'));
 
         $filter = new MenuPermissionsFilter();
 
@@ -366,19 +375,19 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
     function it_does_not_attempt_to_filter_if_user_has_all_indexed_permissions()
     {
         $user = $this->getMockUser();
-        $user->method('isAdmin')->willReturn(false);
-        $user->method('can')->willReturn(true);
-        $user->method('canAnyOf')->willReturn(true);
+        $user->shouldReceive('isAdmin')->andReturn(false);
+        $user->shouldReceive('can')->andReturn(true);
+        $user->shouldReceive('canAnyOf')->andReturn(true);
 
-        /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
-        $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
-        $layoutMock->method('setLayout')
-            ->willThrowException(new RuntimeException('setLayout should not be called'));
+        /** @var MenuLayoutDataInterface|Mock|MockInterface $layoutMock */
+        $layoutMock = Mockery::mock(MenuLayoutDataInterface::class);
+        $layoutMock->shouldReceive('setLayout')
+            ->andThrow(new RuntimeException('setLayout should not be called'));
 
-        $indexMock = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
-        $indexMock->method('index')
-            ->willThrowException(new RuntimeException('index should not be called'));
-        $indexMock->expects(static::atLeastOnce())->method('permissions')->willReturn([]);
+        $indexMock = Mockery::mock(MenuPermissionsIndexDataInterface::class);
+        $indexMock->shouldReceive('index')
+            ->andThrow(new RuntimeException('index should not be called'));
+        $indexMock->shouldReceive('permissions')->atLeast()->once()->andReturn([]);
 
         $filter = new MenuPermissionsFilter();
 
@@ -435,8 +444,10 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         // data that it *should* leave out, the layout should be returned with 'invalid' data.
         $user = $this->getMockUser();
 
-        $user->method('can')
-            ->willReturnCallback(function ($permission) {
+        $user->shouldReceive('isAdmin')->andReturn(false);
+
+        $user->shouldReceive('can')
+            ->andReturnUsing(function ($permission) {
                 switch ($permission) {
                     case 'permission-a':
                     case 'permission-z':
@@ -497,11 +508,11 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
     // ------------------------------------------------------------------------------
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|UserInterface
+     * @return Mock|MockInterface|UserInterface
      */
     protected function getMockUser()
     {
-        return $this->getMockBuilder(UserInterface::class)->getMock();
+        return Mockery::mock(UserInterface::class);
     }
 
     /**

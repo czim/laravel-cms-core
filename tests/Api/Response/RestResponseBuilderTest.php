@@ -22,6 +22,10 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection as FractalCollection;
 use League\Fractal\Resource\Item as FractalItem;
 use League\Fractal\TransformerAbstract;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
+use UnexpectedValueException;
 
 class RestResponseBuilderTest extends CmsBootTestCase
 {
@@ -72,17 +76,15 @@ class RestResponseBuilderTest extends CmsBootTestCase
         $manager = $this->getMockFractalManager();
         $builder = new RestResponseBuilder($this->getMockCore(), $manager);
 
-        $manager->expects(static::once())
-            ->method('createData')
-            ->willReturnCallback(function ($resource) {
+        $manager->shouldReceive('createData')->once()
+            ->andReturnUsing(function ($resource) {
 
                 static::assertInstanceOf(FractalItem::class, $resource);
 
                 return new BasicDataObject([ 'test' => 'testing' ]);
             });
 
-        /** @var TransformerAbstract|\PHPUnit_Framework_MockObject_MockObject $transformerMock */
-        $transformerMock = $this->getMockBuilder(TransformerAbstract::class)->getMock();
+        $transformerMock = $this->getMockTransformer();
 
         $container = new TransformContainer;
         $container->content     = 'testing';
@@ -104,9 +106,8 @@ class RestResponseBuilderTest extends CmsBootTestCase
         $manager = $this->getMockFractalManager();
         $builder = new RestResponseBuilder($this->getMockCore(), $manager);
 
-        $manager->expects(static::once())
-            ->method('createData')
-            ->willReturnCallback(function ($resource) {
+        $manager->shouldReceive('createData')->once()
+            ->andReturnUsing(function ($resource) {
 
                 static::assertInstanceOf(FractalItem::class, $resource);
 
@@ -132,7 +133,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_transformer_class_is_invalid()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageRegExp('#Czim\\\\CmsCore\\\\Test\\\\Helpers\\\\Support\\\\TestDataObject#');
 
         $manager = $this->getMockFractalManager();
@@ -158,9 +159,8 @@ class RestResponseBuilderTest extends CmsBootTestCase
         $manager = $this->getMockFractalManager();
         $builder = new RestResponseBuilder($this->getMockCore(), $manager);
 
-        $manager->expects(static::once())
-            ->method('createData')
-            ->willReturnCallback(function ($resource) {
+        $manager->shouldReceive('createData')->once()
+            ->andreturnUsing(function ($resource) {
                 /** @var FractalCollection $resource */
                 static::assertInstanceOf(FractalCollection::class, $resource);
                 static::assertCount(2, $resource->getData());
@@ -168,8 +168,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
                 return new BasicDataObject([ 'test' => 'testing' ]);
             });
 
-        /** @var TransformerAbstract|\PHPUnit_Framework_MockObject_MockObject $transformerMock */
-        $transformerMock = $this->getMockBuilder(TransformerAbstract::class)->getMock();
+        $transformerMock = $this->getMockTransformer();
 
         $container = new TransformContainer;
         $container->content     = ['test-a', 'test-b'];
@@ -192,9 +191,8 @@ class RestResponseBuilderTest extends CmsBootTestCase
         $manager = $this->getMockFractalManager();
         $builder = new RestResponseBuilder($this->getMockCore(), $manager);
 
-        $manager->expects(static::once())
-            ->method('createData')
-            ->willReturnCallback(function ($resource) {
+        $manager->shouldReceive('createData')->once()
+            ->andReturnUsing(function ($resource) {
                 /** @var FractalCollection $resource */
                 static::assertInstanceOf(FractalCollection::class, $resource);
                 static::assertCount(2, $resource->getData());
@@ -206,8 +204,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
                 return new BasicDataObject([ 'test' => 'testing' ]);
             });
 
-        /** @var TransformerAbstract|\PHPUnit_Framework_MockObject_MockObject $transformerMock */
-        $transformerMock = $this->getMockBuilder(TransformerAbstract::class)->getMock();
+        $transformerMock = $this->getMockTransformer();
 
         $paginator = new LengthAwarePaginator(['test-a', 'test-b'], 4, 2);
 
@@ -234,8 +231,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
      */
     function it_renders_an_error_response_for_array_data()
     {
-        $manager = $this->getMockFractalManager();
-        $builder = new RestResponseBuilder($this->getMockCore(), $manager);
+        $builder = new RestResponseBuilder($this->getMockCore(), $this->getMockFractalManager());
 
         /** @var JsonResponse $result */
         $result = $builder->error(['message' => 'test error']);
@@ -250,8 +246,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
      */
     function it_renders_an_error_response_for_array_data_with_custom_status_code()
     {
-        $manager = $this->getMockFractalManager();
-        $builder = new RestResponseBuilder($this->getMockCore(), $manager);
+        $builder = new RestResponseBuilder($this->getMockCore(), $this->getMockFractalManager());
 
         /** @var JsonResponse $result */
         $result = $builder->error(['message' => 'test error'], 418);
@@ -322,11 +317,10 @@ class RestResponseBuilderTest extends CmsBootTestCase
      */
     function it_renders_an_error_response_for_a_standard_exception()
     {
-        $manager = $this->getMockFractalManager();
-        $builder = new RestResponseBuilder($this->getMockCore(), $manager);
+        $builder = new RestResponseBuilder($this->getMockCore(), $this->getMockFractalManager());
 
         /** @var JsonResponse $result */
-        $result = $builder->error(new \Exception('test error'));
+        $result = $builder->error(new Exception('test error'));
 
         static::assertInstanceOf(JsonResponse::class, $result);
         static::assertEquals(500, $result->getStatusCode());
@@ -394,16 +388,16 @@ class RestResponseBuilderTest extends CmsBootTestCase
         $this->app['config']->set('cms-core.debug', true);
         $this->app['config']->set('cms-api.debug.local-exception-trace', true);
 
-        $coreMock->method('config')
-            ->willReturnCallback(function ($key, $default = null) {
+        $coreMock->shouldReceive('config')
+            ->andReturnUsing(function ($key, $default = null) {
                 if ($key === 'cms-core.debug') {
                     return true;
                 }
                 return $default;
             });
 
-        $coreMock->method('apiConfig')
-            ->willReturnCallback(function ($key, $default = null) {
+        $coreMock->shouldReceive('apiConfig')
+            ->andReturnUsing(function ($key, $default = null) {
                 if ($key === 'debug.local-exception-trace') {
                     return true;
                 }
@@ -437,11 +431,13 @@ class RestResponseBuilderTest extends CmsBootTestCase
      */
     protected function standardExceptionMessageTest($status, $message)
     {
+        $core    = $this->getMockCore();
         $manager = $this->getMockFractalManager();
-        $builder = new RestResponseBuilder($this->getMockCore(), $manager);
+
+        $builder = new RestResponseBuilder($core, $manager);
 
         /** @var JsonResponse $result */
-        $result = $builder->error(new \Exception(), $status);
+        $result = $builder->error(new Exception(), $status);
 
         static::assertInstanceOf(JsonResponse::class, $result);
         static::assertEquals($status, $result->getStatusCode());
@@ -450,16 +446,38 @@ class RestResponseBuilderTest extends CmsBootTestCase
 
 
     /**
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MockInterface|Mock|Manager|CoreInterface
      */
     protected function getMockCore()
     {
-        return $this->getMockBuilder(CoreInterface::class)->getMock();
+        /** @var MockInterface|Mock|Manager|CoreInterface */
+        $core = Mockery::mock(CoreInterface::class);
+
+        $core->shouldReceive('config')->with('debug')->andReturn(false);
+
+        return $core;
     }
 
+    /**
+     * @return MockInterface|Mock|Manager
+     */
     protected function getMockFractalManager()
     {
-        return $this->getMockBuilder(Manager::class)->getMock();
+        /** @var MockInterface|Mock|Manager $mock */
+        $mock = Mockery::mock(Manager::class);
+
+        $mock->shouldReceive('setSerializer');
+
+        return $mock;
     }
+
+    /**
+     * @return MockInterface|Mock|TransformerAbstract
+     */
+    protected function getMockTransformer()
+    {
+        return Mockery::mock(TransformerAbstract::class);
+    }
+
 
 }

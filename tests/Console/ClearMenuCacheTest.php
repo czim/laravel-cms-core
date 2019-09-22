@@ -6,6 +6,9 @@ namespace Czim\CmsCore\Console;
 
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Test\CmsBootTestCase;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class ClearMenuCacheTest extends CmsBootTestCase
 {
@@ -15,9 +18,10 @@ class ClearMenuCacheTest extends CmsBootTestCase
      */
     function it_clears_cache_using_the_menu_repository()
     {
-        $repositoryMock = $this->getMockBuilder(MenuRepositoryInterface::class)->getMock();
-        $repositoryMock->expects(static::once())
-            ->method('clearCache');
+        /** @var MenuRepositoryInterface|Mock|MockInterface $repositoryMock */
+        $repositoryMock = Mockery::mock(MenuRepositoryInterface::class);
+
+        $repositoryMock->shouldReceive('clearCache')->once();
 
         $this->app->instance(MenuRepositoryInterface::class, $repositoryMock);
 

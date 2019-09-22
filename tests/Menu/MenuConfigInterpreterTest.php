@@ -7,13 +7,15 @@ namespace Czim\CmsCore\Test\Menu;
 use Czim\CmsCore\Contracts\Menu\MenuModulesInterpreterInterface;
 use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuConfiguredModulesDataInterface;
-use Czim\CmsCore\Contracts\Support\Data\MenuLayoutDataInterface;
 use Czim\CmsCore\Menu\MenuConfigInterpreter;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 use UnexpectedValueException;
 
 class MenuConfigInterpreterTest extends CmsBootTestCase
@@ -229,36 +231,32 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
     // ------------------------------------------------------------------------------
 
     /**
-     * @return MenuModulesInterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MenuModulesInterpreterInterface|Mock|MockInterface
      */
     protected function getMockModulesInterpreter()
     {
-        $mock = $this->getMockBuilder(MenuModulesInterpreterInterface::class)->getMock();
+        $mock = Mockery::mock(MenuModulesInterpreterInterface::class);
 
-        $mock->expects(static::once())
-             ->method('interpret')
-             ->willReturn($this->getMockModulesData());
+        $mock->shouldReceive('interpret')->once()
+             ->andReturn($this->getMockModulesData());
 
         return $mock;
     }
 
     /**
-     * @return MenuConfiguredModulesDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MenuConfiguredModulesDataInterface|Mock|MockInterface
      */
     protected function getMockModulesData()
     {
-        $mock = $this->getMockBuilder(MenuConfiguredModulesDataInterface::class)->getMock();
+        $mock = Mockery::mock(MenuConfiguredModulesDataInterface::class);
 
-        $mock->method('standard')->willReturn($this->menuModulesStandard);
-        $mock->method('alternative')->willReturn(new Collection);
+        $mock->shouldReceive('standard')->andReturn($this->menuModulesStandard);
+        $mock->shouldReceive('alternative')->andReturn(new Collection);
 
         return $mock;
     }
 
-    /**
-     * @return Collection
-     */
-    protected function getMockModulePresences()
+    protected function getMockModulePresences(): Collection
     {
         return new Collection([
             'test-a' => [
@@ -292,10 +290,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
         ]);
     }
 
-    /**
-     * @return Collection
-     */
-    protected function getMockModulePresencesWithArrays()
+    protected function getMockModulePresencesWithArrays(): Collection
     {
         return new Collection([
             'test-a' => [
@@ -325,10 +320,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
         ]);
     }
 
-    /**
-     * @return MenuConfigInterpreter()
-     */
-    protected function makeConfigInterpreter()
+    protected function makeConfigInterpreter(): MenuConfigInterpreter
     {
         return new MenuConfigInterpreter($this->getMockModulesInterpreter());
     }

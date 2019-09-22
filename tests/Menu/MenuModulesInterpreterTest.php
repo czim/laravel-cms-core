@@ -15,6 +15,10 @@ use Czim\CmsCore\Support\Enums\MenuPresenceMode;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
+use UnexpectedValueException;
 
 class MenuModulesInterpreterTest extends CmsBootTestCase
 {
@@ -30,6 +34,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
      * @var Collection
      */
     protected $modules;
+
 
     public function setUp(): void
     {
@@ -329,7 +334,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_incorrect_presence_data_is_defined_for_a_module()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         $this->modules = collect([
             'test' => $this->getMockModuleWithCustomPresence([
@@ -350,7 +355,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_incorrect_presence_data_is_configured_for_a_module()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         $this->modules = collect([
             'test-a' => $this->getMockModuleWithPresenceInstance(false),
@@ -368,7 +373,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_no_key_for_a_module_could_be_determined()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageRegExp('#must be string or have a non-numeric key#i');
 
         $this->modules = collect([
@@ -387,7 +392,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_incorrect_presence_data_is_configured_for_a_module_in_a_nesting_array()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         $this->modules = collect([
             'test-a' => $this->getMockModuleWithPresenceInstance(false),
@@ -918,17 +923,17 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
     // ------------------------------------------------------------------------------
 
     /**
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return CoreInterface|Mock|MockInterface
      */
     protected function getMockCore()
     {
-        $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
+        $mock = Mockery::mock(CoreInterface::class);
 
-        $mock->method('modules')
-            ->willReturn($this->getMockModuleManager($this->modules));
+        $mock->shouldReceive('modules')
+            ->andReturn($this->getMockModuleManager($this->modules));
 
-        $mock->method('moduleConfig')
-            ->willReturnCallback(function ($key) {
+        $mock->shouldReceive('moduleConfig')
+            ->andReturnUsing(function ($key) {
                 if ($key === 'menu.modules') {
                     return $this->menuModulesConfig;
                 }
@@ -941,17 +946,15 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
     /**
      * @param null|Collection $modules
-     * @return ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModuleManagerInterface|Mock|MockInterface
      */
     protected function getMockModuleManager($modules = null)
     {
-        $mock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
+        $mock = Mockery::mock(ModuleManagerInterface::class);
 
         $modules = $modules ?: new Collection;
 
-        $mock->expects(static::once())
-            ->method('getModules')
-            ->willReturn($modules);
+        $mock->shouldReceive('getModules')->once()->andReturn($modules);
 
         return $mock;
     }
@@ -969,17 +972,21 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
     /**
      * @param bool $expected    whether the menu presence call is expected
-     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     * @return Mock|MockInterface|ModuleInterface
      */
     protected function getMockModuleWithPresenceInstance($expected = true)
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->method('getKey')->willReturn('test-a');
+        $mock->shouldReceive('getKey')->andReturn('test-a');
 
-        $mock->expects($expected ? static::once() : static::any())
-            ->method('getMenuPresence')
-            ->willReturn(
+        $mock = $mock->shouldReceive('getMenuPresence');
+
+        if ($expected) {
+            $mock->once();
+        }
+
+        $mock->andReturn(
                 new MenuPresence([
                     'id'    => 'test-a',
                     'type'  => MenuPresenceType::ACTION,
@@ -987,21 +994,20 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
                 ])
             );
 
-        return $mock;
+        return $mock->getMock();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     * @return Mock|MockInterface|ModuleInterface
      */
     protected function getMockModuleWithPermissions()
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->method('getKey')->willReturn('test-b');
+        $mock->shouldReceive('getKey')->andReturn('test-b');
 
-        $mock->expects(static::once())
-            ->method('getMenuPresence')
-            ->willReturn([
+        $mock->shouldReceive('getMenuPresence')->once()
+            ->andReturn([
                 'id'          => 'test-b',
                 'type'        => MenuPresenceType::ACTION,
                 'label'       => 'something',
@@ -1014,24 +1020,21 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
     /**
      * @param mixed $presence
-     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     * @return Mock|MockInterface|ModuleInterface
      */
     protected function getMockModuleWithCustomPresence($presence)
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->method('getKey')->willReturn('test');
+        $mock->shouldReceive('getKey')->andReturn('test');
 
-        $mock->method('getMenuPresence')
-             ->willReturn($presence);
+        $mock->shouldReceive('getMenuPresence')
+             ->andReturn($presence);
 
         return $mock;
     }
 
-    /**
-     * @return MenuModulesInterpreter
-     */
-    protected function makeModulesInterpreter()
+    protected function makeModulesInterpreter(): MenuModulesInterpreter
     {
         return new MenuModulesInterpreter($this->getMockCore());
     }

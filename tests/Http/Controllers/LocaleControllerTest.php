@@ -10,6 +10,7 @@ use Czim\CmsCore\Http\Requests\SetLocaleRequest;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Http\RedirectResponse;
+use Mockery;
 
 class LocaleControllerTest extends CmsBootTestCase
 {
@@ -19,20 +20,20 @@ class LocaleControllerTest extends CmsBootTestCase
      */
     function it_sets_an_available_locale()
     {
-        /** @var LocaleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        /** @var SetLocaleRequest|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $repositoryMock = $this->getMockBuilder(LocaleRepositoryInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(SetLocaleRequest::class)->getMock();
+        /** @var LocaleRepositoryInterface|Mockery\Mock|Mockery\MockInterface $repositoryMock */
+        /** @var SetLocaleRequest|Mockery\Mock|Mockery\MockInterface $requestMock */
+        $repositoryMock = Mockery::mock(LocaleRepositoryInterface::class);
+        $requestMock    = Mockery::mock(SetLocaleRequest::class);
 
-        $repositoryMock->expects(static::atLeastOnce())
-            ->method('isAvailable')
+        $repositoryMock->shouldReceive('isAvailable')
+            ->atLeast()->once()
             ->with('nl')
-            ->willReturn(true);
+            ->andReturn(true);
 
-        $requestMock->expects(static::atLeastOnce())
-            ->method('input')
+        $requestMock->shouldReceive('input')
+            ->atLeast()->once()
             ->with('locale')
-            ->willReturn('nl');
+            ->andReturn('nl');
 
         $controller = new LocaleController($this->app[Component::CORE], $repositoryMock);
 
@@ -49,20 +50,20 @@ class LocaleControllerTest extends CmsBootTestCase
      */
     function it_redirects_if_locale_to_set_is_unavailable()
     {
-        /** @var LocaleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        /** @var SetLocaleRequest|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $repositoryMock = $this->getMockBuilder(LocaleRepositoryInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(SetLocaleRequest::class)->getMock();
+        /** @var LocaleRepositoryInterface|Mockery\Mock|Mockery\MockInterface $repositoryMock */
+        /** @var SetLocaleRequest|Mockery\Mock|Mockery\MockInterface $requestMock */
+        $repositoryMock = Mockery::mock(LocaleRepositoryInterface::class);
+        $requestMock    = Mockery::mock(SetLocaleRequest::class);
 
-        $repositoryMock->expects(static::atLeastOnce())
-            ->method('isAvailable')
+        $repositoryMock->shouldReceive('isAvailable')
+            ->atLeast()->once()
             ->with('nl')
-            ->willReturn(false);
+            ->andReturn(false);
 
-        $requestMock->expects(static::atLeastOnce())
-            ->method('input')
+        $requestMock->shouldReceive('input')
+            ->atLeast()->once()
             ->with('locale')
-            ->willReturn('nl');
+            ->andReturn('nl');
 
         $controller = new LocaleController($this->app[Component::CORE], $repositoryMock);
 

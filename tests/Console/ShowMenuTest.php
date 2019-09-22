@@ -9,6 +9,9 @@ use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class ShowMenuTest extends CmsBootTestCase
 {
@@ -43,18 +46,12 @@ class ShowMenuTest extends CmsBootTestCase
             ])
         ]);
 
-        $repositoryMock = $this->getMockBuilder(MenuRepositoryInterface::class)->getMock();
+        /** @var MenuRepositoryInterface|Mock|MockInterface $repositoryMock */
+        $repositoryMock = Mockery::mock(MenuRepositoryInterface::class);
 
-        $repositoryMock->expects(static::once())
-            ->method('ignorePermission')
-            ->willReturnSelf();
-
-        $repositoryMock->expects(static::once())
-            ->method('initialize');
-
-        $repositoryMock->expects(static::once())
-            ->method('getMenuLayout')
-            ->willReturn($layout);
+        $repositoryMock->shouldReceive('ignorePermission')->once()->andReturnSelf();
+        $repositoryMock->shouldReceive('initialize');
+        $repositoryMock->shouldReceive('getMenuLayout')->once()->andReturn($layout);
 
         $this->app->instance(MenuRepositoryInterface::class, $repositoryMock);
 
@@ -79,10 +76,12 @@ class ShowMenuTest extends CmsBootTestCase
             ])
         ]);
 
-        $repositoryMock = $this->getMockBuilder(MenuRepositoryInterface::class)->getMock();
-        $repositoryMock->method('ignorePermission')->willReturnSelf();
-        $repositoryMock->method('initialize');
-        $repositoryMock->method('getMenuLayout')->willReturn($layout);
+        /** @var MenuRepositoryInterface|Mock|MockInterface $repositoryMock */
+        $repositoryMock = Mockery::mock(MenuRepositoryInterface::class);
+
+        $repositoryMock->shouldReceive('ignorePermission')->andReturnSelf();
+        $repositoryMock->shouldReceive('initialize');
+        $repositoryMock->shouldReceive('getMenuLayout')->andReturn($layout);
 
         $this->app->instance(MenuRepositoryInterface::class, $repositoryMock);
 

@@ -8,6 +8,9 @@ use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class ShowModulesTest extends CmsBootTestCase
 {
@@ -33,10 +36,10 @@ class ShowModulesTest extends CmsBootTestCase
             'test-c' => $this->getMockModule('test-c'),
         ]);
 
-        $modulesMock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
-        $modulesMock->expects(static::once())
-            ->method('getModules')
-            ->willReturn($modules);
+        /** @var ModuleManagerInterface|Mock|MockInterface $modulesMock */
+        $modulesMock = Mockery::mock(ModuleManagerInterface::class);
+
+        $modulesMock->shouldReceive('getModules')->once()->andReturn($modules);
 
         $this->app->instance(ModuleManagerInterface::class, $modulesMock);
 
@@ -59,10 +62,10 @@ class ShowModulesTest extends CmsBootTestCase
             'test-b' => $this->getMockModule('test-b', 'Test B', static::class),
         ]);
 
-        $modulesMock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
-        $modulesMock->expects(static::once())
-            ->method('getModules')
-            ->willReturn($modules);
+        /** @var ModuleManagerInterface|Mock|MockInterface $modulesMock */
+        $modulesMock = Mockery::mock(ModuleManagerInterface::class);
+
+        $modulesMock->shouldReceive('getModules')->once()->andReturn($modules);
 
         $this->app->instance(ModuleManagerInterface::class, $modulesMock);
 
@@ -83,12 +86,12 @@ class ShowModulesTest extends CmsBootTestCase
      */
     function it_shows_information_about_a_specific_module_by_key()
     {
-        $modulesMock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
-        $modulesMock->expects(static::never())->method('getModules');
-        $modulesMock->expects(static::once())
-            ->method('get')
-            ->with('test-b')
-            ->willReturn($this->getMockModule('test-b', 'Test B', static::class));
+        /** @var ModuleManagerInterface|Mock|MockInterface $modulesMock */
+        $modulesMock = Mockery::mock(ModuleManagerInterface::class);
+
+        $modulesMock->shouldReceive('getModules')->never();
+        $modulesMock->shouldReceive('get')->once()->with('test-b')
+            ->andReturn($this->getMockModule('test-b', 'Test B', static::class));
 
         $this->app->instance(ModuleManagerInterface::class, $modulesMock);
 
@@ -110,8 +113,10 @@ class ShowModulesTest extends CmsBootTestCase
      */
     function it_reports_a_warning_if_a_module_could_not_be_found_by_key()
     {
-        $modulesMock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
-        $modulesMock->method('getModules')->willReturn(new Collection);
+        /** @var ModuleManagerInterface|Mock|MockInterface $modulesMock */
+        $modulesMock = Mockery::mock(ModuleManagerInterface::class);
+
+        $modulesMock->shouldReceive('getModules')->andReturn(new Collection());
 
         static::assertEquals(0, $this->artisan('cms:modules:show', [ 'module' => 'test-b' ]));
 
@@ -125,16 +130,17 @@ class ShowModulesTest extends CmsBootTestCase
      * @param string      $key
      * @param string      $name
      * @param null|string $class
-     * @return ModuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModuleInterface|Mock|MockInterface
      */
-    protected function getMockModule($key = 'test', $name = 'Test Module', $class = null)
+    protected function getMockModule(string $key = 'test', string $name = 'Test Module', ?string $class = null)
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        /** @var ModuleInterface|Mock|MockInterface $modulesMock */
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->method('getKey')->willReturn($key);
-        $mock->method('getName')->willReturn($name);
-        $mock->method('getVersion')->willReturn('1.0.0');
-        $mock->method('getAssociatedClass')->willReturn($class);
+        $mock->shouldReceive('getKey')->andReturn($key);
+        $mock->shouldReceive('getName')->andReturn($name);
+        $mock->shouldReceive('getVersion')->andReturn('1.0.0');
+        $mock->shouldReceive('getAssociatedClass')->andReturn($class);
 
         return $mock;
     }

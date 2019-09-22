@@ -10,8 +10,12 @@ use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Providers\RouteServiceProvider;
 use Czim\CmsCore\Test\TestCase;
+use Hamcrest\Matchers;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 /**
  * Class RouteServiceProviderTest
@@ -32,14 +36,14 @@ class RouteServiceProviderTest extends TestCase
         $authMock    = $this->getMockAuth();
         $modulesMock = $this->getMockModules();
 
-        $coreMock->expects(static::atLeastOnce())->method('auth')->willReturn($authMock);
-        $coreMock->expects(static::atLeastOnce())->method('modules')->willReturn($modulesMock);
+        $coreMock->shouldReceive('auth')->atLeast()->once()->andReturn($authMock);
+        $coreMock->shouldReceive('modules')->atLeast()->once()->andReturn($modulesMock);
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldRegisterCmsWebRoutes')
-            ->willReturn(true);
+        $checkerMock->shouldReceive('shouldRegisterCmsWebRoutes')
+            ->atLeast()->once()
+            ->andReturn(true);
 
-        $modulesMock->expects(static::once())->method('mapWebRoutes');
+        $modulesMock->shouldReceive('mapWebRoutes')->once();
 
         $provider = new RouteServiceProvider($this->app);
         $provider->boot($this->getElaborateRouterMock(), $coreMock, $checkerMock);
@@ -53,12 +57,12 @@ class RouteServiceProviderTest extends TestCase
         $coreMock    = $this->getMockCore();
         $checkerMock = $this->getMockBootChecker();
 
-        $coreMock->expects(static::never())->method('auth');
-        $coreMock->expects(static::never())->method('modules');
+        $coreMock->shouldReceive('auth')->never();
+        $coreMock->shouldReceive('modules')->never();
 
-        $checkerMock->expects(static::atLeastOnce())
-            ->method('shouldRegisterCmsWebRoutes')
-            ->willReturn(false);
+        $checkerMock->shouldReceive('shouldRegisterCmsWebRoutes')
+            ->atLeast()->once()
+            ->andReturn(false);
 
         $provider = new RouteServiceProvider($this->app);
         $provider->boot($this->getMockRouter(), $coreMock, $checkerMock);
@@ -66,32 +70,33 @@ class RouteServiceProviderTest extends TestCase
 
 
     /**
-     * @return Router|\PHPUnit_Framework_MockObject_MockObject
+     * @return Router|Mock|MockInterface
      */
     protected function getElaborateRouterMock()
     {
         // The router in the auth closure
         $routerMockAuth = $this->getMockRouter();
-        $routerMockAuth->expects(static::atLeastOnce())->method('get');
-        $routerMockAuth->expects(static::atLeastOnce())->method('post');
+        $routerMockAuth->shouldReceive('get')->atLeast()->once();
+        $routerMockAuth->shouldReceive('post')->atLeast()->once();
 
         // The router in the authenticated middleware closure
         $routerMockAuthed = $this->getMockRouter();
-        $routerMockAuthed->expects(static::atLeastOnce())->method('get');
-        $routerMockAuthed->expects(static::once())
-            ->method('group')
-            ->with(['prefix' => 'meta'], static::isType('callable'))
-            ->willReturnCallback(function () use ($routerMockAuthed) {
+        $routerMockAuthed->shouldReceive('get')->atLeast()->once();
+        $routerMockAuthed->shouldReceive('post');
+        $routerMockAuthed->shouldReceive('group')
+            ->once()
+            ->with(['prefix' => 'meta'], Matchers::callableValue())
+            ->andReturnUsing(function () use ($routerMockAuthed) {
                 $callable = func_get_arg(1);
                 $callable($routerMockAuthed);
             });
 
         // The router in the first closure
         $routerMockOne = $this->getMockRouter();
-        $routerMockOne->expects(static::exactly(2))
-            ->method('group')
-            ->with(static::isType('array'), static::isType('callable'))
-            ->willReturnCallback(function (array $context, callable $callable) use ($routerMockAuth, $routerMockAuthed) {
+        $routerMockOne->shouldReceive('group')
+            ->twice()
+            ->with(Matchers::arrayValue(), Matchers::callableValue())
+            ->andReturnUsing(function (array $context, callable $callable) use ($routerMockAuth, $routerMockAuthed) {
                 // At this level, two groups should be created: the auth group and the main cms group with auth middleware set
                 if (Arr::get($context, 'prefix') === 'auth') {
                     $callable($routerMockAuth);
@@ -102,14 +107,14 @@ class RouteServiceProviderTest extends TestCase
 
         // Top level router
         $routerMock = $this->getMockRouter();
-        $routerMock->expects(static::once())
-            ->method('group')
+        $routerMock->shouldReceive('group')
+            ->once()
             ->with([
                 'prefix'     => 'cms',
                 'as'         => 'cms::',
                 'middleware' => ['cms'],
-            ], static::isType('callable'))
-            ->willReturnCallback(function () use ($routerMockOne) {
+            ], Matchers::callableValue())
+            ->andReturnUsing(function () use ($routerMockOne) {
                 $callable = func_get_arg(1);
                 $callable($routerMockOne);
             });
@@ -118,69 +123,67 @@ class RouteServiceProviderTest extends TestCase
     }
 
     /**
-     * @return AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return AuthenticatorInterface|Mock|MockInterface
      */
     protected function getMockAuth()
     {
-        $authMock = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
+        $authMock = Mockery::mock(AuthenticatorInterface::class);
 
-        $authMock->expects(static::atLeastOnce())
-            ->method('getRouteLoginAction')
-            ->willReturn('login');
+        $authMock->shouldReceive('getRouteLoginAction')
+            ->atLeast()->once()
+            ->andReturn('login');
 
-        $authMock->expects(static::atLeastOnce())
-            ->method('getRouteLoginPostAction')
-            ->willReturn('loginPost');
+        $authMock->shouldReceive('getRouteLoginPostAction')
+            ->atLeast()->once()
+            ->andReturn('loginPost');
 
-        $authMock->expects(static::atLeastOnce())
-            ->method('getRouteLogoutAction')
-            ->willReturn('logout');
+        $authMock->shouldReceive('getRouteLogoutAction')
+            ->atLeast()->once()
+            ->andReturn('logout');
 
-        $authMock->expects(static::atLeastOnce())
-            ->method('getRoutePasswordEmailGetAction')
-            ->willReturn('email');
+        $authMock->shouldReceive('getRoutePasswordEmailGetAction')
+            ->atLeast()->once()
+            ->andReturn('email');
 
-        $authMock->expects(static::atLeastOnce())
-            ->method('getRoutePasswordEmailPostAction')
-            ->willReturn('loginPost');
+        $authMock->shouldReceive('getRoutePasswordEmailPostAction')
+            ->atLeast()->once()
+            ->andReturn('loginPost');
 
-        $authMock->expects(static::atLeastOnce())
-            ->method('getRoutePasswordResetGetAction')
-            ->willReturn('reset');
+        $authMock->shouldReceive('getRoutePasswordResetGetAction')
+            ->atLeast()->once()
+            ->andReturn('reset');
 
-        $authMock->expects(static::atLeastOnce())
-            ->method('getRoutePasswordResetPostAction')
-            ->willReturn('resetPost');
+        $authMock->shouldReceive('getRoutePasswordResetPostAction')
+            ->atLeast()->once()
+            ->andReturn('resetPost');
 
         return $authMock;
     }
 
     /**
-     * @return ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModuleManagerInterface|Mock|MockInterface
      */
     protected function getMockModules()
     {
-        return $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
+        return Mockery::mock(ModuleManagerInterface::class);
     }
 
     /**
-     * @return Router|\PHPUnit_Framework_MockObject_MockObject
+     * @return Router|Mock|MockInterface
      */
     protected function getMockRouter()
     {
-        return $this->getMockBuilder(Router::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return Mockery::mock(Router::class);
     }
 
     /**
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return CoreInterface|Mock|MockInterface
      */
     protected function getMockCore()
     {
-        $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
+        $mock = Mockery::mock(CoreInterface::class);
 
-        $mock->method('config')->willReturnCallback(
+        $mock->shouldReceive('config')->andReturnUsing(
             function ($key, $default = null) {
                 switch ($key) {
 
@@ -200,11 +203,11 @@ class RouteServiceProviderTest extends TestCase
     }
 
     /**
-     * @return BootCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return BootCheckerInterface|Mock|MockInterface
      */
     protected function getMockBootChecker()
     {
-        return $this->getMockBuilder(BootCheckerInterface::class)->getMock();
+        return Mockery::mock(BootCheckerInterface::class);
     }
 
 }

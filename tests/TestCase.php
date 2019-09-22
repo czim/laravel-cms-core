@@ -6,8 +6,10 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Contracts\Foundation\Application;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
+use Mockery;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-abstract class TestCase extends \Orchestra\Testbench\TestCase
+abstract class TestCase extends OrchestraTestCase
 {
 
     /**
@@ -38,18 +40,24 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         $app->bind('mock-cms-auth', function () {
 
-            $mock = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
+            $mock = $this->getMockAuthenticator();
 
-            $mock->method('version')->willReturn('1.2.3');
+            $mock->shouldReceive('version')->andReturn('1.2.3');
 
-            $mock->method('getRouteLoginAction')->willReturn('MockController@index');
-            $mock->method('getRouteLoginPostAction')->willReturn('MockController@index');
-            $mock->method('getRouteLogoutAction')->willReturn('MockController@index');
+            $mock->shouldReceive('admin')->andReturn(false);
+            $mock->shouldReceive('user')->andReturn(null);
 
-            $mock->method('getRoutePasswordEmailGetAction')->willReturn('MockController@index');
-            $mock->method('getRoutePasswordEmailPostAction')->willReturn('MockController@index');
-            $mock->method('getRoutePasswordResetGetAction')->willReturn('MockController@index');
-            $mock->method('getRoutePasswordResetPostAction')->willReturn('MockController@index');
+            $mock->shouldReceive('getRouteLoginAction')->andReturn('MockController@index');
+            $mock->shouldReceive('getRouteLoginPostAction')->andReturn('MockController@index');
+            $mock->shouldReceive('getRouteLogoutAction')->andReturn('MockController@index');
+
+            $mock->shouldReceive('getApiRouteLoginAction')->andReturn('MockController@index');
+            $mock->shouldReceive('getApiRouteLogoutAction')->andReturn('MockController@index');
+
+            $mock->shouldReceive('getRoutePasswordEmailGetAction')->andReturn('MockController@index');
+            $mock->shouldReceive('getRoutePasswordEmailPostAction')->andReturn('MockController@index');
+            $mock->shouldReceive('getRoutePasswordResetGetAction')->andReturn('MockController@index');
+            $mock->shouldReceive('getRoutePasswordResetPostAction')->andReturn('MockController@index');
 
             return $mock;
         });
@@ -66,5 +74,14 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         return $this->app[ConsoleKernelContract::class]->output();
     }
+
+    /**
+     * @return \Mockery\MockInterface|\Mockery\Mock|AuthenticatorInterface
+     */
+    protected function getMockAuthenticator()
+    {
+        return Mockery::mock(AuthenticatorInterface::class);
+    }
+
 
 }

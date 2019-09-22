@@ -7,6 +7,7 @@ namespace Czim\CmsCore\Test\Support\Data\Menu;
 use Czim\CmsCore\Support\Data\Menu\LayoutGroupData;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Contracts\Translation\Translator;
+use Mockery;
 
 class LayoutGroupDataTest extends CmsBootTestCase
 {
@@ -59,11 +60,10 @@ class LayoutGroupDataTest extends CmsBootTestCase
      */
     function it_returns_label_translation_if_available()
     {
-        $transMock = $this->getMockBuilder(Translator::class)
-            ->setMethods(['has', 'get', 'choice', 'getLocale', 'setLocale'])
-            ->getMock();
+        $transMock = Mockery::mock(Translator::class);
 
-        $transMock->expects(static::once())->method('get')->willReturn('testing_translated');
+        $transMock->shouldReceive('has')->andReturn(true);
+        $transMock->shouldReceive('get')->once()->andReturn('testing_translated');
 
         $this->app->instance('translator', $transMock);
 
@@ -79,11 +79,10 @@ class LayoutGroupDataTest extends CmsBootTestCase
      */
     function it_returns_untranslated_label_if_translation_not_available()
     {
-        $transMock = $this->getMockBuilder(Translator::class)
-            ->setMethods(['has', 'get', 'choice', 'getLocale', 'setLocale'])
-            ->getMock();
+        $transMock = Mockery::mock(Translator::class);
 
-        $transMock->expects(static::once())->method('get')->willReturn('translation_key');
+        $transMock->shouldReceive('has')->andReturn(false);
+        $transMock->shouldReceive('get')->once()->andReturn('translation_key');
 
         $this->app->instance('translator', $transMock);
 

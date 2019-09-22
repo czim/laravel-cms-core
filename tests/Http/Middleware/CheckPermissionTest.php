@@ -15,6 +15,9 @@ use Czim\CmsCore\Test\TestCase;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class CheckPermissionTest extends TestCase
 {
@@ -24,21 +27,23 @@ class CheckPermissionTest extends TestCase
      */
     function it_passes_through_if_no_permission_is_given()
     {
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $coreMock       = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $authMock       = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(Request::class)->getMock();
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $coreMock       = Mockery::mock(CoreInterface::class);
+        $authMock       = Mockery::mock(AuthenticatorInterface::class);
+        $requestMock    = Mockery::mock(Request::class);
 
-        $authMock->expects(static::never())->method('admin');
-        $authMock->expects(static::never())->method('can');
+        $authMock->shouldReceive('admin')->never();
+        $authMock->shouldReceive('can')->never();
 
-        $coreMock->method('auth')->willReturn($authMock);
+        $coreMock->shouldReceive('auth')->andReturn($authMock);
 
         $middleware = new CheckPermission($coreMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next));
     }
@@ -48,21 +53,23 @@ class CheckPermissionTest extends TestCase
      */
     function it_passes_through_if_user_is_admin()
     {
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $coreMock       = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $authMock       = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(Request::class)->getMock();
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $coreMock       = Mockery::mock(CoreInterface::class);
+        $authMock       = Mockery::mock(AuthenticatorInterface::class);
+        $requestMock    = Mockery::mock(Request::class);
 
-        $authMock->expects(static::atLeastOnce())->method('admin')->willReturn(true);
-        $authMock->expects(static::never())->method('can');
+        $authMock->shouldReceive('admin')->atLeast()->once()->andReturn(true);
+        $authMock->shouldReceive('can')->never();
 
-        $coreMock->method('auth')->willReturn($authMock);
+        $coreMock->shouldReceive('auth')->andReturn($authMock);
 
         $middleware = new CheckPermission($coreMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next, 'test'));
     }
@@ -72,21 +79,22 @@ class CheckPermissionTest extends TestCase
      */
     function it_passes_through_if_user_has_permission()
     {
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $coreMock       = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $authMock       = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $requestMock    = $this->getMockBuilder(Request::class)->getMock();
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $coreMock       = Mockery::mock(CoreInterface::class);
+        $authMock       = Mockery::mock(AuthenticatorInterface::class);
+        $requestMock    = Mockery::mock(Request::class);
 
-        $authMock->expects(static::atLeastOnce())->method('admin')->willReturn(false);
-        $authMock->expects(static::atLeastOnce())->method('can')->with('test')->willReturn(true);
-
-        $coreMock->method('auth')->willReturn($authMock);
+        $authMock->shouldReceive('admin')->atLeast()->once()->andReturn(false);
+        $authMock->shouldReceive('can')->atLeast()->once()->with('test')->andReturn(true);
+        $coreMock->shouldReceive('auth')->andReturn($authMock);
 
         $middleware = new CheckPermission($coreMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertSame($requestMock, $middleware->handle($requestMock, $next, 'test'));
     }
@@ -96,32 +104,34 @@ class CheckPermissionTest extends TestCase
      */
     function it_returns_403_api_response_for_blocked_api_request()
     {
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var ApiCoreInterface|\PHPUnit_Framework_MockObject_MockObject $apiMock */
-        /** @var BootCheckerInterface|\PHPUnit_Framework_MockObject_MockObject $checkerMock */
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $apiMock     = $this->getMockBuilder(ApiCoreInterface::class)->getMock();
-        $authMock    = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $checkerMock = $this->getMockBuilder(BootCheckerInterface::class)->getMock();
-        $coreMock    = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $requestMock = $this->getMockBuilder(Request::class)->getMock();
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var ApiCoreInterface|Mock|MockInterface $apiMock */
+        /** @var BootCheckerInterface|Mock|MockInterface $checkerMock */
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var Request|Mock|MockInterface $requestMock */
+        $apiMock     = Mockery::mock(ApiCoreInterface::class);
+        $authMock    = Mockery::mock(AuthenticatorInterface::class);
+        $checkerMock = Mockery::mock(BootCheckerInterface::class);
+        $coreMock    = Mockery::mock(CoreInterface::class);
+        $requestMock = Mockery::mock(Request::class);
 
 
-        $authMock->expects(static::atLeastOnce())->method('admin')->willReturn(false);
-        $authMock->expects(static::atLeastOnce())->method('can')->with('test')->willReturn(false);
+        $authMock->shouldReceive('admin')->atLeast()->once()->andReturn(false);
+        $authMock->shouldReceive('can')->atLeast()->once()->with('test')->andReturn(false);
 
-        $checkerMock->method('isCmsApiRequest')->willReturn(true);
+        $checkerMock->shouldReceive('isCmsApiRequest')->andReturn(true);
 
-        $apiMock->expects(static::atLeastOnce())->method('error')->willReturn('test');
+        $apiMock->shouldReceive('error')->atLeast()->once()->andReturn('test');
 
-        $coreMock->method('api')->willReturn($apiMock);
-        $coreMock->method('auth')->willReturn($authMock);
-        $coreMock->method('bootChecker')->willReturn($checkerMock);
+        $coreMock->shouldReceive('api')->andReturn($apiMock);
+        $coreMock->shouldReceive('auth')->andReturn($authMock);
+        $coreMock->shouldReceive('bootChecker')->andReturn($checkerMock);
 
         $middleware = new CheckPermission($coreMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertEquals('test', $middleware->handle($requestMock, $next, 'test'));
     }
@@ -131,32 +141,31 @@ class CheckPermissionTest extends TestCase
      */
     function it_returns_403_json_response_for_blocked_json_request()
     {
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var BootCheckerInterface|\PHPUnit_Framework_MockObject_MockObject $checkerMock */
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var Request|MockRequest|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $authMock    = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $checkerMock = $this->getMockBuilder(BootCheckerInterface::class)->getMock();
-        $coreMock    = $this->getMockBuilder(CoreInterface::class)->getMock();
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var BootCheckerInterface|Mock|MockInterface $checkerMock */
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var Request|MockRequest|Mock|MockInterface $requestMock */
+        $authMock    = Mockery::mock(AuthenticatorInterface::class);
+        $checkerMock = Mockery::mock(BootCheckerInterface::class);
+        $coreMock    = Mockery::mock(CoreInterface::class);
+        $requestMock = Mockery::mock(MockRequest::class);
 
-        $requestMock = $this->getMockBuilder(MockRequest::class)
-            ->setMethods(['ajax', 'wantsJson'])
-            ->getMock();
+        $requestMock->shouldReceive('ajax')->once()->andReturn(false);
+        $requestMock->shouldReceive('wantsJson')->once()->andReturn(true);
 
-        $requestMock->expects(static::once())->method('ajax')->willReturn(false);
-        $requestMock->expects(static::once())->method('wantsJson')->willReturn(true);
+        $authMock->shouldReceive('admin')->atLeast()->once()->andReturn(false);
+        $authMock->shouldReceive('can')->atLeast()->once()->with('test')->andReturn(false);
 
-        $authMock->expects(static::atLeastOnce())->method('admin')->willReturn(false);
-        $authMock->expects(static::atLeastOnce())->method('can')->with('test')->willReturn(false);
+        $checkerMock->shouldReceive('isCmsApiRequest')->andReturn(false);
 
-        $checkerMock->method('isCmsApiRequest')->willReturn(false);
-
-        $coreMock->method('auth')->willReturn($authMock);
-        $coreMock->method('bootChecker')->willReturn($checkerMock);
+        $coreMock->shouldReceive('auth')->andReturn($authMock);
+        $coreMock->shouldReceive('bootChecker')->andReturn($checkerMock);
 
         $middleware = new CheckPermission($coreMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         /** @var Response $response */
         $response = $middleware->handle($requestMock, $next, 'test');
@@ -170,38 +179,37 @@ class CheckPermissionTest extends TestCase
      */
     function it_returns_a_redirect_response_for_blocked_web_request()
     {
-        /** @var AuthenticatorInterface|\PHPUnit_Framework_MockObject_MockObject $authMock */
-        /** @var BootCheckerInterface|\PHPUnit_Framework_MockObject_MockObject $checkerMock */
-        /** @var CoreInterface|\PHPUnit_Framework_MockObject_MockObject $coreMock */
-        /** @var Request|MockRequest|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $authMock    = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
-        $checkerMock = $this->getMockBuilder(BootCheckerInterface::class)->getMock();
-        $coreMock    = $this->getMockBuilder(CoreInterface::class)->getMock();
+        /** @var AuthenticatorInterface|Mock|MockInterface $authMock */
+        /** @var BootCheckerInterface|Mock|MockInterface $checkerMock */
+        /** @var CoreInterface|Mock|MockInterface $coreMock */
+        /** @var Request|MockRequest|Mock|MockInterface $requestMock */
+        $authMock    = Mockery::mock(AuthenticatorInterface::class);
+        $checkerMock = Mockery::mock(BootCheckerInterface::class);
+        $coreMock    = Mockery::mock(CoreInterface::class);
+        $requestMock = Mockery::mock(MockRequest::class);
 
-        $requestMock = $this->getMockBuilder(MockRequest::class)
-            ->setMethods(['ajax', 'wantsJson'])
-            ->getMock();
+        $requestMock->shouldReceive('ajax')->andReturn(false);
+        $requestMock->shouldReceive('wantsJson')->andReturn(false);
 
-        $requestMock->method('ajax')->willReturn(false);
-        $requestMock->method('wantsJson')->willReturn(false);
+        $authMock->shouldReceive('admin')->atLeast()->once()->andReturn(false);
+        $authMock->shouldReceive('can')->atLeast()->once()->with('test')->andReturn(false);
 
-        $authMock->expects(static::atLeastOnce())->method('admin')->willReturn(false);
-        $authMock->expects(static::atLeastOnce())->method('can')->with('test')->willReturn(false);
+        $checkerMock->shouldReceive('isCmsApiRequest')->andReturn(false);
 
-        $checkerMock->method('isCmsApiRequest')->willReturn(false);
-
-        $coreMock->method('auth')->willReturn($authMock);
-        $coreMock->method('bootChecker')->willReturn($checkerMock);
+        $coreMock->shouldReceive('auth')->andReturn($authMock);
+        $coreMock->shouldReceive('bootChecker')->andReturn($checkerMock);
 
         // Register and fake the redirect route
         $this->app['router']->get('testing/ignore', ['as' => 'testing', 'uses' => 'NoController@nowhere']);
-        $coreMock->method('prefixRoute')->willReturn('testing');
+        $coreMock->shouldReceive('prefixRoute')->andReturn('testing');
 
         $this->app->instance(Component::CORE, $coreMock);
 
         $middleware = new CheckPermission($coreMock);
 
-        $next = function ($request) { return $request; };
+        $next = function ($request) {
+            return $request;
+        };
 
         static::assertInstanceOf(RedirectResponse::class, $middleware->handle($requestMock, $next, 'test'));
     }

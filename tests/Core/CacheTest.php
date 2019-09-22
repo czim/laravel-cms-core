@@ -11,6 +11,9 @@ use Czim\CmsCore\Test\Helpers\Spies\CacheSpy;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Cache\Store;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class CacheTest extends CmsBootTestCase
 {
@@ -58,11 +61,9 @@ class CacheTest extends CmsBootTestCase
     function it_relays_has_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('has')
-                ->with('test-key')
-                ->willReturn(true);
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('has')->once()
+                ->with('test-key')->andReturn(true);
         });
 
         static::assertTrue($this->makeCache()->has('test-key'));
@@ -74,11 +75,9 @@ class CacheTest extends CmsBootTestCase
     function it_relays_get_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('get')
-                ->with('test-key')
-                ->willReturn('test-value');
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('get')->once()
+                ->with('test-key', null)->andReturn('test-value');
         });
 
         static::assertEquals('test-value', $this->makeCache()->get('test-key'));
@@ -90,11 +89,9 @@ class CacheTest extends CmsBootTestCase
     function it_relays_many_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('many')
-                ->with(['test-key'])
-                ->willReturn(['test-value']);
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('many')->once()
+                ->with(['test-key'])->andReturn(['test-value']);
         });
 
         static::assertEquals(['test-value'], $this->makeCache()->many(['test-key']));
@@ -106,11 +103,9 @@ class CacheTest extends CmsBootTestCase
     function it_relays_pull_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('pull')
-                ->with('test-key')
-                ->willReturn('test-value');
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('pull')->once()
+                ->with('test-key', null)->andReturn('test-value');
         });
 
         static::assertEquals('test-value', $this->makeCache()->pull('test-key'));
@@ -122,10 +117,9 @@ class CacheTest extends CmsBootTestCase
     function it_relays_put_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('put')
-                ->with('test-key', 'test-value');
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('put')->once()
+                ->with('test-key', 'test-value', null);
         });
 
         $this->makeCache()->put('test-key', 'test-value');
@@ -137,10 +131,8 @@ class CacheTest extends CmsBootTestCase
     function it_relays_put_many_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('putMany')
-                ->with(['test-key' => 'test-value'], 10);
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('putMany')->once()->with(['test-key' => 'test-value'], 10);
         });
 
         $this->makeCache()->putMany(['test-key' => 'test-value'], 10);
@@ -152,11 +144,9 @@ class CacheTest extends CmsBootTestCase
     function it_relays_add_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('add')
-                ->with('test-key', 'test-value', 10)
-                ->willReturn(true);
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('add')->once()
+                ->with('test-key', 'test-value', 10)->andReturn(true);
         });
 
         static::assertTrue($this->makeCache()->add('test-key', 'test-value', 10));
@@ -168,10 +158,8 @@ class CacheTest extends CmsBootTestCase
     function it_relays_forever_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('forever')
-                ->with('test-key', 'test-value');
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('forever')->once()->with('test-key', 'test-value');
         });
 
         $this->makeCache()->forever('test-key', 'test-value');
@@ -182,14 +170,14 @@ class CacheTest extends CmsBootTestCase
      */
     function it_relays_remember_call_to_cache_store()
     {
-        $callback = function () { return 'test-value'; };
+        $callback = function () {
+            return 'test-value';
+        };
 
         $this->prepareCacheRelayMock(function ($mock) use ($callback) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('remember')
-                ->with('test-key', 10, $callback)
-                ->willReturn('test-value');
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('remember')->once()
+                ->with('test-key', 10, $callback)->andReturn('test-value');
         });
 
         static::assertEquals('test-value', $this->makeCache()->remember('test-key', 10, $callback));
@@ -200,14 +188,14 @@ class CacheTest extends CmsBootTestCase
      */
     function it_relays_rememberForever_call_to_cache_store()
     {
-        $callback = function () { return 'test-value'; };
+        $callback = function () {
+            return 'test-value';
+        };
 
         $this->prepareCacheRelayMock(function ($mock) use ($callback) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('rememberForever')
-                ->with('test-key', $callback)
-                ->willReturn('test-value');
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('rememberForever')->once()
+                ->with('test-key', $callback)->andReturn('test-value');
         });
 
         static::assertEquals('test-value', $this->makeCache()->rememberForever('test-key', $callback));
@@ -219,21 +207,15 @@ class CacheTest extends CmsBootTestCase
     function it_relays_forget_call_to_cache_store()
     {
         $this->prepareCacheRelayMock(function ($mock) {
-            /** @var Store|\PHPUnit_Framework_MockObject_MockObject $mock */
-            $mock->expects(static::once())
-                ->method('forget')
-                ->with('test-key')
-                ->willReturn(true);
+            /** @var Store|Mock|MockInterface $mock */
+            $mock->shouldReceive('forget')->once()->with('test-key')->andReturn(true);
         });
 
         static::assertTrue($this->makeCache()->forget('test-key'));
     }
 
 
-    /**
-     * @return Cache
-     */
-    protected function makeCache()
+    protected function makeCache(): Cache
     {
         return new Cache($this->getMockCore());
     }
@@ -241,62 +223,58 @@ class CacheTest extends CmsBootTestCase
     /**
      * @param null|string         $store
      * @param null|false|string[] $tags
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return CoreInterface|Mock|MockInterface
      */
-    protected function getMockCore($store = null, $tags = null)
+    protected function getMockCore(?string $store = null, $tags = null)
     {
-        $mockCore = $this->getMockBuilder(CoreInterface::class)->getMock();
+        /** @var CoreInterface|Mock|MockInterface $mockCore */
+        $mockCore = Mockery::mock(CoreInterface::class);
 
-        if (null !== $store || null !== $tags) {
-            $mockCore
-                ->method('config')
-                ->willReturnCallback(function ($key, $default) use ($store, $tags) {
-                    switch ($key) {
-                        case 'cache.store':
-                            return $store ?? $default;
-                        case 'cache.tags':
-                            return $tags ?? $default;
+        $mockCore
+            ->shouldReceive('config')
+            ->andReturnUsing(function (string $key, $default = null) use ($store, $tags) {
+                switch ($key) {
 
-                    }
-                    return $default;
-                });
-        }
+                    case 'debug':
+                        return false;
+                    case 'cache.store':
+                        return $store ?? $default;
+                    case 'cache.tags':
+                        return $tags ?? $default;
+
+                }
+                return $default;
+            });
 
         return $mockCore;
     }
 
-    /**
-     * @param callable $relayCallback
-     */
-    protected function prepareCacheRelayMock(callable $relayCallback)
+    protected function prepareCacheRelayMock(callable $relayCallback): void
     {
         $mockStore = $this->getMockCacheStore();
 
         $relayCallback($mockStore);
 
         $mockCache = $this->getMockCacheManager();
-        $mockCache->method('store')->willReturn($mockStore);
+        $mockCache->shouldReceive('store')->andReturn($mockStore);
 
         $this->app->instance('cache', $mockCache);
     }
 
     /**
-     * @return CacheManager|\PHPUnit_Framework_MockObject_MockObject
+     * @return CacheManager|Mock|MockInterface
      */
     protected function getMockCacheManager()
     {
-        return $this->getMockBuilder(CacheManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return Mockery::mock(CacheManager::class);
     }
 
     /**
-     * @return Store|\PHPUnit_Framework_MockObject_MockObject
+     * @return Store|CacheInterface|Mock|MockInterface
      */
     protected function getMockCacheStore()
     {
-        return $this->getMockBuilder(CacheInterface::class)
-            ->getMock();
+        return Mockery::mock(CacheInterface::class);
     }
 
 }

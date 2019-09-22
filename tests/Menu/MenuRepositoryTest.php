@@ -18,6 +18,7 @@ use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
+use Mockery;
 
 class MenuRepositoryTest extends CmsBootTestCase
 {
@@ -84,7 +85,7 @@ class MenuRepositoryTest extends CmsBootTestCase
     function it_can_be_set_to_ignore_permissions_for_initialization()
     {
         $this->menuLayoutStandardFiltered = [
-            $this->getMockBuilder(MenuPresence::class)->getMock()
+            Mockery::mock(MenuPresence::class)
         ];
 
         $menu = $this->makeMenuRepository();
@@ -216,90 +217,99 @@ class MenuRepositoryTest extends CmsBootTestCase
 
     /**
      * @param bool $exactExpects
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return CoreInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockCore($exactExpects = false)
     {
-        $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
+        $mock = Mockery::mock(CoreInterface::class);
 
-        $mock->expects($exactExpects ? static::once() : static::any())
-             ->method('moduleConfig')
-             ->willReturnCallback(function ($key, $default = null) {
-                 if ($key === 'menu.layout') {
-                     return [];
-                 }
+        $mock = $mock->shouldReceive('moduleConfig');
 
-                 return $default;
-             });
+        if ($exactExpects) {
+            $mock->once();
+        }
 
-        return $mock;
+        $mock->andReturnUsing(function ($key, $default = null) {
+             if ($key === 'menu.layout') {
+                 return [];
+             }
+
+             return $default;
+         });
+
+        return $mock->getMock();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AuthenticatorInterface
+     * @return Mockery\Mock|Mockery\MockInterface|AuthenticatorInterface
      */
     protected function getMockAuth()
     {
-        $mock = $this->getMockBuilder(AuthenticatorInterface::class)->getMock();
+        $mock = Mockery::mock(AuthenticatorInterface::class);
 
-        $mock->method('admin')->willReturn($this->isAdmin);
+        $mock->shouldReceive('admin')->andReturn($this->isAdmin);
+        $mock->shouldReceive('user');
 
         return $mock;
     }
 
     /**
      * @param null $data
-     * @return MenuConfigInterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MenuConfigInterpreterInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockConfigInterpreter($data = null)
     {
-        $mock = $this->getMockBuilder(MenuConfigInterpreterInterface::class)->getMock();
+        $mock = Mockery::mock(MenuConfigInterpreterInterface::class);
 
-        $mock->method('interpretLayout')->willReturn($data ?: $this->getMockLayoutData());
+        $mock->shouldReceive('interpretLayout')->andReturn($data ?: $this->getMockLayoutData());
 
         return $mock;
     }
 
     /**
      * @param null $index
-     * @return MenuPermissionsFilterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MenuPermissionsFilterInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockPermissionsFilter($index = null)
     {
-        $mock = $this->getMockBuilder(MenuPermissionsFilterInterface::class)->getMock();
+        $mock = Mockery::mock(MenuPermissionsFilterInterface::class);
 
-        $mock->method('buildPermissionsIndex')->willReturn($index ?: $this->getMockIndex());
-        $mock->method('filterLayout')->willReturn($this->getMockLayoutData(true));
+        $mock->shouldReceive('buildPermissionsIndex')->andReturn($index ?: $this->getMockIndex());
+        $mock->shouldReceive('filterLayout')->andReturn($this->getMockLayoutData(true));
 
         return $mock;
     }
 
     /**
      * @param bool $filtered
-     * @return MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MenuLayoutDataInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockLayoutData($filtered = false)
     {
-        $mock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
+        $mock = Mockery::mock(MenuLayoutDataInterface::class);
 
         $layout = $filtered && $this->menuLayoutStandardFiltered
                 ?   $this->menuLayoutStandardFiltered
                 :   $this->menuLayoutStandard;
 
-        $mock->method('layout')->willReturn($layout);
-        $mock->method('setLayout')->willReturn($mock);
-        $mock->method('alternative')->willReturn([]);
-        $mock->method('setAlternative')->willReturn($mock);
+        $mock->shouldReceive('layout')->andReturn($layout);
+        $mock->shouldReceive('setLayout')->andReturn($mock);
+        $mock->shouldReceive('alternative')->andReturn([]);
+        $mock->shouldReceive('setAlternative')->andReturn($mock);
+        $mock->shouldReceive('serialize');
 
         return $mock;
     }
 
     /**
-     * @return MenuPermissionsIndexDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return MenuPermissionsIndexDataInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockIndex()
     {
-        $mock = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
+        /** @var MenuPermissionsIndexDataInterface|Mockery\Mock|Mockery\MockInterface $data */
+        $mock = Mockery::mock(MenuPermissionsIndexDataInterface::class);
+
+        $mock->shouldReceive('serialize');
 
         return $mock;
     }

@@ -13,6 +13,7 @@ use Czim\CmsCore\Support\Data\AclPresence;
 use Czim\CmsCore\Support\Enums\AclPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Collection;
+use Mockery;
 use UnexpectedValueException;
 
 class AclRepositoryTest extends CmsBootTestCase
@@ -245,32 +246,34 @@ class AclRepositoryTest extends CmsBootTestCase
     /**
      * @param null|Collection $modules
      * @param bool            $expect  whether to force strict expectactions
-     * @return CoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return CoreInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockCore($modules = null, $expect = false)
     {
-        $mock = $this->getMockBuilder(CoreInterface::class)->getMock();
+        /** @var CoreInterface|Mockery\Mock|Mockery\MockInterface $mock */
+        $mock = Mockery::mock(CoreInterface::class);
 
-        $mock->expects($expect ? static::once() : static::any())
-             ->method('modules')
-             ->willReturn($this->getMockModuleManager($modules));
+        $mock = $mock->shouldReceive('modules');
 
-        return $mock;
+        if ($expect) {
+            $mock = $mock->once();
+        }
+
+        return $mock->andReturn($this->getMockModuleManager($modules))->getMock();
     }
 
     /**
      * @param null|Collection $modules
-     * @return ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModuleManagerInterface|Mockery\Mock|Mockery\MockInterface
      */
-    protected function getMockModuleManager($modules = null)
+    protected function getMockModuleManager(?Collection $modules = null)
     {
-        $mock = $this->getMockBuilder(ModuleManagerInterface::class)->getMock();
+        /** @var ModuleManagerInterface|Mockery\Mock|Mockery\MockInterface $mock */
+        $mock = Mockery::mock(ModuleManagerInterface::class);
 
         $modules = $modules ?: new Collection;
 
-        $mock->expects(static::once())
-             ->method('getModules')
-             ->willReturn($modules);
+        $mock->shouldReceive('getModules')->once()->andReturn($modules);
 
         return $mock;
     }
@@ -286,15 +289,15 @@ class AclRepositoryTest extends CmsBootTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     * @return ModuleInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockModuleWithPresenceInstance()
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        /** @var ModuleInterface|Mockery\Mock|Mockery\MockInterface $mock */
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->expects(static::once())
-             ->method('getAclPresence')
-             ->willReturn(
+        $mock->shouldReceive('getAclPresence')->once()
+             ->andReturn(
                  new AclPresence([
                      'id'   => 'test-a',
                      'type' => AclPresenceType::GROUP,
@@ -311,15 +314,15 @@ class AclRepositoryTest extends CmsBootTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     * @return ModuleInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockModuleWithPresenceArray()
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        /** @var ModuleInterface|Mockery\Mock|Mockery\MockInterface $mock */
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->expects(static::once())
-            ->method('getAclPresence')
-            ->willReturn([
+        $mock->shouldReceive('getAclPresence')->once()
+            ->andReturn([
                 'id'   => 'test-b',
                 'type' => AclPresenceType::GROUP,
                 'label' => 'something',
@@ -334,15 +337,15 @@ class AclRepositoryTest extends CmsBootTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ModuleInterface
+     * @return ModuleInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockModuleWithMultiplePresencesInArray()
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        /** @var ModuleInterface|Mockery\Mock|Mockery\MockInterface $mock */
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->expects(static::once())
-            ->method('getAclPresence')
-            ->willReturn([
+        $mock->shouldReceive('getAclPresence')->once()
+            ->andReturn([
                 [
                     'id'   => 'test-b',
                     'type' => AclPresenceType::GROUP,
@@ -368,23 +371,19 @@ class AclRepositoryTest extends CmsBootTestCase
 
     /**
      * @param mixed $presence
-     * @return ModuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModuleInterface|Mockery\Mock|Mockery\MockInterface
      */
     protected function getMockModuleWithCustomPresence($presence)
     {
-        $mock = $this->getMockBuilder(ModuleInterface::class)->getMock();
+        /** @var ModuleInterface|Mockery\Mock|Mockery\MockInterface $mock */
+        $mock = Mockery::mock(ModuleInterface::class);
 
-        $mock->expects(static::once())
-             ->method('getAclPresence')
-             ->willReturn($presence);
+        $mock->shouldReceive('getAclPresence')->once()->andReturn($presence);
 
         return $mock;
     }
 
-    /**
-     * @return AclRepository
-     */
-    protected function makeAclRepository()
+    protected function makeAclRepository(): AclRepository
     {
         return new AclRepository($this->getMockCore());
     }

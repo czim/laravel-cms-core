@@ -6,6 +6,9 @@ namespace Czim\CmsCore\Test\Support\Data;
 
 use Czim\CmsCore\Support\Logging\CmsFormatterDecorator;
 use Czim\CmsCore\Test\TestCase;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 use Monolog\Formatter\FormatterInterface;
 
 class CmsFormatterDecoratorTest extends TestCase
@@ -16,11 +19,9 @@ class CmsFormatterDecoratorTest extends TestCase
      */
     function it_relays_batch_formatting_to_wrapped_formatter()
     {
-        /** @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject $formatterMock */
-        $formatterMock = $this->getMockBuilder(FormatterInterface::class)->getMock();
-        $formatterMock->expects(static::once())
-            ->method('formatBatch')
-            ->with(['testing']);
+        /** @var FormatterInterface|Mock|MockInterface $formatterMock */
+        $formatterMock = Mockery::mock(FormatterInterface::class);
+        $formatterMock->shouldReceive('formatBatch')->once()->with(['testing']);
 
         $decorator = new CmsFormatterDecorator($formatterMock);
 
@@ -32,12 +33,10 @@ class CmsFormatterDecoratorTest extends TestCase
      */
     function it_decorates_a_string_message()
     {
-        /** @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject $formatterMock */
-        $formatterMock = $this->getMockBuilder(FormatterInterface::class)->getMock();
-        $formatterMock->expects(static::once())
-            ->method('format')
-            ->with(['test'])
-            ->willReturn('test');
+        /** @var FormatterInterface|Mock|MockInterface $formatterMock */
+        $formatterMock = Mockery::mock(FormatterInterface::class);
+        $formatterMock->shouldReceive('format')->once()
+            ->with(['test'])->andReturn('test');
 
         $decorator = new CmsFormatterDecorator($formatterMock);
 
@@ -49,12 +48,11 @@ class CmsFormatterDecoratorTest extends TestCase
      */
     function it_decorates_an_array_message()
     {
-        /** @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject $formatterMock */
-        $formatterMock = $this->getMockBuilder(FormatterInterface::class)->getMock();
-        $formatterMock->expects(static::once())
-            ->method('format')
+        /** @var FormatterInterface|Mock|MockInterface $formatterMock */
+        $formatterMock = Mockery::mock(FormatterInterface::class);
+        $formatterMock->shouldReceive('format')->once()
             ->with(['test'])
-            ->willReturn([
+            ->andReturn([
                 'channel',
                 'test',
                 'trace',
@@ -73,6 +71,5 @@ class CmsFormatterDecoratorTest extends TestCase
             $decorator->format(['test'])
         );
     }
-
 
 }

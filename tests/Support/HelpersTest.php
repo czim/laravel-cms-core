@@ -39,8 +39,9 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_route_function_returns_a_prefixed_route()
     {
-        $urlMock = $this->getMockBuilder(UrlGenerator::class)->getMock();
-        $urlMock->expects(static::once())->method('route')->with('cms::testing-something')->willReturn('test');
+        $urlMock = Mockery::mock(UrlGenerator::class);
+        $urlMock->shouldReceive('route')->once()->with('cms::testing-something', [], true)
+            ->andReturn('test');
 
         $this->app->instance('url', $urlMock);
 
@@ -74,8 +75,8 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_config_function_returns_a_core_config_value()
     {
-        $coreMock = $this->getMockBuilder(CoreInterface::class)->getMock();
-        $coreMock->expects(static::once())->method('config')->with('test-key', 'test-default');
+        $coreMock = Mockery::mock(CoreInterface::class);
+        $coreMock->shouldReceive('config')->once()->with('test-key', 'test-default');
 
         $this->app->instance(Component::CORE, $coreMock);
 
@@ -98,8 +99,8 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_flash_config_function_relays_a_flash_message_to_the_notifier()
     {
-        $notifierMock = $this->getMockBuilder(NotifierInterface::class)->getMock();
-        $notifierMock->expects(static::once())->method('flash')->with('test-message', 'emergency');
+        $notifierMock = Mockery::mock(NotifierInterface::class);
+        $notifierMock->shouldReceive('flash')->once()->with('test-message', 'emergency');
 
         $this->app->instance(Component::NOTIFIER, $notifierMock);
 

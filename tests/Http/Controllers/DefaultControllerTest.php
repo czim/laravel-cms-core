@@ -8,6 +8,9 @@ use Czim\CmsCore\Http\Controllers\DefaultController;
 use Czim\CmsCore\Support\Enums\Component;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Contracts\View\Factory;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
 
 class DefaultControllerTest extends CmsBootTestCase
 {
@@ -19,8 +22,10 @@ class DefaultControllerTest extends CmsBootTestCase
     {
         $controller = new DefaultController($this->app[Component::CORE]);
 
-        $viewMock = $this->getMockBuilder(Factory::class)->getMock();
-        $viewMock->method('make')->with('cms::blank.index')->willReturn('testing');
+        /** @var Factory|Mock|MockInterface $viewMock */
+        $viewMock = Mockery::mock(Factory::class);
+
+        $viewMock->shouldReceive('make')->with('cms::blank.index', [], [])->andReturn('testing');
 
         $this->app->instance(Factory::class, $viewMock);
 
