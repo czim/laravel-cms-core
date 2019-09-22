@@ -34,7 +34,9 @@ class CmsCoreServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        if ( ! $this->shouldCmsBoot()) return;
+        if ( ! $this->shouldCmsBoot()) {
+            return;
+        }
 
         $this->bootConfig()
              ->finalizeBoot();
@@ -46,7 +48,9 @@ class CmsCoreServiceProvider extends ServiceProvider
         $this->registerConfig()
              ->registerBootChecker();
 
-        if ( ! $this->shouldCmsRegister()) return;
+        if ( ! $this->shouldCmsRegister()) {
+            return;
+        }
 
         $this->registerCoreComponents()
              ->registerExceptionHandler()

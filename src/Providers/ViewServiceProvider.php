@@ -55,23 +55,23 @@ class ViewServiceProvider extends ServiceProvider
     {
         // Set up the cms_script directive
         Blade::directive('cms_script', function () {
-            return "<?php ob_start(); ?>";
+            return '<?php ob_start(); ?>';
         });
 
         Blade::directive('cms_endscript', function () {
             return "<?php app(Czim\\CmsCore\\Contracts\\Support\\View\\AssetManagerInterface::class)"
-                 . "->registerScript(ob_get_clean(), false); ?>";
+                 . '->registerScript(ob_get_clean(), false); ?>';
         });
 
 
         // Set up the cms_scriptonce directive
         Blade::directive('cms_scriptonce', function () {
-            return "<?php ob_start(); ?>";
+            return '<?php ob_start(); ?>';
         });
 
         Blade::directive('cms_endscriptonce', function () {
             return "<?php app(Czim\\CmsCore\\Contracts\\Support\\View\\AssetManagerInterface::class)"
-                 . "->registerScript(ob_get_clean(), true); ?>";
+                 . '->registerScript(ob_get_clean(), true); ?>';
         });
 
 
@@ -90,16 +90,16 @@ class ViewServiceProvider extends ServiceProvider
         // Set up the cms_scriptasset directive
         Blade::directive('cms_scriptasset', function ($expression) {
             return "<?php app(Czim\\CmsCore\\Contracts\\Support\\View\\AssetManagerInterface::class)"
-                . "->registerScriptAsset"
-                . ($this->isBladeArgumentStringBracketed() ? $expression : "({$expression})") . "; ?>";
+                . '->registerScriptAsset'
+                . ($this->isBladeArgumentStringBracketed() ? $expression : "({$expression})") . '; ?>';
         });
 
 
         // Set up the cms_style directive
         Blade::directive('cms_style', function ($expression) {
             return "<?php app(Czim\\CmsCore\\Contracts\\Support\\View\\AssetManagerInterface::class)"
-                . "->registerStyleAsset"
-                . ($this->isBladeArgumentStringBracketed() ? $expression : "({$expression})") . "; ?>";
+                . '->registerStyleAsset'
+                . ($this->isBladeArgumentStringBracketed() ? $expression : "({$expression})") . '; ?>';
         });
     }
 
@@ -118,7 +118,7 @@ class ViewServiceProvider extends ServiceProvider
         }
         $major = (int) $matches['major'];
         $minor = (int) $matches['minor'];
-        return ($major < 5 || $major == 5 && $minor < 3);
+        return ($major < 5 || $major === 5 && $minor < 3);
     }
 
 }

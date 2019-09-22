@@ -12,15 +12,15 @@ use MyCLabs\Enum\Enum;
  */
 class Component extends Enum
 {
-    const ACL         = 'cms-acl';
-    const API         = 'cms-api';
-    const ASSETS      = 'cms-assets';
-    const AUTH        = 'cms-auth';
-    const BOOTCHECKER = 'cms-bootchecker';
-    const CACHE       = 'cms-cache';
-    const CORE        = 'cms-core';
-    const LOG         = 'cms-log';
-    const MENU        = 'cms-menu';
-    const MODULES     = 'cms-modules';
-    const NOTIFIER    = 'cms-notifier';
+    public const ACL  = 'cms-acl';
+    public const API         = 'cms-api';
+    public const ASSETS      = 'cms-assets';
+    public const AUTH        = 'cms-auth';
+    public const BOOTCHECKER = 'cms-bootchecker';
+    public const CACHE       = 'cms-cache';
+    public const CORE        = 'cms-core';
+    public const LOG         = 'cms-log';
+    public const MENU        = 'cms-menu';
+    public const MODULES     = 'cms-modules';
+    public const NOTIFIER    = 'cms-notifier';
 }

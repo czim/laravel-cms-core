@@ -93,7 +93,7 @@ class BootChecker implements BootCheckerInterface
      */
     public function markCmsRegistered(bool $registered = true): void
     {
-        $this->registered = (bool) $registered;
+        $this->registered = $registered;
     }
 
     public function isCmsRegistered(): bool
@@ -108,7 +108,7 @@ class BootChecker implements BootCheckerInterface
      */
     public function markCmsBooted(bool $booted = true): void
     {
-        $this->booted = (bool) $booted;
+        $this->booted = $booted;
     }
 
     /**

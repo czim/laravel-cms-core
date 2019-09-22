@@ -69,7 +69,7 @@ class ApiRouteServiceProvider extends ServiceProvider
      *
      * @return $this
      */
-    protected function registerRoutes()
+    protected function registerRoutes(): ApiRouteServiceProvider
     {
         // If the application has all routes cached, skip registering them
         if ($this->app->routesAreCached()) {
@@ -115,7 +115,7 @@ class ApiRouteServiceProvider extends ServiceProvider
      *
      * @param Router $router
      */
-    protected function buildRoutesForAuth(Router $router)
+    protected function buildRoutesForAuth(Router $router): void
     {
         $auth = $this->core->auth();
 
@@ -136,7 +136,7 @@ class ApiRouteServiceProvider extends ServiceProvider
      *
      * @param Router $router
      */
-    protected function buildRoutesForMetaData(Router $router)
+    protected function buildRoutesForMetaData(Router $router): void
     {
         $router->group(
             [
@@ -180,7 +180,7 @@ class ApiRouteServiceProvider extends ServiceProvider
      *
      * @param Router $router
      */
-    protected function buildRoutesForModules(Router $router)
+    protected function buildRoutesForModules(Router $router): void
     {
         $this->core->modules()->mapApiRoutes($router);
     }
@@ -189,7 +189,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    protected function getCmsPrefix()
+    protected function getCmsPrefix(): string
     {
         return $this->core->apiConfig('route.prefix');
     }
@@ -197,7 +197,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    protected function getCmsNamePrefix()
+    protected function getCmsNamePrefix(): string
     {
         return $this->core->apiConfig('route.name-prefix');
     }
@@ -205,7 +205,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    protected function getCmsMiddlewareGroup()
+    protected function getCmsMiddlewareGroup(): string
     {
         return $this->core->apiConfig('middleware.group');
     }
@@ -213,7 +213,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    protected function getLoginPath()
+    protected function getLoginPath(): string
     {
         return $this->core->apiConfig('route.auth.path.login', 'login');
     }
@@ -221,7 +221,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    protected function getLogoutPath()
+    protected function getLogoutPath(): string
     {
         return $this->core->apiConfig('route.auth.path.logout', 'logout');
     }
@@ -229,7 +229,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    protected function getLoginMethod()
+    protected function getLoginMethod(): string
     {
         return $this->core->apiConfig('route.auth.method.login', 'post');
     }
@@ -237,7 +237,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    protected function getLogoutMethod()
+    protected function getLogoutMethod(): string
     {
         return $this->core->apiConfig('route.auth.method.logout', 'post');
     }

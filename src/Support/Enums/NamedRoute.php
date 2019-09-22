@@ -10,10 +10,10 @@ use MyCLabs\Enum\Enum;
  */
 class NamedRoute extends Enum
 {
-    const HOME                = 'home';
-    const AUTH_LOGIN          = 'auth-login';
-    const AUTH_LOGOUT         = 'auth-logout';
-    const AUTH_PASSWORD_EMAIL = 'auth-password-email';
-    const AUTH_PASSWORD_RESET = 'auth-password-reset';
-    const LOCALE_SET          = 'locale-set';
+    public const HOME                = 'home';
+    public const AUTH_LOGIN          = 'auth-login';
+    public const AUTH_LOGOUT         = 'auth-logout';
+    public const AUTH_PASSWORD_EMAIL = 'auth-password-email';
+    public const AUTH_PASSWORD_RESET = 'auth-password-reset';
+    public const LOCALE_SET          = 'locale-set';
 }

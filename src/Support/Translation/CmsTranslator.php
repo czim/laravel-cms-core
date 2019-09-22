@@ -56,7 +56,7 @@ class CmsTranslator extends Translator
         if ( ! $this->isCmsPrefixed($key)) {
             $prefixedKey = $this->applyCmsPrefix($key);
 
-            if (parent::has($prefixedKey, $locale, $fallback)) {
+            if ($this->has($prefixedKey, $locale, $fallback)) {
                 $key = $prefixedKey;
             }
         }

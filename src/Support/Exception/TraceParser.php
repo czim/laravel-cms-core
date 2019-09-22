@@ -14,11 +14,8 @@ class TraceParser
      */
     protected $fileLinkFormat;
 
-    /**
-     * @param null|string $charset
-     * @param null|string $fileLinkFormat
-     */
-    public function __construct($charset = null, $fileLinkFormat = null)
+
+    public function __construct(?string $charset = null, ?string $fileLinkFormat = null)
     {
         $this->charset = $charset ?: ini_get('default_charset') ?: 'UTF-8';
         $this->fileLinkFormat = $fileLinkFormat ?: ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
@@ -28,7 +25,7 @@ class TraceParser
      * @param array $traces
      * @return array
      */
-    public function parse(array $traces)
+    public function parse(array $traces): array
     {
         $data = [];
 
@@ -49,7 +46,7 @@ class TraceParser
                 );
             }
 
-            if (isset($trace['file']) && isset($trace['line'])) {
+            if (isset($trace['file'], $trace['line'])) {
                 $rowData['file'] = $this->formatPath($trace['file'], $trace['line']);
             }
 
@@ -64,7 +61,7 @@ class TraceParser
      * @param string $class
      * @return string
      */
-    protected function formatClass($class)
+    protected function formatClass(string $class): string
     {
         $parts = explode('\\', $class);
 
@@ -76,7 +73,7 @@ class TraceParser
      * @param string $line
      * @return string
      */
-    protected function formatPath($path, $line)
+    protected function formatPath(string $path, string $line): string
     {
         $path = $this->escapeHtml($path);
         $file = preg_match('#[^/\\\\]*$#', $path, $file) ? $file[0] : $path;
@@ -96,7 +93,7 @@ class TraceParser
      * @param array $args The argument array
      * @return string
      */
-    protected function formatArgs(array $args)
+    protected function formatArgs(array $args): string
     {
         $result = array();
         foreach ($args as $key => $item) {
@@ -128,7 +125,7 @@ class TraceParser
      * @param string $str
      * @return string
      */
-    protected function escapeHtml($str)
+    protected function escapeHtml(string $str): string
     {
         return htmlspecialchars($str, ENT_QUOTES | ENT_SUBSTITUTE, $this->charset);
     }

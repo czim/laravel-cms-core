@@ -252,7 +252,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         $splitForAddition = [];
 
         foreach ($newPresences as $index => $presence) {
-            if ($presence->mode() == MenuPresenceMode::ADD) {
+            if ($presence->mode() === MenuPresenceMode::ADD) {
                 $additions[] = $presence;
                 $splitForAddition[] = $index;
             }
@@ -294,7 +294,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                     // Merge children for groups that have further nested definitions
                     if (    $oldPresences[ $index ]->type() === MenuPresenceType::GROUP
                         &&  (   $presence->type() === MenuPresenceType::GROUP
-                            ||  ! in_array('type', $presence->explicitKeys() ?: [])
+                            ||  ! in_array('type', $presence->explicitKeys() ?: [], true)
                             )
                         &&  count($presence->children())
                     ) {
@@ -469,16 +469,13 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      */
     protected function enrichConfiguredPresenceData(MenuPresenceInterface $presence): void
     {
-        if ( ! $presence->type()) {
+        // If type is not set, it should be determined by the action or html value set
+        if ( ! $presence->type() && $presence->action()) {
 
-            // If type is not set, it should be determined by the action or html value set
-            if ($presence->action()) {
-
-                if ($this->isStringUrl($presence->action())) {
-                    $presence->type = MenuPresenceType::LINK;
-                } else {
-                    $presence->type = MenuPresenceType::ACTION;
-                }
+            if ($this->isStringUrl($presence->action())) {
+                $presence->type = MenuPresenceType::LINK;
+            } else {
+                $presence->type = MenuPresenceType::ACTION;
             }
         }
     }

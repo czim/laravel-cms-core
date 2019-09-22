@@ -76,12 +76,9 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
 
             unset($item);
 
-        } else {
+        } elseif ( ! is_a($this->attributes[ $key ], $dataObjectClass)) {
 
-            if ( ! is_a($this->attributes[ $key ], $dataObjectClass)) {
-
-                $this->attributes[ $key ] = $this->makeNestedDataObject($dataObjectClass, $this->attributes[ $key ], $key);
-            }
+            $this->attributes[ $key ] = $this->makeNestedDataObject($dataObjectClass, $this->attributes[ $key ], $key);
         }
 
         return $this->attributes[$key];
@@ -101,7 +98,7 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
             throw new UnexpectedValueException(
                 "Cannot instantiate data object '{$class}' with non-array data for key '{$key}'"
                 . (is_scalar($data) || is_object($data) && method_exists($data, '__toString')
-                    ?   ' (data: ' . (string) $data . ')'
+                    ?   ' (data: ' . $data . ')'
                     :   null)
             );
         }

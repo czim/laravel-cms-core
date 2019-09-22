@@ -262,7 +262,7 @@ class MiddlewareServiceProvider extends ServiceProvider
             $middleware,
             function () {
                 $key = func_get_arg(1);
-                return is_integer($key);
+                return is_int($key);
             },
             ARRAY_FILTER_USE_BOTH
         );
@@ -280,7 +280,7 @@ class MiddlewareServiceProvider extends ServiceProvider
             $middleware,
             function () {
                 $key = func_get_arg(1);
-                return ! is_integer($key);
+                return ! is_int($key);
             },
             ARRAY_FILTER_USE_BOTH
         );

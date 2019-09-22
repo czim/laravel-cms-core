@@ -131,7 +131,7 @@ class LayoutGroupData extends AbstractDataObject
         foreach ($this->attributes[$topKey] as $key => &$value) {
 
             if (is_array($value)) {
-                $value = new LayoutGroupData($value);
+                $value = new static($value);
             }
         }
 

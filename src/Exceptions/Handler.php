@@ -87,7 +87,9 @@ class Handler extends ExceptionHandler
 
             if ($core->bootChecker()->isCmsWebRequest()) {
                 return $this->renderCmsWebException($request, $e);
-            } elseif ($core->bootChecker()->isCmsApiRequest()) {
+            }
+
+            if ($core->bootChecker()->isCmsApiRequest()) {
                 return $this->renderCmsApiException($request, $e);
             }
         }
@@ -180,10 +182,10 @@ class Handler extends ExceptionHandler
      */
     protected function convertExceptionToResponse(Exception $e)
     {
-        if ($this->isCmsWebRequest() && view()->exists("cms::errors.500")) {
+        if ($this->isCmsWebRequest() && view()->exists('cms::errors.500')) {
             $flatException = FlattenException::create($e);
 
-            return response()->view("cms::errors.500", [ 'exception' => $flatException ], 500);
+            return response()->view('cms::errors.500', ['exception' => $flatException ], 500);
         }
 
         return parent::convertExceptionToResponse($e);

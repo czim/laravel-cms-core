@@ -82,7 +82,7 @@ class LocaleRepository implements LocaleRepositoryInterface
      */
     public function isAvailable(string $locale): bool
     {
-        return in_array($locale, $this->getAvailable());
+        return in_array($locale, $this->getAvailable(), true);
     }
 
     /**

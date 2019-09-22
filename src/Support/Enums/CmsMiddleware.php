@@ -11,10 +11,10 @@ use MyCLabs\Enum\Enum;
  */
 class CmsMiddleware extends Enum
 {
-    const AUTHENTICATED = 'cms\auth';
-    const GUEST         = 'cms\guest';
-    const PERMISSION    = 'cms\permission';
+    public const AUTHENTICATED = 'cms\auth';
+    public const GUEST         = 'cms\guest';
+    public const PERMISSION    = 'cms\permission';
 
-    const API_AUTHENTICATED = 'cms\api\auth';
-    const API_AUTH_OWNER    = 'cms\api\auth-owner';
+    public const API_AUTHENTICATED = 'cms\api\auth';
+    public const API_AUTH_OWNER    = 'cms\api\auth-owner';
 }
