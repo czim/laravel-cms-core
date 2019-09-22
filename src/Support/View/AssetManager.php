@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Support\View;
 
 use Czim\CmsCore\Contracts\Support\View\AssetManagerInterface;
+use Illuminate\Support\Arr;
 
 /**
  * Class AssetManager
@@ -124,9 +125,9 @@ class AssetManager implements AssetManagerInterface
             "\n",
             array_map(
                 function ($asset, $parameters) {
-                    return '<link rel="' . e(array_get($parameters, 'rel')) . '" href="' . $asset . '"'
-                        . (array_get($parameters, 'type') ? ' type="' . e(array_get($parameters, 'type')) . '"' : '')
-                        . (array_get($parameters, 'media') ? ' media="' . e(array_get($parameters, 'media')) . '"' : '')
+                    return '<link rel="' . e(Arr::get($parameters, 'rel')) . '" href="' . $asset . '"'
+                        . (Arr::get($parameters, 'type') ? ' type="' . e(Arr::get($parameters, 'type')) . '"' : '')
+                        . (Arr::get($parameters, 'media') ? ' media="' . e(Arr::get($parameters, 'media')) . '"' : '')
                         . '>';
                 },
                 array_keys($this->styleAssets),

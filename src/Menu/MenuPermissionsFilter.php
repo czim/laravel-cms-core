@@ -8,6 +8,7 @@ use Czim\CmsCore\Contracts\Support\Data\MenuLayoutDataInterface;
 use Czim\CmsCore\Contracts\Support\Data\MenuPermissionsIndexDataInterface;
 use Czim\CmsCore\Support\Data\Menu\PermissionsIndexData;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
+use Illuminate\Support\Arr;
 use RuntimeException;
 use UnexpectedValueException;
 
@@ -138,7 +139,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
             if ($value->type() === MenuPresenceType::GROUP) {
 
                 $childKeys = $parentKeys;
-                array_push($childKeys, $key);
+                $childKeys[] = $key;
 
                 $childPermissions = $this->compileIndexForLayoutLayer($value->children(), $childKeys);
 
@@ -214,7 +215,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
             }
 
             $childKeys = $parentKeys;
-            array_push($childKeys, $key);
+            $childKeys[] = $key;
 
             $presence->setChildren(
                 $this->filterLayoutLayer($presence->children(), $childKeys)
@@ -226,7 +227,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
         }
 
         if (count($remove)) {
-            array_forget($presences, $remove);
+            Arr::forget($presences, $remove);
         }
 
         return $presences;
@@ -246,7 +247,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
 
         return (bool) count(
             array_filter($permissions, function ($permission) {
-                return array_get($this->userPermissions, $permission);
+                return Arr::get($this->userPermissions, $permission);
             })
         );
     }
@@ -265,7 +266,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
 
         return ! count(
             array_filter($permissions, function ($permission) {
-                return ! array_get($this->userPermissions, $permission);
+                return ! Arr::get($this->userPermissions, $permission);
             })
         );
     }

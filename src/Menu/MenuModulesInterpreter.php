@@ -156,7 +156,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
 
             // Order by configured order first, natural modules order second.
             if (count($orderMap)) {
-                $primaryOrder = (int) array_get($orderMap, $module->getKey(), -2) + 1;
+                $primaryOrder = (int) Arr::get($orderMap, $module->getKey(), -2) + 1;
             } else {
                 $primaryOrder = -1;
             }

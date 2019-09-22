@@ -15,6 +15,7 @@ use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Support\Enums\Component;
 use Illuminate\Session\SessionInterface;
+use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
 class Core implements CoreInterface
@@ -277,7 +278,7 @@ class Core implements CoreInterface
     {
         $prefix = $this->config('route.name-prefix');
 
-        return starts_with($name, $prefix) ? $name : $prefix . $name;
+        return Str::startsWith($name, $prefix) ? $name : $prefix . $name;
     }
 
     /**
@@ -304,7 +305,7 @@ class Core implements CoreInterface
     {
         $prefix = $this->apiConfig('route.name-prefix');
 
-        return starts_with($name, $prefix) ? $name : $prefix . $name;
+        return Str::startsWith($name, $prefix) ? $name : $prefix . $name;
     }
 
 }

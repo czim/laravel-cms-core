@@ -3,6 +3,7 @@ namespace Czim\CmsCore\Support\Data\Menu;
 
 use Czim\CmsCore\Contracts\Support\Data\MenuPermissionsIndexDataInterface;
 use Czim\CmsCore\Support\Data\AbstractDataObject;
+use Illuminate\Support\Arr;
 
 /**
  * Class PermissionsIndexData
@@ -54,7 +55,7 @@ class PermissionsIndexData extends AbstractDataObject implements MenuPermissions
     {
         $normalized = $this->stringifyNodeKey($nodeKey);
 
-        return array_get($this->index(), $normalized, false);
+        return Arr::get($this->index(), $normalized, false);
     }
 
     /**

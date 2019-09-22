@@ -3,6 +3,7 @@ namespace Czim\CmsCore\Support\Data;
 
 use Czim\CmsCore\Support\Enums\MenuPresenceMode;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Czim\CmsCore\Contracts\Modules\Data\MenuPresenceInterface;
 
@@ -288,7 +289,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
         if ($children instanceof Collection) {
             $children->prepend($presence);
         } else {
-            $children = array_prepend($children, $presence);
+            $children = Arr::prepend($children, $presence);
         }
 
         $this->children = $children;

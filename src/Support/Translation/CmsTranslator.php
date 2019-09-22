@@ -1,6 +1,7 @@
 <?php
 namespace Czim\CmsCore\Support\Translation;
 
+use Illuminate\Support\Str;
 use Illuminate\Translation\Translator;
 
 /**
@@ -41,7 +42,7 @@ class CmsTranslator extends Translator
      */
     protected function isCmsPrefixed($key)
     {
-        return starts_with($key, $this->getCmsPrefix());
+        return Str::startsWith($key, $this->getCmsPrefix());
     }
 
     /**

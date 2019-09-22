@@ -2,6 +2,7 @@
 namespace Czim\CmsCore\Providers;
 
 use Czim\CmsCore\Support\Logging\CmsLogManager;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Support\Enums\Component;
 
@@ -58,7 +59,7 @@ class LogServiceProvider extends ServiceProvider
      */
     protected function defineChannelConfigurationIfNotSet($channel, array $configuration)
     {
-        if (array_has(config('logging.channels'), $channel)) {
+        if (Arr::has(config('logging.channels'), $channel)) {
             return;
         }
 

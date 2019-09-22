@@ -9,6 +9,7 @@ use Czim\CmsCore\Contracts\Support\Data\MenuLayoutDataInterface;
 use Czim\CmsCore\Support\Data\Menu\LayoutData;
 use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use UnexpectedValueException;
 
@@ -81,15 +82,15 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
             }
 
             // The child is a group, so make a presence object for it
-            $children = array_get($value, 'children', []);
+            $children = Arr::get($value, 'children', []);
             $children = $this->interpretNestedGroupLayout($children);
 
             $value = new MenuPresence([
-                'id'               => $key ?: array_get($value, 'id'),
+                'id'               => $key ?: Arr::get($value, 'id'),
                 'type'             => MenuPresenceType::GROUP,
-                'label'            => array_get($value, 'label'),
-                'label_translated' => array_get($value, 'label_translated'),
-                'icon'             => array_get($value, 'icon'),
+                'label'            => Arr::get($value, 'label'),
+                'label_translated' => Arr::get($value, 'label_translated'),
+                'icon'             => Arr::get($value, 'icon'),
                 'children'         => $children,
             ]);
         }
@@ -197,7 +198,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
                 $remove[] = $key;
             }
         }
-        array_forget($presences, $remove);
+        Arr::forget($presences, $remove);
 
         $layout->layout = $presences;
     }

@@ -26,6 +26,7 @@ use Czim\CmsCore\Support\Localization\LocaleRepository;
 use Czim\CmsCore\Support\View\AssetManager;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
 class CmsCoreServiceProvider extends ServiceProvider
@@ -318,7 +319,7 @@ class CmsCoreServiceProvider extends ServiceProvider
      */
     protected function getCoreConfig($key, $default = null)
     {
-        return array_get($this->app['config']['cms-core'], $key, $default);
+        return Arr::get($this->app['config']['cms-core'], $key, $default);
     }
 
     /**
@@ -331,7 +332,7 @@ class CmsCoreServiceProvider extends ServiceProvider
      */
     protected function getModulesConfig($key, $default = null)
     {
-        return array_get($this->app['config']['cms-modules'], $key, $default);
+        return Arr::get($this->app['config']['cms-modules'], $key, $default);
     }
 
 }

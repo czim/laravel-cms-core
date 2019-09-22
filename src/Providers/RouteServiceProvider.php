@@ -6,6 +6,7 @@ use Czim\CmsCore\Http\Controllers\LocaleController;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Support\Enums\CmsMiddleware;
@@ -113,7 +114,7 @@ class RouteServiceProvider extends ServiceProvider
         $action = $this->normalizeRouteAction($this->getDefaultHomeAction());
 
         // Guarantee that the home route has the expected name
-        $router->get('/', array_set($action, 'as', NamedRoute::HOME));
+        $router->get('/', Arr::set($action, 'as', NamedRoute::HOME));
     }
 
     /**
