@@ -168,6 +168,10 @@ class Handler extends ExceptionHandler
     {
         $core = $this->getCoreIfBound();
 
+        if ( ! $core) {
+            return null;
+        }
+
         return $core->api()->error($e);
     }
 

@@ -71,7 +71,7 @@ class AclPresenceTest extends CmsBootTestCase
      */
     function it_returns_label_translation_if_available()
     {
-        $transMock = $this->getMockBuilder(Translatorx::class)
+        $transMock = $this->getMockBuilder(Translator::class)
             ->setMethods(['has', 'get', 'choice', 'getLocale', 'setLocale'])
             ->getMock();
 

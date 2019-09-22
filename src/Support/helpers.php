@@ -3,6 +3,7 @@
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
+use Czim\CmsCore\Contracts\Core\NotifierInterface;
 use Czim\CmsCore\Support\Enums\CmsMiddleware;
 use Czim\CmsCore\Support\Enums\Component;
 use Illuminate\Translation\Translator;
@@ -97,8 +98,9 @@ if ( ! function_exists('cms_flash')) {
      *
      * @param string      $message
      * @param null|string $level
+     * @return NotifierInterface
      */
-    function cms_flash(string $message, ?string $level = null): void
+    function cms_flash(string $message, ?string $level = null): NotifierInterface
     {
         return app(Component::NOTIFIER)
             ->flash($message, $level);
@@ -116,14 +118,14 @@ if ( ! function_exists('cms_trans')) {
      * @param array       $parameters
      * @param string      $domain
      * @param string|null $locale
-     * @return string|null
+     * @return string|null|\Illuminate\Contracts\Translation\Translator
      */
     function cms_trans(
         ?string $id = null,
         array $parameters = [],
         string $domain = 'messages',
         ?string $locale = null
-    ): ?string {
+    ) {
 
         /** @var Translator $translator */
         $translator = app('translator');

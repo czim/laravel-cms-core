@@ -11,9 +11,9 @@ class CmsMigration extends Migration
     /**
      * Get the migration connection name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getConnection()
+    public function getConnection(): ?string
     {
         $connection = parent::getConnection();
 
@@ -47,7 +47,7 @@ class CmsMigration extends Migration
      * @param string $name
      * @return string
      */
-    protected function prefixCmsTable($name)
+    protected function prefixCmsTable(?string $name): string
     {
         return config('cms-core.database.prefix', '') . $name;
     }

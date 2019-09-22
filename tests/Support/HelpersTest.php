@@ -4,6 +4,8 @@
 
 namespace Czim\CmsCore\Test\Support;
 
+use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Core\NotifierInterface;
 use Czim\CmsCore\Support\Enums\CmsMiddleware;
@@ -26,9 +28,10 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_function_returns_the_core()
     {
-        $this->app->instance(Component::CORE, 'testing');
+        $core = Mockery::mock(CoreInterface::class);
+        $this->app->instance(Component::CORE, $core);
 
-        static::assertEquals('testing', cms());
+        static::assertSame($core, cms());
     }
 
     /**
@@ -37,7 +40,7 @@ class HelpersTest extends CmsBootTestCase
     function its_cms_route_function_returns_a_prefixed_route()
     {
         $urlMock = $this->getMockBuilder(UrlGenerator::class)->getMock();
-        $urlMock->expects(static::once())->method('route')->with('cms::testing-something');
+        $urlMock->expects(static::once())->method('route')->with('cms::testing-something')->willReturn('test');
 
         $this->app->instance('url', $urlMock);
 
@@ -49,9 +52,10 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_api_function_returns_the_api_core()
     {
-        $this->app->instance(Component::API, 'testing');
+        $core = Mockery::mock(ApiCoreInterface::class);
+        $this->app->instance(Component::API, $core);
 
-        static::assertEquals('testing', cms_api());
+        static::assertSame($core, cms_api());
     }
 
     /**
@@ -59,9 +63,10 @@ class HelpersTest extends CmsBootTestCase
      */
     function its_cms_auth_function_returns_the_authenticator()
     {
-        $this->app->instance(Component::AUTH, 'testing');
+        $instance = Mockery::mock(AuthenticatorInterface::class);
+        $this->app->instance(Component::AUTH, $instance);
 
-        static::assertEquals('testing', cms_auth());
+        static::assertSame($instance, cms_auth());
     }
 
     /**
