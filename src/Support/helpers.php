@@ -127,7 +127,7 @@ if ( ! function_exists('cms_trans')) {
             $key = $id;
         }
 
-        return $translator->trans($key, $parameters, $domain, $locale);
+        return $translator->get($key, $parameters, $domain, $locale);
     }
 }
 
@@ -157,6 +157,6 @@ if ( ! function_exists('cms_trans_choice')) {
             $key = $id;
         }
 
-        return app('translator')->transChoice($key, $number, $parameters, $domain, $locale);
+        return app('translator')->choice($key, $number, $parameters, $domain, $locale);
     }
 }
