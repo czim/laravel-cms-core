@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Support\Translation;
 
 use Czim\CmsCore\Support\Translation\CmsTranslator;
@@ -18,7 +21,7 @@ class CmsTranslatorTest extends CmsBootTestCase
 
         $translator = new CmsTranslator($loaderMock, 'en');
 
-        $translator->addLines(['testing.test' => 'exists application'], 'en', '*');
+        $translator->addLines(['testing.test' => 'exists application'], 'en');
 
         static::assertEquals('exists application', $translator->get('testing.test'));
     }
@@ -33,7 +36,7 @@ class CmsTranslatorTest extends CmsBootTestCase
 
         $translator = new CmsTranslator($loaderMock, 'en');
 
-        $translator->addLines(['testing.test' => 'exists application'], 'en', '*');
+        $translator->addLines(['testing.test' => 'exists application'], 'en');
 
         static::assertEquals('cms::testing.test', $translator->get('cms::testing.test'));
     }
@@ -49,7 +52,7 @@ class CmsTranslatorTest extends CmsBootTestCase
         $translator = new CmsTranslator($loaderMock, 'en');
 
         $translator->addLines(['testing.test' => 'exists cms'], 'en', 'cms');
-        $translator->addLines(['testing.test' => 'exists application'], 'en', '*');
+        $translator->addLines(['testing.test' => 'exists application'], 'en');
 
         static::assertEquals('exists cms', $translator->get('testing.test'));
     }

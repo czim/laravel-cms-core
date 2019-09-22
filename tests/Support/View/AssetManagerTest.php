@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Support\View;
 
 use Czim\CmsCore\Support\View\AssetManager;
@@ -12,9 +15,9 @@ class AssetManagerTest extends TestCase
      */
     function it_registers_style_assets()
     {
-        $manager = new AssetManager;
+        $manager = new AssetManager();
 
-        static::assertSame($manager, $manager->registerStyleAsset('/path/to/asset', 'something', 'screen', 'stylesheet'));
+        static::assertSame($manager, $manager->registerStyleAsset('/path/to/asset', 'something', 'screen'));
 
         static::assertEquals(
             '<link rel="stylesheet" href="/path/to/asset" type="something" media="screen">',
@@ -22,7 +25,7 @@ class AssetManagerTest extends TestCase
         );
 
         // Without parameters
-        $manager = new AssetManager;
+        $manager = new AssetManager();
 
         $manager->registerStyleAsset('/path/to/asset');
 
@@ -34,7 +37,7 @@ class AssetManagerTest extends TestCase
      */
     function it_registers_script_footer_assets()
     {
-        $manager = new AssetManager;
+        $manager = new AssetManager();
 
         static::assertSame($manager, $manager->registerScriptAsset('/path/to/asset'));
         $manager->registerScriptAsset('/not/footer', true);
@@ -47,10 +50,10 @@ class AssetManagerTest extends TestCase
      */
     function it_registers_script_header_assets()
     {
-        $manager = new AssetManager;
+        $manager = new AssetManager();
 
         static::assertSame($manager, $manager->registerScriptAsset('/path/to/asset', true));
-        $manager->registerScriptAsset('/not/footer', false);
+        $manager->registerScriptAsset('/not/footer');
 
         static::assertEquals('<script src="/path/to/asset"></script>', $manager->renderScriptHeadAssets());
     }
@@ -60,7 +63,7 @@ class AssetManagerTest extends TestCase
      */
     function it_registers_script_bodies()
     {
-        $manager = new AssetManager;
+        $manager = new AssetManager();
 
         static::assertSame($manager, $manager->registerScript('<script>test</script>', false));
         $manager->registerScript('<script>test</script>', false);
@@ -73,7 +76,7 @@ class AssetManagerTest extends TestCase
      */
     function it_registers_script_bodies_such_that_duplicates_are_not_rendered()
     {
-        $manager = new AssetManager;
+        $manager = new AssetManager();
 
         static::assertSame($manager, $manager->registerScript('<script>test</script>'));
         $manager->registerScript('<script>test</script>');

@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Http\Middleware;
 
 use Czim\CmsCore\Contracts\Core\CoreInterface;
@@ -53,9 +56,8 @@ class SetLocaleTest extends TestCase
 
         $coreMock->method('config')
             ->willReturnCallback(function ($key, $default = null) {
-                switch ($key) {
-                    case 'session.prefix':
-                        return 'cms::';
+                if ($key === 'session.prefix') {
+                    return 'cms::';
                 }
                 return $default;
             });

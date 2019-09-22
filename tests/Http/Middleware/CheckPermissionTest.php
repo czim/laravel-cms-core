@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Http\Middleware;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
@@ -37,7 +40,7 @@ class CheckPermissionTest extends TestCase
 
         $next = function ($request) { return $request; };
 
-        static::assertSame($requestMock, $middleware->handle($requestMock, $next, null));
+        static::assertSame($requestMock, $middleware->handle($requestMock, $next));
     }
 
     /**

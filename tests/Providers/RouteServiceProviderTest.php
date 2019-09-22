@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Providers;
 
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -181,14 +184,13 @@ class RouteServiceProviderTest extends TestCase
             function ($key, $default = null) {
                 switch ($key) {
 
+                    case 'middleware.group':
                     case 'route.prefix':
                         return 'cms';
 
                     case 'route.name-prefix':
                         return 'cms::';
 
-                    case 'middleware.group':
-                        return 'cms';
                 }
                 return $default;
             }

@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Support\Data\Menu;
 
 use Czim\CmsCore\Support\Data\Menu\PermissionsIndexData;

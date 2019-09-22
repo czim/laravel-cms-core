@@ -14,6 +14,7 @@ use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use UnexpectedValueException;
 
 class MenuConfigInterpreterTest extends CmsBootTestCase
 {
@@ -45,7 +46,6 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
 
         $layout = $interpreter->interpretLayout([]);
 
-        static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
         static::assertCount(4, $layout->layout());
         static::assertEquals(['test-a', 'test-b', 'test-c', 'test-d'], Arr::pluck($layout->layout(), 'id'));
     }
@@ -78,8 +78,6 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
             'test-a',
         ]);
 
-        static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
-
         static::assertCount(3, $layout->layout());
         static::assertEquals(['group-a', 'test-d', 'test-a'], Arr::pluck($layout->layout(), 'id'));
         static::assertEquals(['group-b'], Arr::pluck($layout->layout()['group-a']->children(), 'id'));
@@ -108,8 +106,6 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
                 ],
             ],
         ]);
-
-        static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
 
         static::assertCount(1, $layout->layout());
         static::assertEquals(['group-a'], Arr::pluck($layout->layout(), 'id'));
@@ -146,8 +142,6 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
             'test-d',
         ]);
 
-        static::assertInstanceOf(MenuLayoutDataInterface::class, $layout);
-
         static::assertCount(4, $layout->layout());
         static::assertArrayNotHasKey('group-a', $layout->layout());
     }
@@ -162,7 +156,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_a_module_key_is_unknown()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageRegExp('#\'test-does-not-exist\'#');
 
         $this->menuModulesStandard = $this->getMockModulePresences();
@@ -186,7 +180,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_a_module_key_is_assigned_more_than_once_in_a_layout()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageRegExp('#\'test-a\'#');
 
         $this->menuModulesStandard = $this->getMockModulePresences();
@@ -210,7 +204,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
      */
     function it_throws_an_exception_if_an_incorrect_value_is_present_in_the_layout_tree()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         $this->menuModulesStandard = $this->getMockModulePresences();
 

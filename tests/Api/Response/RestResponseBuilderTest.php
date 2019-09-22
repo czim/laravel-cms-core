@@ -395,18 +395,16 @@ class RestResponseBuilderTest extends CmsBootTestCase
 
         $coreMock->method('config')
             ->willReturnCallback(function ($key, $default = null) {
-                switch ($key) {
-                    case 'cms-core.debug':
-                        return true;
+                if ($key === 'cms-core.debug') {
+                    return true;
                 }
                 return $default;
             });
 
         $coreMock->method('apiConfig')
             ->willReturnCallback(function ($key, $default = null) {
-                switch ($key) {
-                    case 'debug.local-exception-trace':
-                        return true;
+                if ($key === 'debug.local-exception-trace') {
+                    return true;
                 }
                 return $default;
             });

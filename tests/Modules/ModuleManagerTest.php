@@ -56,7 +56,7 @@ class ModuleManagerTest extends CmsBootTestCase
         $modules = $manager->getModules();
 
         static::assertInstanceOf(Collection::class, $modules, 'getModules() did not return Collection');
-        static::assertCount(2, $modules, "Two modules should be loaded by default");
+        static::assertCount(2, $modules, 'Two modules should be loaded by default');
         static::assertTrue($modules->has('test-module'), 'Test Module should be loaded');
         static::assertTrue($modules->has('associated-test-module'), 'Associated Test Module should be loaded');
     }
@@ -124,7 +124,7 @@ class ModuleManagerTest extends CmsBootTestCase
 
         $manager->initialize();
 
-        static::assertSame(false, $manager->get('does-not-exist'));
+        static::assertFalse($manager->get('does-not-exist'));
     }
 
     /**
@@ -136,7 +136,7 @@ class ModuleManagerTest extends CmsBootTestCase
 
         $manager->initialize();
 
-        static::assertSame(false, $manager->getByAssociatedClass('Some\\Unassociated\\Class'));
+        static::assertFalse($manager->getByAssociatedClass('Some\\Unassociated\\Class'));
     }
 
     /**

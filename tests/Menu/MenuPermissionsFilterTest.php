@@ -14,6 +14,7 @@ use Czim\CmsCore\Support\Data\MenuPresence;
 use Czim\CmsCore\Support\Enums\MenuPresenceType;
 use Czim\CmsCore\Test\CmsBootTestCase;
 use Illuminate\Support\Arr;
+use RuntimeException;
 
 class MenuPermissionsFilterTest extends CmsBootTestCase
 {
@@ -52,7 +53,6 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         $filter = new MenuPermissionsFilter;
         $index = $filter->buildPermissionsIndex($layout);
 
-        static::assertInstanceOf(MenuPermissionsIndexDataInterface::class, $index);
         static::assertEmpty($index->index());
         static::assertEquals(['permission-a', 'permission-b'], $index->permissions());
     }
@@ -128,7 +128,6 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         $filter = new MenuPermissionsFilter();
         $index = $filter->buildPermissionsIndex($layout);
 
-        static::assertInstanceOf(MenuPermissionsIndexDataInterface::class, $index);
         static::assertEquals([
             'Z3JvdXAtYQ==' => [],
             'Z3JvdXAtYg==' => [ 'permission-a', 'permission-b' ]
@@ -153,7 +152,6 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         $filter = new MenuPermissionsFilter();
         $index = $filter->buildPermissionsIndex($layout);
 
-        static::assertInstanceOf(MenuPermissionsIndexDataInterface::class, $index);
         static::assertEquals([
             base64_encode('group-a') .'.' . base64_encode('group-b') => ['permission-a', 'permission-b'],
             base64_encode('group-a') .'.' . base64_encode('group-c') => [],
@@ -349,13 +347,13 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
         $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
         $layoutMock->method('setLayout')
-            ->willThrowException(new \RuntimeException("setLayout should not be called"));
+            ->willThrowException(new RuntimeException('setLayout should not be called'));
 
         $indexMock = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
         $indexMock->method('index')
-            ->willThrowException(new \RuntimeException("index should not be called"));
+            ->willThrowException(new RuntimeException('index should not be called'));
         $indexMock->method('permissions')
-            ->willThrowException(new \RuntimeException("permissions should not be called"));
+            ->willThrowException(new RuntimeException('permissions should not be called'));
 
         $filter = new MenuPermissionsFilter();
 
@@ -375,11 +373,11 @@ class MenuPermissionsFilterTest extends CmsBootTestCase
         /** @var MenuLayoutDataInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
         $layoutMock = $this->getMockBuilder(MenuLayoutDataInterface::class)->getMock();
         $layoutMock->method('setLayout')
-            ->willThrowException(new \RuntimeException("setLayout should not be called"));
+            ->willThrowException(new RuntimeException('setLayout should not be called'));
 
         $indexMock = $this->getMockBuilder(MenuPermissionsIndexDataInterface::class)->getMock();
         $indexMock->method('index')
-            ->willThrowException(new \RuntimeException("index should not be called"));
+            ->willThrowException(new RuntimeException('index should not be called'));
         $indexMock->expects(static::atLeastOnce())->method('permissions')->willReturn([]);
 
         $filter = new MenuPermissionsFilter();

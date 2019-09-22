@@ -929,9 +929,8 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
 
         $mock->method('moduleConfig')
             ->willReturnCallback(function ($key) {
-                switch ($key) {
-                    case 'menu.modules':
-                        return $this->menuModulesConfig;
+                if ($key === 'menu.modules') {
+                    return $this->menuModulesConfig;
                 }
 
                 return null;

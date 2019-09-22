@@ -264,7 +264,7 @@ class DataObjectTest extends TestCase
 
         static::assertEquals('new', $data->some);
         static::assertEquals(11, $data->that);
-        static::assertSame(true, $data->set);
+        static::assertTrue($data->set);
     }
 
     /**

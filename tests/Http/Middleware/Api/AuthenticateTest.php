@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Http\Middleware\Api;
 
 use Czim\CmsCore\Contracts\Api\ApiCoreInterface;

@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Menu;
 
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
@@ -153,7 +156,7 @@ class MenuRepositoryTest extends CmsBootTestCase
 
         // Must set up 'real' data for caching serialization
         $menu = new MenuRepository(
-            $this->getMockCore(false),
+            $this->getMockCore(),
             $this->getMockAuth(),
             $this->getMockConfigInterpreter($layout),
             $this->getMockPermissionsFilter($index)
@@ -161,11 +164,11 @@ class MenuRepositoryTest extends CmsBootTestCase
 
         $menu->initialize();
 
-        static::assertFalse(file_exists($this->getMenuCachePath()), 'Cache file should not exist before caching');
+        static::assertFileNotExists($this->getMenuCachePath(), 'Cache file should not exist before caching');
 
         $menu->writeCache();
 
-        static::assertTrue(file_exists($this->getMenuCachePath()), 'Cache file should exist after caching');
+        static::assertFileExists($this->getMenuCachePath(), 'Cache file should exist after caching');
 
         // Assert that the cache works:
         // If the data returned is empty, the mocks are used, not the 'real' cached data.
@@ -186,14 +189,14 @@ class MenuRepositoryTest extends CmsBootTestCase
 
         $menu->writeCache();
 
-        static::assertTrue(file_exists($this->getMenuCachePath()), 'Cache file should exist before clearing');
+        static::assertFileExists($this->getMenuCachePath(), 'Cache file should exist before clearing');
 
         $menu->clearCache();
 
-        static::assertFalse(file_exists($this->getMenuCachePath()), 'Cache file should not exist after clearing');
+        static::assertFileNotExists($this->getMenuCachePath(), 'Cache file should not exist after clearing');
     }
 
-    
+
     // ------------------------------------------------------------------------------
     //      Helpers
     // ------------------------------------------------------------------------------
@@ -204,7 +207,7 @@ class MenuRepositoryTest extends CmsBootTestCase
     protected function makeMenuRepository()
     {
         return new MenuRepository(
-            $this->getMockCore(false),
+            $this->getMockCore(),
             $this->getMockAuth(),
             $this->getMockConfigInterpreter(),
             $this->getMockPermissionsFilter()
@@ -222,9 +225,8 @@ class MenuRepositoryTest extends CmsBootTestCase
         $mock->expects($exactExpects ? static::once() : static::any())
              ->method('moduleConfig')
              ->willReturnCallback(function ($key, $default = null) {
-                 switch ($key) {
-                     case 'menu.layout':
-                         return [];
+                 if ($key === 'menu.layout') {
+                     return [];
                  }
 
                  return $default;

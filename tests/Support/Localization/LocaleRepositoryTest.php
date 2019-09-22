@@ -1,4 +1,7 @@
 <?php
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection AccessModifierPresentedInspection */
+
 namespace Czim\CmsCore\Test\Support\Localization;
 
 use Czim\CmsCore\Support\Enums\Component;
@@ -94,12 +97,12 @@ class LocaleRepositoryTest extends CmsBootTestCase
     {
         $repository = $this->makeLocaleRepository();
 
-        static::assertFalse($repository->isLocalized(), "Single locale should not be isLocalized");
+        static::assertFalse($repository->isLocalized(), 'Single locale should not be isLocalized');
 
         // When different fallback locale is set
         $this->app['config']->set('app.locale', 'en');
 
-        static::assertTrue($repository->isLocalized(), "Double locale should nbe isLocalized");
+        static::assertTrue($repository->isLocalized(), 'Double locale should nbe isLocalized');
     }
 
     /**
@@ -108,7 +111,7 @@ class LocaleRepositoryTest extends CmsBootTestCase
     function it_returns_whether_a_locale_is_available()
     {
         $repository = $this->makeLocaleRepository();
-        
+
         static::assertTrue($repository->isAvailable('nl'));
         static::assertFalse($repository->isAvailable('it'));
     }
