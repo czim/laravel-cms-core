@@ -28,9 +28,9 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
     /**
      * Returns the layout that should be used for displaying the edit form.
      *
-     * @return array|mixed[]
+     * @return array
      */
-    public function layout()
+    public function layout(): array
     {
         return $this->getAttribute('layout') ?: [];
     }
@@ -38,7 +38,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
     /**
      * @return MenuPresenceInterface[]
      */
-    public function alternative()
+    public function alternative(): array
     {
         return $this->getAttribute('alternative') ?: [];
     }
@@ -49,7 +49,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
      * @param MenuPresenceInterface[] $presences
      * @return $this
      */
-    public function setLayout(array $presences)
+    public function setLayout(array $presences): MenuLayoutDataInterface
     {
         $this->setAttribute('layout', $presences);
 
@@ -62,7 +62,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
      * @param MenuPresenceInterface[] $presences
      * @return $this
      */
-    public function setAlternative(array $presences)
+    public function setAlternative(array $presences): MenuLayoutDataInterface
     {
         $this->setAttribute('alternative', $presences);
 
@@ -95,7 +95,7 @@ class LayoutData extends AbstractDataObject implements MenuLayoutDataInterface
     /**
      * @param string $topKey
      */
-    protected function decorateLayoutAttribute(string $topKey = 'layout')
+    protected function decorateLayoutAttribute(string $topKey = 'layout'): void
     {
         foreach ($this->attributes[$topKey] as $key => &$value) {
 

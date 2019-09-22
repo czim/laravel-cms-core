@@ -8,56 +8,29 @@ use Illuminate\Database\ConnectionInterface;
 use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
-use Illuminate\Session\SessionInterface;
+use Illuminate\Contracts\Session\Session;
 use Psr\Log\LoggerInterface;
 
 interface CoreInterface
 {
 
-    /**
-     * @return BootCheckerInterface
-     */
-    public function bootChecker();
+    public function bootChecker(): BootCheckerInterface;
 
-    /**
-     * @return AuthenticatorInterface
-     */
-    public function auth();
+    public function auth(): AuthenticatorInterface;
 
-    /**
-     * @return ApiCoreInterface
-     */
-    public function api();
+    public function api(): ApiCoreInterface;
 
-    /**
-     * @return CacheInterface
-     */
-    public function cache();
+    public function cache(): CacheInterface;
 
-    /**
-     * @return ModuleManagerInterface
-     */
-    public function modules();
+    public function modules(): ModuleManagerInterface;
 
-    /**
-     * @return MenuRepositoryInterface
-     */
-    public function menu();
+    public function menu(): MenuRepositoryInterface;
 
-    /**
-     * @return AssetManagerInterface
-     */
-    public function assets();
+    public function assets(): AssetManagerInterface;
 
-    /**
-     * @return AclRepositoryInterface
-     */
-    public function acl();
+    public function acl(): AclRepositoryInterface;
 
-    /**
-     * @return NotifierInterface
-     */
-    public function notifier();
+    public function notifier(): NotifierInterface;
 
     /**
      * With any parameters set, will record a CMS log entry.
@@ -68,7 +41,7 @@ interface CoreInterface
      * @param null|array        $extra   only used if neither $type nor $message are arrays
      * @return LoggerInterface
      */
-    public function log($level = null, $message = null, $extra = null);
+    public function log($level = null, $message = null, $extra = null): LoggerInterface;
 
     /**
      * Returns the database connection that the CMS uses.
@@ -80,7 +53,7 @@ interface CoreInterface
     /**
      * Returns the session interface that the CMS uses.
      *
-     * @return SessionInterface
+     * @return Session
      */
     public function session();
 
@@ -91,7 +64,7 @@ interface CoreInterface
      * @param null|mixed $default
      * @return mixed
      */
-    public function config($key, $default = null);
+    public function config(string $key, $default = null);
 
     /**
      * Returns CMS configuration value for modules and/or menu.
@@ -100,7 +73,7 @@ interface CoreInterface
      * @param null|mixed $default
      * @return mixed
      */
-    public function moduleConfig($key, $default = null);
+    public function moduleConfig(string $key, $default = null);
 
     /**
      * Returns CMS configuration value for the API.
@@ -109,7 +82,7 @@ interface CoreInterface
      * @param null|mixed $default
      * @return mixed
      */
-    public function apiConfig($key, $default = null);
+    public function apiConfig(string $key, $default = null);
 
     /**
      * Generate a URL to a named CMS route. This ensures that the
@@ -120,7 +93,7 @@ interface CoreInterface
      * @param bool   $absolute
      * @return string
      */
-    public function route($name, $parameters = [], $absolute = true);
+    public function route(string $name, array $parameters = [], bool $absolute = true): string;
 
     /**
      * Prefixes a route name with the standard web CMS prefix, if required.
@@ -128,7 +101,7 @@ interface CoreInterface
      * @param string $name
      * @return string
      */
-    public function prefixRoute($name);
+    public function prefixRoute(string $name): string;
 
     /**
      * Generate a URL to a named CMS API route. This ensures that the
@@ -139,7 +112,7 @@ interface CoreInterface
      * @param bool   $absolute
      * @return string
      */
-    public function apiRoute($name, $parameters = [], $absolute = true);
+    public function apiRoute(string $name, array $parameters = [], bool $absolute = true): string;
 
     /**
      * Prefixes a route name with the standard web CMS API prefix, if required.
@@ -147,13 +120,13 @@ interface CoreInterface
      * @param string $name
      * @return string
      */
-    public function prefixApiRoute($name);
+    public function prefixApiRoute(string $name): string;
 
     /**
      * Returns CMS Core version number.
      *
      * @return string
      */
-    public function version();
+    public function version(): string;
 
 }

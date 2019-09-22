@@ -15,9 +15,7 @@ class RedirectIfAuthenticated
      */
     protected $auth;
 
-    /**
-     * @param AuthenticatorInterface $auth
-     */
+
     public function __construct(AuthenticatorInterface $auth)
     {
         $this->auth = $auth;

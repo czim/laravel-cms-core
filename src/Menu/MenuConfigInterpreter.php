@@ -34,9 +34,6 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
     protected $assignedModuleKeys;
 
 
-    /**
-     * @param MenuModulesInterpreterInterface $modulesInterpreter
-     */
     public function __construct(MenuModulesInterpreterInterface $modulesInterpreter)
     {
         $this->modulesInterpreter = $modulesInterpreter;
@@ -49,7 +46,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
      * @param array $layout
      * @return MenuLayoutDataInterface
      */
-    public function interpretLayout(array $layout)
+    public function interpretLayout(array $layout): MenuLayoutDataInterface
     {
         $this->assignedModuleKeys = [];
 
@@ -73,7 +70,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
      * @param array $data
      * @return array
      */
-    protected function interpretNestedGroupLayout(array $data)
+    protected function interpretNestedGroupLayout(array $data): array
     {
         foreach ($data as $key => &$value) {
 
@@ -107,7 +104,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
      * @param MenuConfiguredModulesDataInterface $modules
      * @return array
      */
-    protected function mergeModulePresencesIntoLayout(array $layout, MenuConfiguredModulesDataInterface $modules)
+    protected function mergeModulePresencesIntoLayout(array $layout, MenuConfiguredModulesDataInterface $modules): array
     {
         $standard = $modules->standard();
 
@@ -131,7 +128,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
      * @param Collection $presencesPerModule    pulls presences per module if they are added to the layout
      * @return array
      */
-    protected function mergeModulePresencesIntoLayoutLayer(array $layer, Collection $presencesPerModule)
+    protected function mergeModulePresencesIntoLayoutLayer(array $layer, Collection $presencesPerModule): array
     {
         $newLayer = [];
 
@@ -186,7 +183,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
      *
      * @param LayoutData $layout
      */
-    protected function filterEmptyGroups(LayoutData $layout)
+    protected function filterEmptyGroups(LayoutData $layout): void
     {
         $presences = $layout->layout;
 
@@ -210,7 +207,7 @@ class MenuConfigInterpreter implements MenuConfigInterpreterInterface
      * @param MenuPresenceInterface $presence
      * @return int  the number of non-group children found on the levels below
      */
-    protected function filterNestedEmptyGroups(MenuPresenceInterface $presence)
+    protected function filterNestedEmptyGroups(MenuPresenceInterface $presence): int
     {
         if ($presence->type() !== MenuPresenceType::GROUP) {
             return 1;

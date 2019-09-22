@@ -65,7 +65,7 @@ class AclRepository implements AclRepositoryInterface
     /**
      * Prepares the menu for presentation on demand.
      */
-    public function initialize()
+    public function initialize(): void
     {
         $this->prepareData();
     }
@@ -75,7 +75,7 @@ class AclRepository implements AclRepositoryInterface
      *
      * @return Collection|AclPresenceInterface[]
      */
-    public function getAclPresences()
+    public function getAclPresences(): Collection
     {
         $this->prepareData();
 
@@ -88,7 +88,7 @@ class AclRepository implements AclRepositoryInterface
      * @param string $key
      * @return Collection|AclPresenceInterface[]|null
      */
-    public function getAclPresencesByModule($key)
+    public function getAclPresencesByModule(string $key): ?Collection
     {
         $this->prepareData();
 
@@ -100,7 +100,7 @@ class AclRepository implements AclRepositoryInterface
      *
      * @return string[]
      */
-    public function getAllPermissions()
+    public function getAllPermissions(): array
     {
         $this->prepareData();
 
@@ -113,7 +113,7 @@ class AclRepository implements AclRepositoryInterface
      * @param string $key
      * @return string[]
      */
-    public function getModulePermissions($key)
+    public function getModulePermissions(string $key): array
     {
         $this->prepareData();
 
@@ -132,7 +132,7 @@ class AclRepository implements AclRepositoryInterface
     /**
      * Prepares CMS data for presentation in the menu views.
      */
-    protected function prepareData()
+    protected function prepareData(): void
     {
         if ($this->prepared) {
             return;
@@ -154,7 +154,7 @@ class AclRepository implements AclRepositoryInterface
      *
      * @return $this
      */
-    protected function loadAclModules()
+    protected function loadAclModules(): AclRepositoryInterface
     {
         // Gather all modules with any menu inherent or overridden presence
         // and store them locally according to their nature.
@@ -191,10 +191,10 @@ class AclRepository implements AclRepositoryInterface
     /**
      * Normalizes ACL presence data to an array of ACLPresence instances.
      *
-     * @param $data
+     * @param mixed $data
      * @return AclPresenceInterface[]
      */
-    protected function normalizeAclPresence($data)
+    protected function normalizeAclPresence($data): array
     {
         if ( ! $data) {
             // @codeCoverageIgnoreStart
@@ -249,7 +249,7 @@ class AclRepository implements AclRepositoryInterface
      *
      * @return $this
      */
-    protected function collapsePermissions()
+    protected function collapsePermissions(): AclRepositoryInterface
     {
         foreach ($this->modulePresences as $moduleKey => $presences) {
 

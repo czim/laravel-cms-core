@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Console\Commands;
 use Czim\CmsCore\Contracts\Modules\ModuleInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class ShowModules extends Command
 {
@@ -19,7 +20,7 @@ class ShowModules extends Command
      *
      * @param ModuleManagerInterface $manager
      */
-    public function handle(ModuleManagerInterface $manager)
+    public function handle(ModuleManagerInterface $manager): void
     {
         $key      = $this->argument('module');
         $onlyKeys = $this->option('keys');
@@ -46,9 +47,9 @@ class ShowModules extends Command
     }
 
     /**
-     * @param ModuleInterface[] $modules
+     * @param Collection|ModuleInterface[] $modules
      */
-    protected function displayKeys($modules)
+    protected function displayKeys(Collection $modules): void
     {
         foreach ($modules as $module) {
             $this->comment($module->getKey());
@@ -56,9 +57,9 @@ class ShowModules extends Command
     }
 
     /**
-     * @param ModuleInterface[] $modules
+     * @param Collection|ModuleInterface[] $modules
      */
-    protected function displayList($modules)
+    protected function displayList(Collection $modules): void
     {
         foreach ($modules as $module) {
             $this->displaySingle($module);
@@ -68,7 +69,7 @@ class ShowModules extends Command
     /**
      * @param ModuleInterface $module
      */
-    protected function displaySingle(ModuleInterface $module)
+    protected function displaySingle(ModuleInterface $module): void
     {
         $this->comment($module->getKey());
         $this->infoIndent('Name             : ' . $module->getName());
@@ -77,7 +78,7 @@ class ShowModules extends Command
         if ($module->getAssociatedClass()) {
             $this->infoIndent('Associated Class : ' . $module->getAssociatedClass());
         }
-        
+
         $this->info('');
     }
 
@@ -85,7 +86,7 @@ class ShowModules extends Command
      * @param string $info
      * @param int    $indents
      */
-    protected function infoIndent($info, $indents = 1)
+    protected function infoIndent(string $info, int $indents = 1): void
     {
         $this->info(str_repeat(' ', $indents * 4) . $info);
     }

@@ -11,6 +11,6 @@ interface ModuleGeneratorInterface
      *
      * @return Collection|ModuleInterface[]
      */
-    public function modules();
+    public function modules(): Collection;
 
 }

@@ -17,7 +17,7 @@ class ClearMenuCache extends Command
      *
      * @param MenuRepositoryInterface $repository
      */
-    public function handle(MenuRepositoryInterface $repository)
+    public function handle(MenuRepositoryInterface $repository): void
     {
         $repository->clearCache();
 

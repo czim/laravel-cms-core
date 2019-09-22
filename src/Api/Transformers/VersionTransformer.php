@@ -10,7 +10,7 @@ class VersionTransformer extends TransformerAbstract
      * @param array $version
      * @return array
      */
-    public function transform(array $version)
+    public function transform(array $version): array
     {
         return $version;
     }

@@ -5,7 +5,7 @@ use Monolog\Formatter\FormatterInterface;
 
 class CmsFormatterDecorator implements FormatterInterface
 {
-    const CMS_RECORD_PREFIX = '[CMS] ';
+    public const CMS_RECORD_PREFIX = '[CMS] ';
 
 
     /**
@@ -19,9 +19,6 @@ class CmsFormatterDecorator implements FormatterInterface
     protected $formatterPrefix = self::CMS_RECORD_PREFIX;
 
 
-    /**
-     * @param FormatterInterface $formatter
-     */
     public function __construct(FormatterInterface $formatter)
     {
         $this->formatter = $formatter;
@@ -39,7 +36,7 @@ class CmsFormatterDecorator implements FormatterInterface
         $formattedRecord = $this->formatter->format($record);
 
         if (is_array($formattedRecord)) {
-            list($channel, $message, $backtrace, $loglevel) = $formattedRecord;
+            [$channel, $message, $backtrace, $loglevel] = $formattedRecord;
 
             return [
                 $channel,

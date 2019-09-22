@@ -14,6 +14,6 @@ interface AuthenticatorInterface extends
      *
      * @return string
      */
-    public function version();
+    public function version(): string;
 
 }

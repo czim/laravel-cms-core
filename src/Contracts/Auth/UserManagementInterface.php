@@ -12,15 +12,15 @@ interface UserManagementInterface
      * @param array  $data
      * @return UserInterface
      */
-    public function createUser($username, $password, array $data = []);
+    public function createUser(string $username, string $password, array $data = []): UserInterface;
 
     /**
      * Removes a user from the CMS.
      *
-     * @param $username
+     * @param string $username
      * @return bool
      */
-    public function deleteUser($username);
+    public function deleteUser(string $username): bool;
 
     /**
      * Sets a new password for an existing CMS user.
@@ -29,7 +29,7 @@ interface UserManagementInterface
      * @param string $password
      * @return bool
      */
-    public function updatePassword($username, $password);
+    public function updatePassword(string $username, string $password): bool;
 
     /**
      * Updates a CMS user's (extra) data.
@@ -38,7 +38,7 @@ interface UserManagementInterface
      * @param array $data
      * @return bool
      */
-    public function updateUser($username, array $data);
+    public function updateUser(string $username, array $data): bool;
 
 
     // ------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ interface UserManagementInterface
      * @param string|null $name
      * @return bool
      */
-    public function createRole($role, $name = null);
+    public function createRole(string $role, ?string $name = null): bool;
 
     /**
      * Removes a role.
@@ -60,16 +60,16 @@ interface UserManagementInterface
      * @param string $role
      * @return bool
      */
-    public function removeRole($role);
+    public function removeRole(string $role): bool;
 
     /**
      * Assigns one or several roles to a user.
-     * 
+     *
      * @param string|string[] $role
      * @param UserInterface   $user
      * @return bool
      */
-    public function assign($role, UserInterface $user);
+    public function assign($role, UserInterface $user): bool;
 
     /**
      * Removes one or several roles from a user.
@@ -78,8 +78,8 @@ interface UserManagementInterface
      * @param UserInterface   $user
      * @return bool
      */
-    public function unassign($role, UserInterface $user);
-    
+    public function unassign($role, UserInterface $user): bool;
+
 
     // ------------------------------------------------------------------------------
     //      Permissions
@@ -92,7 +92,7 @@ interface UserManagementInterface
      * @param string          $role
      * @return bool
      */
-    public function grantToRole($permission, $role);
+    public function grantToRole($permission, string $role): bool;
 
     /**
      * Revokes one or more permissions of a role.
@@ -101,7 +101,7 @@ interface UserManagementInterface
      * @param string          $role
      * @return bool
      */
-    public function revokeFromRole($permission, $role);
+    public function revokeFromRole($permission, string $role): bool;
 
     /**
      * Grants one or more permissions to a user.
@@ -110,7 +110,7 @@ interface UserManagementInterface
      * @param UserInterface   $user
      * @return bool
      */
-    public function grant($permission, UserInterface $user);
+    public function grant($permission, UserInterface $user): bool;
 
     /**
      * Revokes one or more permissions of a user.
@@ -119,6 +119,6 @@ interface UserManagementInterface
      * @param UserInterface   $user
      * @return bool
      */
-    public function revoke($permission, UserInterface $user);
+    public function revoke($permission, UserInterface $user): bool;
 
 }

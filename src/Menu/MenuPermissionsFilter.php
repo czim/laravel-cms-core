@@ -56,7 +56,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      * @param MenuLayoutDataInterface $layout
      * @return MenuPermissionsIndexDataInterface
      */
-    public function buildPermissionsIndex(MenuLayoutDataInterface $layout)
+    public function buildPermissionsIndex(MenuLayoutDataInterface $layout): MenuPermissionsIndexDataInterface
     {
         $this->permissionsIndex = new PermissionsIndexData;
         $this->permissions      = [];
@@ -81,9 +81,10 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
         MenuLayoutDataInterface $layout,
         $user,
         MenuPermissionsIndexDataInterface $permissionsIndex = null
-    ) {
+    ): MenuLayoutDataInterface {
+
         if ($user && ! ($user instanceof UserInterface)) {
-            throw new UnexpectedValueException("filterLayout expects UserInterface or boolean false");
+            throw new UnexpectedValueException('filterLayout expects UserInterface or boolean false');
         }
 
         if ($user && $user->isAdmin()) {
@@ -127,7 +128,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      * @param array                   $parentKeys
      * @return string[]|false     permissions, or false if the layer has mixed (un)conditional presences
      */
-    protected function compileIndexForLayoutLayer(array $layout, $parentKeys = [])
+    protected function compileIndexForLayoutLayer(array $layout, array $parentKeys = [])
     {
         $permissions = [];
 
@@ -187,7 +188,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      * @param array                   $parentKeys
      * @return MenuPresenceInterface[]
      */
-    protected function filterLayoutLayer(array $presences, array $parentKeys = [])
+    protected function filterLayoutLayer(array $presences, array $parentKeys = []): array
     {
         $remove = [];
 
@@ -239,7 +240,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      * @param string[] $permissions
      * @return bool
      */
-    protected function userHasPermission(array $permissions)
+    protected function userHasPermission(array $permissions): bool
     {
         if ( ! count($permissions)) {
             return true;
@@ -258,7 +259,7 @@ class MenuPermissionsFilter implements MenuPermissionsFilterInterface
      * @param string[] $permissions
      * @return bool
      */
-    protected function userHasAllPermissions(array $permissions)
+    protected function userHasAllPermissions(array $permissions): bool
     {
         if ( ! count($permissions)) {
             return true;

@@ -11,7 +11,7 @@ interface AclPresenceInterface extends DataObjectInterface
      *
      * @return string
      */
-    public function id();
+    public function id(): string;
 
     /**
      * Returns type of presence.
@@ -19,14 +19,14 @@ interface AclPresenceInterface extends DataObjectInterface
      * @see \Czim\CmsCore\Support\Enums\AclPresenceType
      * @return string
      */
-    public function type();
+    public function type(): string;
 
     /**
      * Returns available permission(s).
      *
      * @return string[]
      */
-    public function permissions();
+    public function permissions(): array;
 
     /**
      * Returns (translated) label for display.
@@ -34,27 +34,27 @@ interface AclPresenceInterface extends DataObjectInterface
      * @param bool $translated  returns translated label if possible
      * @return string
      */
-    public function label($translated = true);
+    public function label(bool $translated = true): string;
 
     /**
      * Returns the translation key for the label.
      *
-     * @return string
+     * @return string|null
      */
-    public function translationKey();
+    public function translationKey(): ?string;
 
     /**
      * Replace the permissions entirely.
      *
-     * @param mixed $permissions
+     * @param string[] $permissions
      */
-    public function setPermissions($permissions);
+    public function setPermissions(array $permissions): void;
 
     /**
      * Removes a permission from the current child permissions.
      *
      * @param string $permission
      */
-    public function removePermission($permission);
+    public function removePermission(string $permission): void;
 
 }

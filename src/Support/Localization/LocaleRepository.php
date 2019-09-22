@@ -11,9 +11,7 @@ class LocaleRepository implements LocaleRepositoryInterface
      */
     protected $core;
 
-    /**
-     * @param CoreInterface $core
-     */
+
     public function __construct(CoreInterface $core)
     {
         $this->core = $core;
@@ -25,7 +23,7 @@ class LocaleRepository implements LocaleRepositoryInterface
      *
      * @return string
      */
-    public function getDefault()
+    public function getDefault(): string
     {
         return $this->core->config('locale.default') ?: config('app.locale') ?: config('app.fallback_locale');
     }
@@ -35,7 +33,7 @@ class LocaleRepository implements LocaleRepositoryInterface
      *
      * @return string[]
      */
-    public function getAvailable()
+    public function getAvailable(): array
     {
         // If explicitly set in CMS config, this overrules all else
         $configLocales = $this->core->config('locale.available');
@@ -71,9 +69,9 @@ class LocaleRepository implements LocaleRepositoryInterface
      *
      * @return bool
      */
-    public function isLocalized()
+    public function isLocalized(): bool
     {
-        return (count($this->getAvailable()) > 1);
+        return count($this->getAvailable()) > 1;
     }
 
     /**
@@ -82,7 +80,7 @@ class LocaleRepository implements LocaleRepositoryInterface
      * @param string $locale
      * @return bool
      */
-    public function isAvailable($locale)
+    public function isAvailable(string $locale): bool
     {
         return in_array($locale, $this->getAvailable());
     }

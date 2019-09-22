@@ -35,9 +35,6 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     protected $presences;
 
 
-    /**
-     * @param CoreInterface $core
-     */
     public function __construct(CoreInterface $core)
     {
         $this->core          = $core;
@@ -55,7 +52,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      *
      * @return MenuConfiguredModulesDataInterface
      */
-    public function interpret()
+    public function interpret(): MenuConfiguredModulesDataInterface
     {
         /** @var Collection|ModuleInterface[] $modules */
         $modules = $this->sortModules(
@@ -128,7 +125,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      * @param Collection $modules
      * @return Collection
      */
-    protected function sortModules(Collection $modules)
+    protected function sortModules(Collection $modules): Collection
     {
         $index = 0;
 
@@ -137,7 +134,9 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
         $orderMap = array_map(
             function ($key) {
 
-                if (is_string($key)) return $key;
+                if (is_string($key)) {
+                    return $key;
+                }
 
                 if ( ! is_string($this->configModules[$key])) {
                     throw new UnexpectedValueException(
@@ -171,7 +170,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      * @param ModuleInterface $module
      * @return bool
      */
-    protected function hasConfiguredModulePresence(ModuleInterface $module)
+    protected function hasConfiguredModulePresence(ModuleInterface $module): bool
     {
         return array_key_exists($module->getKey(), $this->configModules);
     }
@@ -201,7 +200,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      * @param array $configured
      * @return bool
      */
-    protected function isArrayPresenceDefinition(array $configured)
+    protected function isArrayPresenceDefinition(array $configured): bool
     {
         return (bool) count(
             array_intersect(
@@ -222,7 +221,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      * @param false|MenuPresenceInterface[] $newPresences
      * @return MenuPresenceInterface[]
      */
-    protected function mergeNormalizedMenuPresences($oldPresences, $newPresences)
+    protected function mergeNormalizedMenuPresences($oldPresences, $newPresences): array
     {
         if (false === $oldPresences) {
             // @codeCoverageIgnoreStart
@@ -293,8 +292,8 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
                 default:
 
                     // Merge children for groups that have further nested definitions
-                    if (    $oldPresences[ $index ]->type() == MenuPresenceType::GROUP
-                        &&  (   $presence->type() == MenuPresenceType::GROUP
+                    if (    $oldPresences[ $index ]->type() === MenuPresenceType::GROUP
+                        &&  (   $presence->type() === MenuPresenceType::GROUP
                             ||  ! in_array('type', $presence->explicitKeys() ?: [])
                             )
                         &&  count($presence->children())
@@ -388,7 +387,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     /**
      * Normalizes menu presence data to an array of MenuPresence instances.
      *
-     * @param $data
+     * @param mixed $data
      * @return false|MenuPresenceInterface[]
      */
     protected function normalizeMenuPresence($data)
@@ -452,7 +451,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      * @param MenuPresenceInterface $new
      * @return MenuPresenceInterface
      */
-    protected function mergeMenuPresenceData(MenuPresenceInterface $original, MenuPresenceInterface $new)
+    protected function mergeMenuPresenceData(MenuPresenceInterface $original, MenuPresenceInterface $new): MenuPresenceInterface
     {
         $keys = $new->explicitKeys();
 
@@ -468,7 +467,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      *
      * @param MenuPresenceInterface|MenuPresence $presence
      */
-    protected function enrichConfiguredPresenceData(MenuPresenceInterface $presence)
+    protected function enrichConfiguredPresenceData(MenuPresenceInterface $presence): void
     {
         if ( ! $presence->type()) {
 
@@ -487,10 +486,10 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
     /**
      * Returns whether a string
      *
-     * @param string $string
+     * @param mixed $string
      * @return bool
      */
-    protected function isStringUrl($string)
+    protected function isStringUrl($string): bool
     {
         return (bool) is_string($string) && preg_match('#^(https?:)?//|^www\.#', $string);
     }
@@ -501,7 +500,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      * @param MenuPresenceInterface $presence
      * @return bool
      */
-    protected function isMenuPresenceAlternative(MenuPresenceInterface $presence)
+    protected function isMenuPresenceAlternative(MenuPresenceInterface $presence): bool
     {
         return  $presence->type() !== MenuPresenceType::ACTION
             &&  $presence->type() !== MenuPresenceType::GROUP
@@ -515,7 +514,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      * @param ModuleInterface $module
      * @return bool
      */
-    protected function isConfiguredModulePresenceDisabled(ModuleInterface $module)
+    protected function isConfiguredModulePresenceDisabled(ModuleInterface $module): bool
     {
         if ( ! array_key_exists($module->getKey(), $this->configModules)) {
             return false;
@@ -529,7 +528,7 @@ class MenuModulesInterpreter implements MenuModulesInterpreterInterface
      *
      * @param MenuPresenceInterface $presence
      */
-    protected function markExplicitKeysForMenuPresence(MenuPresenceInterface $presence)
+    protected function markExplicitKeysForMenuPresence(MenuPresenceInterface $presence): void
     {
         $presence->setExplicitKeys(
             array_keys(array_filter($presence->toArray()))

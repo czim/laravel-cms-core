@@ -19,7 +19,7 @@ class ShowMenu extends Command
      *
      * @param MenuRepositoryInterface $repository
      */
-    public function handle(MenuRepositoryInterface $repository)
+    public function handle(MenuRepositoryInterface $repository): void
     {
         $this->setLocale();
 
@@ -42,7 +42,7 @@ class ShowMenu extends Command
     /**
      * Sets locale if option is set.
      */
-    protected function setLocale()
+    protected function setLocale(): void
     {
         if ( ! ($locale = $this->option('locale'))) {
             return;
@@ -55,7 +55,7 @@ class ShowMenu extends Command
      * @param MenuPresenceInterface $presence
      * @param int                   $depth
      */
-    protected function displaySingle(MenuPresenceInterface $presence, $depth = 0)
+    protected function displaySingle(MenuPresenceInterface $presence, int $depth = 0): void
     {
         $indent = str_repeat(' ', $depth * 2);
 
@@ -68,7 +68,7 @@ class ShowMenu extends Command
         if ($presence->translationKey()) {
 
             // Add a flag for currently undefined translation keys
-            $isTranslated = $presence->label(true) !== $presence->label(false);
+            $isTranslated = $presence->label() !== $presence->label(false);
 
             $this->info(
                 $indent . 'Transl. key : ' . $presence->translationKey()
@@ -96,7 +96,7 @@ class ShowMenu extends Command
                 $this->displaySingle($child, $depth + 1);
             }
         }
-        
+
         $this->info('');
     }
 

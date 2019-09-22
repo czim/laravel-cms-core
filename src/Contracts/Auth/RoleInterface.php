@@ -9,20 +9,20 @@ interface RoleInterface
      *
      * @return string
      */
-    public function getSlug();
+    public function getSlug(): string;
 
     /**
      * Returns the display name.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns all permissions for the role.
      *
      * @return string[]
      */
-    public function getAllPermissions();
+    public function getAllPermissions(): array;
 
 }

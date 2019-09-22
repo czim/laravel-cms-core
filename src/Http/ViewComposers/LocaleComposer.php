@@ -17,9 +17,7 @@ class LocaleComposer
      */
     protected $repository;
 
-    /**
-     * @param LocaleRepositoryInterface $repository
-     */
+
     public function __construct(LocaleRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -30,7 +28,7 @@ class LocaleComposer
      *
      * @param View $view
      */
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with([
             'localized'        => $this->repository->isLocalized(),

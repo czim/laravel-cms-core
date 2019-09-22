@@ -4,6 +4,7 @@ namespace Czim\CmsCore\Http\Middleware;
 use Closure;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Support\Localization\LocaleRepositoryInterface;
+use Illuminate\Http\Request;
 
 /**
  * Class SetLocale
@@ -24,10 +25,7 @@ class SetLocale
      */
     protected $repository;
 
-    /**
-     * @param CoreInterface             $core
-     * @param LocaleRepositoryInterface $repository
-     */
+
     public function __construct(CoreInterface $core, LocaleRepositoryInterface $repository)
     {
         $this->core       = $core;
@@ -80,10 +78,7 @@ class SetLocale
         return $locale;
     }
 
-    /**
-     * @return string
-     */
-    protected function getSessionLocale()
+    protected function getSessionLocale(): ?string
     {
         $sessionKey = $this->core->config('session.prefix') . 'locale';
 
@@ -91,10 +86,10 @@ class SetLocale
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return string
      */
-    protected function getRequestLocale($request)
+    protected function getRequestLocale($request): string
     {
         $locales = array_unique(
             array_merge(

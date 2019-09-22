@@ -15,12 +15,12 @@ class BasicNotifier implements NotifierInterface
     /**
      * The session key for storing flash messages
      */
-    const SESSION_FLASH_KEY = 'flash-messages';
+    public const SESSION_FLASH_KEY = 'flash-messages';
 
     /**
      * The default message level
      */
-    const DEFAULT_LEVEL = 'info';
+    public const DEFAULT_LEVEL = 'info';
 
     /**
      * @var CoreInterface
@@ -44,7 +44,7 @@ class BasicNotifier implements NotifierInterface
      * @param null|string $level
      * @return $this
      */
-    public function flash($message, $level = null)
+    public function flash(string $message, ?string $level = null): NotifierInterface
     {
         if (null === $level) {
             $level = static::DEFAULT_LEVEL;
@@ -68,7 +68,7 @@ class BasicNotifier implements NotifierInterface
      * @param bool $clear whether to delete the flashed messages from the session
      * @return array set of associative arrays with message, level keys
      */
-    public function getFlashed($clear = true)
+    public function getFlashed(bool $clear = true): array
     {
         $messages = $this->core->session()->get(static::SESSION_FLASH_KEY, []);
 
@@ -88,7 +88,7 @@ class BasicNotifier implements NotifierInterface
      * @param null|string $level
      * @return $this
      */
-    public function addNotification($message, $level = null)
+    public function addNotification(string $message, ?string $level = null): NotifierInterface
     {
         return $this;
     }
@@ -100,7 +100,7 @@ class BasicNotifier implements NotifierInterface
      *
      * @return $this
      */
-    public function markNotificationsRead()
+    public function markNotificationsRead(): NotifierInterface
     {
         return $this;
     }
@@ -112,7 +112,7 @@ class BasicNotifier implements NotifierInterface
      *
      * @return array
      */
-    public function getUnreadNotifications()
+    public function getUnreadNotifications(): array
     {
         return [];
     }
@@ -124,7 +124,7 @@ class BasicNotifier implements NotifierInterface
      *
      * @return array
      */
-    public function getAllNotifications()
+    public function getAllNotifications(): array
     {
         return [];
     }
@@ -138,7 +138,7 @@ class BasicNotifier implements NotifierInterface
      * @param int $pageSize
      * @return array
      */
-    public function getPaginatedNotifications($page = 1, $pageSize = 10)
+    public function getPaginatedNotifications(int $page = 1, int $pageSize = 10): array
     {
         return [];
     }
@@ -150,7 +150,7 @@ class BasicNotifier implements NotifierInterface
      *
      * @return $this
      */
-    public function clearNotifications()
+    public function clearNotifications(): NotifierInterface
     {
         return $this;
     }

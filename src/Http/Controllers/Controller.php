@@ -8,7 +8,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 
 abstract class Controller extends BaseController
 {
-    use DispatchesJobs, ValidatesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
 
     /**
@@ -16,9 +17,7 @@ abstract class Controller extends BaseController
      */
     protected $core;
 
-    /**
-     * @param CoreInterface    $core
-     */
+
     public function __construct(CoreInterface $core)
     {
         $this->core = $core;

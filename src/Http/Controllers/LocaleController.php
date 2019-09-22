@@ -13,10 +13,7 @@ class LocaleController extends Controller
      */
     protected $repository;
 
-    /**
-     * @param CoreInterface             $core
-     * @param LocaleRepositoryInterface $repository
-     */
+
     public function __construct(CoreInterface $core, LocaleRepositoryInterface $repository)
     {
         parent::__construct($core);
@@ -43,10 +40,8 @@ class LocaleController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * @return string
-     */
-    protected function getSessionKey()
+
+    protected function getSessionKey(): string
     {
         return $this->core->config('session.prefix') . 'locale';
     }

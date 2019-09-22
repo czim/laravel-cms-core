@@ -17,7 +17,7 @@ interface MenuPermissionsFilterInterface
      * @param MenuLayoutDataInterface $layout
      * @return MenuPermissionsIndexDataInterface
      */
-    public function buildPermissionsIndex(MenuLayoutDataInterface $layout);
+    public function buildPermissionsIndex(MenuLayoutDataInterface $layout): MenuPermissionsIndexDataInterface;
 
     /**
      * Filters a given menu layout based on menu permissions.
@@ -31,6 +31,6 @@ interface MenuPermissionsFilterInterface
         MenuLayoutDataInterface $layout,
         $user,
         MenuPermissionsIndexDataInterface $permissionsIndex = null
-    );
+    ): MenuLayoutDataInterface;
 
 }

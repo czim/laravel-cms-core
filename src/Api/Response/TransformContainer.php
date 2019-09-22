@@ -48,13 +48,13 @@ class TransformContainer extends AbstractDataObject implements TransformContaine
      *
      * @return bool
      */
-    public function isCollection()
+    public function isCollection(): bool
     {
         // If collection is not explicitly set, assume standard Laravel use,
         // where either collections or models are passed in as content.
 
         if (null === $this->getAttribute('collection')) {
-            return ($this->getContent() instanceof Collection);
+            return $this->getContent() instanceof Collection;
         }
 
         return $this->getAttribute('collection');

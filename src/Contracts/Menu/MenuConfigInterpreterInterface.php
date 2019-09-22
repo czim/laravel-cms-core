@@ -12,6 +12,6 @@ interface MenuConfigInterpreterInterface
      * @param array $layout
      * @return MenuLayoutDataInterface
      */
-    public function interpretLayout(array $layout);
+    public function interpretLayout(array $layout): MenuLayoutDataInterface;
 
 }

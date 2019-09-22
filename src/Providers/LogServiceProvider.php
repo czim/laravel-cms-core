@@ -23,10 +23,8 @@ class LogServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * @return bool
-     */
-    protected function registerLogger()
+
+    protected function registerLogger(): bool
     {
         $channel = $this->getConfiguredDefaultChannel();
 

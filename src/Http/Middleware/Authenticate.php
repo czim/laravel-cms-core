@@ -15,9 +15,7 @@ class Authenticate
      */
     protected $auth;
 
-    /**
-     * @param AuthenticatorInterface $auth
-     */
+
     public function __construct(AuthenticatorInterface $auth)
     {
         $this->auth = $auth;
@@ -36,12 +34,12 @@ class Authenticate
 
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
-            } else {
-                /** @var CoreInterface $core */
-                $core = app(Component::CORE);
-
-                return redirect()->route( $core->prefixRoute(NamedRoute::AUTH_LOGIN) );
             }
+
+            /** @var CoreInterface $core */
+            $core = app(Component::CORE);
+
+            return redirect()->route( $core->prefixRoute(NamedRoute::AUTH_LOGIN) );
         }
 
         return $next($request);

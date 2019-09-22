@@ -13,13 +13,13 @@ interface MenuConfiguredModulesDataInterface extends DataObjectInterface
      *
      * @return Collection|MenuPresenceInterface[][]
      */
-    public function standard();
+    public function standard(): Collection;
 
     /**
      * Returns list of lists of presences per module key.
      *
      * @return Collection|MenuPresenceInterface[][]
      */
-    public function alternative();
+    public function alternative(): Collection;
 
 }

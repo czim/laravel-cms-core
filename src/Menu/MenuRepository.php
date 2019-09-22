@@ -66,12 +66,6 @@ class MenuRepository implements MenuRepositoryInterface
     protected $ignorePermission = false;
 
 
-    /**
-     * @param CoreInterface                  $core
-     * @param AuthenticatorInterface         $auth
-     * @param MenuConfigInterpreterInterface $configInterpreter
-     * @param MenuPermissionsFilterInterface $permissionsFilter
-     */
     public function __construct(
         CoreInterface $core,
         AuthenticatorInterface $auth,
@@ -93,9 +87,9 @@ class MenuRepository implements MenuRepositoryInterface
      * @param bool $ignore
      * @return $this
      */
-    public function ignorePermission($ignore = true)
+    public function ignorePermission(bool $ignore = true): MenuRepositoryInterface
     {
-        $this->ignorePermission = (bool) $ignore;
+        $this->ignorePermission = $ignore;
 
         return $this;
     }
@@ -103,7 +97,7 @@ class MenuRepository implements MenuRepositoryInterface
     /**
      * Prepares the menu for presentation on demand.
      */
-    public function initialize()
+    public function initialize(): void
     {
         $this->prepareForPresentation();
     }
@@ -111,7 +105,7 @@ class MenuRepository implements MenuRepositoryInterface
     /**
      * @return Collection|MenuPresenceInterface[]
      */
-    public function getMenuLayout()
+    public function getMenuLayout(): Collection
     {
         return $this->menuLayout;
     }
@@ -119,7 +113,7 @@ class MenuRepository implements MenuRepositoryInterface
     /**
      * @return Collection|MenuPresenceInterface[]
      */
-    public function getAlternativePresences()
+    public function getAlternativePresences(): Collection
     {
         return $this->alternativePresences;
     }
@@ -129,7 +123,7 @@ class MenuRepository implements MenuRepositoryInterface
      *
      * @return $this
      */
-    public function clearCache()
+    public function clearCache(): MenuRepositoryInterface
     {
         $this->getFileSystem()->delete($this->getCachePath());
 
@@ -141,9 +135,9 @@ class MenuRepository implements MenuRepositoryInterface
      *
      * @return $this
      */
-    public function writeCache()
+    public function writeCache(): MenuRepositoryInterface
     {
-        list($layout, $index) = $this->interpretMenuData();
+        [$layout, $index] = $this->interpretMenuData();
 
         $this->getFileSystem()->put(
             $this->getCachePath(),
@@ -161,16 +155,16 @@ class MenuRepository implements MenuRepositoryInterface
     /**
      * Prepares CMS data for presentation in the menu views.
      */
-    protected function prepareForPresentation()
+    protected function prepareForPresentation(): void
     {
         if ($this->prepared) {
             return;
         }
 
         if ($this->isMenuCached()) {
-            list($layout, $permissionsIndex) = $this->retrieveMenuFromCache();
+            [$layout, $permissionsIndex] = $this->retrieveMenuFromCache();
         } else {
-            list($layout, $permissionsIndex) = $this->interpretMenuData();
+            [$layout, $permissionsIndex] = $this->interpretMenuData();
         }
 
         if ( ! $this->ignorePermission && ! $this->auth->admin()) {
@@ -188,7 +182,7 @@ class MenuRepository implements MenuRepositoryInterface
      *
      * @return array    [ layout, permissionsIndex ]
      */
-    protected function interpretMenuData()
+    protected function interpretMenuData(): array
     {
         $layout = $this->configInterpreter->interpretLayout($this->core->moduleConfig('menu.layout', []));
 
@@ -208,7 +202,7 @@ class MenuRepository implements MenuRepositoryInterface
      *
      * @return bool
      */
-    protected function isMenuCached()
+    protected function isMenuCached(): bool
     {
         return $this->getFileSystem()->exists($this->getCachePath());
     }
@@ -218,11 +212,11 @@ class MenuRepository implements MenuRepositoryInterface
      *
      * @return array    [ layout, permissions index ]
      */
-    protected function retrieveMenuFromCache()
+    protected function retrieveMenuFromCache(): array
     {
         if ( ! $this->isMenuCached()) {
             // @codeCoverageIgnoreStart
-            throw new BadMethodCallException("Menu was not cached");
+            throw new BadMethodCallException('Menu was not cached');
             // @codeCoverageIgnoreEnd
         }
 
@@ -241,15 +235,10 @@ class MenuRepository implements MenuRepositoryInterface
         return app()->bootstrapPath() . '/cache/cms_menu.php';
     }
 
-    /**
-     * @param MenuLayoutDataInterface           $layout
-     * @param MenuPermissionsIndexDataInterface $permissionsIndex
-     * @return string
-     */
     protected function serializedInformationForCache(
         MenuLayoutDataInterface $layout,
         MenuPermissionsIndexDataInterface $permissionsIndex
-    ) {
+    ): string {
         $data = [
             'layout' => serialize($layout),
             'index'  => serialize($permissionsIndex),
@@ -262,7 +251,7 @@ class MenuRepository implements MenuRepositoryInterface
      * @param array $data
      * @return array    [ layout, permissions index ]
      */
-    protected function deserializeInformationFromCache(array $data)
+    protected function deserializeInformationFromCache(array $data): array
     {
         return [
             unserialize($data['layout']),

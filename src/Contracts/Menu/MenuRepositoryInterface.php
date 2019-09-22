@@ -13,37 +13,37 @@ interface MenuRepositoryInterface
      * @param bool $ignore
      * @return $this
      */
-    public function ignorePermission($ignore = true);
+    public function ignorePermission(bool $ignore = true): MenuRepositoryInterface;
 
     /**
      * Parses available menu presence data, so it may be retrieved.
      */
-    public function initialize();
+    public function initialize(): void;
 
     /**
      * @return Collection|MenuPresenceInterface[]
      */
-    public function getMenuLayout();
+    public function getMenuLayout(): Collection;
 
     /**
      * Retrieves non-standard presences.
      *
      * @return Collection|MenuPresenceInterface[]
      */
-    public function getAlternativePresences();
+    public function getAlternativePresences(): Collection;
 
     /**
      * Clears cached menu data.
      *
      * @return $this
      */
-    public function clearCache();
+    public function clearCache(): MenuRepositoryInterface;
 
     /**
      * Writes menu data cache.
      *
      * @return $this
      */
-    public function writeCache();
+    public function writeCache(): MenuRepositoryInterface;
 
 }

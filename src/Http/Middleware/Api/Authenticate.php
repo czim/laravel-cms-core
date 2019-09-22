@@ -12,9 +12,7 @@ class Authenticate
      */
     protected $auth;
 
-    /**
-     * @param AuthenticatorInterface $auth
-     */
+
     public function __construct(AuthenticatorInterface $auth)
     {
         $this->auth = $auth;

@@ -20,10 +20,8 @@ class VersionController extends Controller
         );
     }
 
-    /**
-     * @return array
-     */
-    protected function getVersions()
+
+    protected function getVersions(): array
     {
         return [
             [
@@ -51,7 +49,7 @@ class VersionController extends Controller
      * @param bool  $collection
      * @return TransformContainer
      */
-    protected function makeContainer($data, $collection = true)
+    protected function makeContainer($data, bool $collection = true): TransformContainer
     {
         return new TransformContainer([
             'content'     => $data,

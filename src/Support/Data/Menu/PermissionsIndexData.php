@@ -15,8 +15,8 @@ use Illuminate\Support\Arr;
  */
 class PermissionsIndexData extends AbstractDataObject implements MenuPermissionsIndexDataInterface
 {
-    const KEY_TOP_LEVEL = '*';
-    const KEY_SEPARATOR = '.';
+    public const KEY_TOP_LEVEL = '*';
+    public const KEY_SEPARATOR = '.';
 
     protected $attributes = [
         // The permissions index
@@ -30,7 +30,7 @@ class PermissionsIndexData extends AbstractDataObject implements MenuPermissions
      *
      * @return array    associative: normalized nested node key => list of permissions
      */
-    public function index()
+    public function index(): array
     {
         return $this->getAttribute('index') ?: [];
     }
@@ -40,7 +40,7 @@ class PermissionsIndexData extends AbstractDataObject implements MenuPermissions
      *
      * @return string[]
      */
-    public function permissions()
+    public function permissions(): array
     {
         return $this->getAttribute('permissions') ?: [];
     }
@@ -65,7 +65,7 @@ class PermissionsIndexData extends AbstractDataObject implements MenuPermissions
      * @param string[] $permissions
      * @return $this
      */
-    public function setForNode(array $nodeKey, array $permissions = [])
+    public function setForNode(array $nodeKey, array $permissions = []): MenuPermissionsIndexDataInterface
     {
         $this->attributes['index'][ $this->stringifyNodeKey($nodeKey) ] = $permissions;
 
@@ -78,7 +78,7 @@ class PermissionsIndexData extends AbstractDataObject implements MenuPermissions
      * @param array $nodeKey
      * @return string
      */
-    public function stringifyNodeKey(array $nodeKey)
+    public function stringifyNodeKey(array $nodeKey): string
     {
         if ( ! count($nodeKey)) {
             return static::KEY_TOP_LEVEL;

@@ -15,7 +15,7 @@ class MigrateRollbackCommand extends LaravelMigrateRollbackCommand
      *
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         if (! $this->confirmToProceed()) {
             // @codeCoverageIgnoreStart

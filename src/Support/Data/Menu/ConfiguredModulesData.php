@@ -20,7 +20,7 @@ class ConfiguredModulesData extends AbstractDataObject implements MenuConfigured
      *
      * @return Collection|MenuPresenceInterface[][]
      */
-    public function standard()
+    public function standard(): Collection
     {
         return $this->getAttribute('standard') ?: new Collection;
     }
@@ -30,7 +30,7 @@ class ConfiguredModulesData extends AbstractDataObject implements MenuConfigured
      *
      * @return Collection|MenuPresenceInterface[][]
      */
-    public function alternative()
+    public function alternative(): Collection
     {
         return $this->getAttribute('alternative') ?: new Collection;
     }

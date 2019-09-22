@@ -11,14 +11,14 @@ interface MenuPermissionsIndexDataInterface extends DataObjectInterface
      *
      * @return array    associative: normalized nested node key => list of permissions
      */
-    public function index();
+    public function index(): array;
 
     /**
      * Returns a list of all permissions referenced in the index.
      *
      * @return string[]
      */
-    public function permissions();
+    public function permissions(): array;
 
     /**
      * Returns indexed permissions for a given menu layout node.
@@ -35,7 +35,7 @@ interface MenuPermissionsIndexDataInterface extends DataObjectInterface
      * @param string[] $permissions
      * @return $this
      */
-    public function setForNode(array $nodeKey, array $permissions = []);
+    public function setForNode(array $nodeKey, array $permissions = []): MenuPermissionsIndexDataInterface;
 
     /**
      * Normalizes an array of keys leading to a node in the layout tree to a single string.
@@ -43,6 +43,6 @@ interface MenuPermissionsIndexDataInterface extends DataObjectInterface
      * @param array $nodeKey
      * @return string
      */
-    public function stringifyNodeKey(array $nodeKey);
+    public function stringifyNodeKey(array $nodeKey): string;
 
 }

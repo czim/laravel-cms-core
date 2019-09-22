@@ -14,28 +14,28 @@ interface ModuleInterface
      *
      * @return string
      */
-    public function getKey();
+    public function getKey(): string;
 
     /**
      * Returns display name for the module.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns release or version number of module.
      *
      * @return string|null
      */
-    public function getVersion();
+    public function getVersion(): ?string;
 
     /**
      * Returns the FQN for a class mainly associated with this module.
      *
      * @return string|null
      */
-    public function getAssociatedClass();
+    public function getAssociatedClass(): ?string;
 
     /**
      * Generates web routes for the module given a contextual router instance.
@@ -43,7 +43,7 @@ interface ModuleInterface
      *
      * @param Router $router
      */
-    public function mapWebRoutes(Router $router);
+    public function mapWebRoutes(Router $router): void;
 
     /**
      * Generates API routes for the module given a contextual router instance.
@@ -51,7 +51,7 @@ interface ModuleInterface
      *
      * @param Router $router
      */
-    public function mapApiRoutes(Router $router);
+    public function mapApiRoutes(Router $router): void;
 
     /**
      * @return null|array|AclPresenceInterface|AclPresenceInterface[]
@@ -61,7 +61,7 @@ interface ModuleInterface
     /**
      * Returns data for CMS menu presence.
      *
-     * @return null|array|MenuPresenceInterface[]|MenuPresenceInterface[]
+     * @return null|array|MenuPresenceInterface|MenuPresenceInterface[]
      */
     public function getMenuPresence();
 

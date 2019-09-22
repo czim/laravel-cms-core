@@ -1,8 +1,6 @@
 <?php
 namespace Czim\CmsCore\Contracts\Core;
 
-use Closure;
-
 interface CacheInterface
 {
 
@@ -12,7 +10,7 @@ interface CacheInterface
      * @param  string  $key
      * @return bool
      */
-    public function has($key);
+    public function has(string $key): bool;
 
     /**
      * Retrieve an item from the cache by key.
@@ -21,7 +19,7 @@ interface CacheInterface
      * @param  mixed   $default
      * @return mixed
      */
-    public function get($key, $default = null);
+    public function get(string $key, $default = null);
 
     /**
      * Retrieve multiple items from the cache by key.
@@ -31,7 +29,7 @@ interface CacheInterface
      * @param  array  $keys
      * @return array
      */
-    public function many(array $keys);
+    public function many(array $keys): array;
 
     /**
      * Retrieve an item from the cache and delete it.
@@ -40,36 +38,36 @@ interface CacheInterface
      * @param  mixed   $default
      * @return mixed
      */
-    public function pull($key, $default = null);
+    public function pull(string $key, $default = null);
 
     /**
      * Store an item in the cache.
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @param  \DateTime|int  $minutes
+     * @param  int     $minutes
      * @return void
      */
-    public function put($key, $value, $minutes = null);
+    public function put(string $key, $value, int $minutes = null): void;
 
     /**
      * Store multiple items in the cache for a given number of minutes.
      *
      * @param  array  $values
-     * @param  int  $minutes
+     * @param  int    $minutes
      * @return void
      */
-    public function putMany(array $values, $minutes);
+    public function putMany(array $values, int $minutes): void;
 
     /**
      * Store an item in the cache if the key does not exist.
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @param  \DateTime|int  $minutes
+     * @param  int     $minutes
      * @return bool
      */
-    public function add($key, $value, $minutes);
+    public function add(string $key, $value, int $minutes): bool;
 
     /**
      * Store an item in the cache indefinitely.
@@ -78,26 +76,26 @@ interface CacheInterface
      * @param  mixed   $value
      * @return void
      */
-    public function forever($key, $value);
+    public function forever(string $key, $value): void;
 
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  string  $key
-     * @param  \DateTime|int  $minutes
-     * @param  \Closure  $callback
+     * @param  string    $key
+     * @param  int       $minutes
+     * @param  callable  $callback
      * @return mixed
      */
-    public function remember($key, $minutes, Closure $callback);
+    public function remember(string $key, int $minutes, callable $callback);
 
     /**
      * Get an item from the cache, or store the default value forever.
      *
-     * @param  string   $key
-     * @param  \Closure  $callback
+     * @param  string    $key
+     * @param  callable  $callback
      * @return mixed
      */
-    public function rememberForever($key, Closure $callback);
+    public function rememberForever(string $key, callable $callback);
 
     /**
      * Remove an item from the cache.
@@ -105,6 +103,6 @@ interface CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function forget($key);
+    public function forget(string $key): bool;
 
 }

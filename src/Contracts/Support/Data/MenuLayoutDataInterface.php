@@ -12,7 +12,7 @@ interface MenuLayoutDataInterface extends DataObjectInterface
      *
      * @return MenuPresenceInterface[]
      */
-    public function layout();
+    public function layout(): array;
 
     /**
      * Sets the layout.
@@ -20,14 +20,14 @@ interface MenuLayoutDataInterface extends DataObjectInterface
      * @param MenuPresenceInterface[] $presences
      * @return $this
      */
-    public function setLayout(array $presences);
+    public function setLayout(array $presences): MenuLayoutDataInterface;
 
     /**
      * Returns the alternative presences.
      *
      * @return MenuPresenceInterface[]
      */
-    public function alternative();
+    public function alternative(): array;
 
     /**
      * Sets the alternative presences.
@@ -35,6 +35,6 @@ interface MenuLayoutDataInterface extends DataObjectInterface
      * @param MenuPresenceInterface[] $presences
      * @return $this
      */
-    public function setAlternative(array $presences);
+    public function setAlternative(array $presences): MenuLayoutDataInterface;
 
 }

@@ -10,9 +10,9 @@ trait CmsMigrationContextTrait
     /**
      * Determines and returns the connection to use, if not set by --database.
      *
-     * @return string
+     * @return string|null
      */
-    public function determineConnection()
+    public function determineConnection(): ?string
     {
         $connection = $this->input->getOption('database');
 
@@ -43,7 +43,7 @@ trait CmsMigrationContextTrait
      *
      * @return string
      */
-    protected function getMigrationPath()
+    protected function getMigrationPath(): string
     {
         return app()->databasePath() . DIRECTORY_SEPARATOR
              . $this->getCore()->config('database.migrations.path');
@@ -54,7 +54,7 @@ trait CmsMigrationContextTrait
      *
      * @inheritdoc
      */
-    protected function getMigrationPaths()
+    protected function getMigrationPaths(): array
     {
         if ($this->input->hasOption('path') && $this->option('path')) {
             return [app()->basePath() . '/' . $this->option('path')];
@@ -67,7 +67,7 @@ trait CmsMigrationContextTrait
     /**
      * @return CoreInterface
      */
-    protected function getCore()
+    protected function getCore(): CoreInterface
     {
         return app(Component::CORE);
     }

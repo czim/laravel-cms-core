@@ -16,10 +16,7 @@ class ModulesController extends Controller
      */
     protected $modules;
 
-    /**
-     * @param CoreInterface          $core
-     * @param ModuleManagerInterface $modules
-     */
+
     public function __construct(CoreInterface $core, ModuleManagerInterface $modules)
     {
         parent::__construct($core);
@@ -49,7 +46,7 @@ class ModulesController extends Controller
         $module = $this->modules->get($key);
 
         if ( ! $module) {
-            return abort(404, "Module not found or not loaded");
+            return abort(404, 'Module not found or not loaded');
         }
 
         return $this->core->api()->response(
@@ -65,7 +62,7 @@ class ModulesController extends Controller
      * @param bool                   $collection
      * @return TransformContainer
      */
-    protected function makeContainer($data, $collection = true)
+    protected function makeContainer($data, bool $collection = true): TransformContainer
     {
         return new TransformContainer([
             'content'     => $data,

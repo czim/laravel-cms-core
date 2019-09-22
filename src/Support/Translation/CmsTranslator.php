@@ -18,7 +18,7 @@ class CmsTranslator extends Translator
      *
      * @return string
      */
-    protected function getCmsPrefix()
+    protected function getCmsPrefix(): string
     {
         return 'cms::';
     }
@@ -29,7 +29,7 @@ class CmsTranslator extends Translator
      * @param string $key
      * @return string
      */
-    protected function applyCmsPrefix($key)
+    protected function applyCmsPrefix(string $key): string
     {
         return $this->getCmsPrefix() . $key;
     }
@@ -40,7 +40,7 @@ class CmsTranslator extends Translator
      * @param string $key
      * @return bool
      */
-    protected function isCmsPrefixed($key)
+    protected function isCmsPrefixed(string $key): bool
     {
         return Str::startsWith($key, $this->getCmsPrefix());
     }

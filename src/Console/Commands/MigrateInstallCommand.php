@@ -18,7 +18,6 @@ class MigrateInstallCommand extends InstallCommand
     protected $core;
 
     /**
-     * Create a new migration install command instance.
      * Overridden to add Core reference.
      *
      * @param MigrationRepositoryInterface $repository
@@ -36,7 +35,7 @@ class MigrateInstallCommand extends InstallCommand
      *
      * @inheritdoc
      */
-    public function handle()
+    public function handle(): void
     {
         $this->repository->setSource($this->determineConnection());
 

@@ -14,6 +14,7 @@ use League\Fractal\Resource\Collection as FractalCollection;
 use League\Fractal\Resource\Item as FractalItem;
 use League\Fractal\Serializer\DataArraySerializer;
 use League\Fractal\TransformerAbstract;
+use UnexpectedValueException;
 
 class RestResponseBuilder implements ResponseBuilderInterface
 {
@@ -36,10 +37,6 @@ class RestResponseBuilder implements ResponseBuilderInterface
     protected $fractalSerializer = DataArraySerializer::class;
 
 
-    /**
-     * @param CoreInterface  $core
-     * @param FractalManager $manager
-     */
     public function __construct(CoreInterface $core, FractalManager $manager)
     {
         $this->core           = $core;
@@ -53,7 +50,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      *
      * @return $this
      */
-    protected function initializeFractal()
+    protected function initializeFractal(): ResponseBuilderInterface
     {
         $this->fractalManager->setSerializer(app($this->fractalSerializer));
 
@@ -68,7 +65,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param int   $statusCode
      * @return mixed
      */
-    public function response($content, $statusCode = 200)
+    public function response($content, int $statusCode = 200)
     {
         return response()
             ->json($this->convertContent($content))
@@ -82,7 +79,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param int   $statusCode
      * @return mixed
      */
-    public function error($content, $statusCode = 500)
+    public function error($content, int $statusCode = 500)
     {
         return $this->makeErrorResponse($content, $statusCode);
     }
@@ -148,7 +145,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param string|TransformerAbstract $transformerClass
      * @return TransformerAbstract
      */
-    protected function makeTransformerInstance($transformerClass)
+    protected function makeTransformerInstance($transformerClass): TransformerAbstract
     {
         if ($transformerClass instanceof TransformerAbstract) {
             return $transformerClass;
@@ -157,7 +154,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
         $instance = app($transformerClass);
 
         if ( ! ($instance instanceof TransformerAbstract)) {
-            throw new \UnexpectedValueException("{$transformerClass} is not a TransformerAbstract");
+            throw new UnexpectedValueException("{$transformerClass} is not a TransformerAbstract");
         }
 
         return $instance;
@@ -168,7 +165,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param int   $statusCode
      * @return mixed
      */
-    protected function makeErrorResponse($content, $statusCode)
+    protected function makeErrorResponse($content, int $statusCode)
     {
         $data = null;
 
@@ -198,7 +195,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param null|array  $data     extra data to provide in the error message
      * @return array
      */
-    protected function normalizeErrorResponse($content, $data = null)
+    protected function normalizeErrorResponse($content, ?array $data = null): array
     {
         if ($content instanceof Arrayable) {
             $content = $content->toArray();
@@ -224,7 +221,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param null|string $fallbackMessage  message to use if exception has none
      * @return mixed
      */
-    protected function formatExceptionError(Exception $e, $fallbackMessage = null)
+    protected function formatExceptionError(Exception $e, ?string $fallbackMessage = null)
     {
         if (    (config('app.debug') || $this->core->config('debug'))
             &&  $this->core->apiConfig('debug.local-exception-trace', true)
@@ -246,7 +243,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param null|string $fallbackMessage  message to use if exception has none
      * @return mixed
      */
-    protected function formatExceptionErrorForLocal(Exception $e, $fallbackMessage = null)
+    protected function formatExceptionErrorForLocal(Exception $e, ?string $fallbackMessage = null)
     {
         $message = $e->getMessage() ?: $fallbackMessage;
 
@@ -255,7 +252,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
             'code'    => $e->getCode(),
             'file'    => $e->getFile(),
             'line'    => $e->getLine(),
-            'trace'   => array_map(function($trace) {
+            'trace'   => array_map(static function ($trace) {
                 return trim(
                     (isset($trace['file']) ? $trace['file'] . ' : ' . $trace['line'] : '')
                     . '   '
@@ -273,7 +270,7 @@ class RestResponseBuilder implements ResponseBuilderInterface
      * @param int $code
      * @return null|string
      */
-    protected function getStandardMessageForStatusCode($code)
+    protected function getStandardMessageForStatusCode(int $code): ?string
     {
         switch ($code) {
 
@@ -284,13 +281,13 @@ class RestResponseBuilder implements ResponseBuilderInterface
                 return 'Not Found';
 
             case 403:
-                return "Forbidden";
+                return 'Forbidden';
 
             case 401:
-                return "Unauthorized";
+                return 'Unauthorized';
 
             case 400:
-                return "Bad Request";
+                return 'Bad Request';
 
             case 500:
                 return 'Server Whoops';

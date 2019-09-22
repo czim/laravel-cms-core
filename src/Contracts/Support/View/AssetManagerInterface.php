@@ -13,7 +13,12 @@ interface AssetManagerInterface
      * @param string      $rel
      * @return $this
      */
-    public function registerStyleAsset($path, $type = null, $media = null, $rel = 'stylesheet');
+    public function registerStyleAsset(
+        string $path,
+        ?string $type = null,
+        ?string $media = null,
+        string $rel = 'stylesheet'
+    ): AssetManagerInterface;
 
     /**
      * Registers a CMS javascript asset by (relative) path.
@@ -22,43 +27,43 @@ interface AssetManagerInterface
      * @param bool   $head      whether to add the asset to the head
      * @return $this
      */
-    public function registerScriptAsset($path, $head = false);
+    public function registerScriptAsset(string $path, bool $head = false): AssetManagerInterface;
 
     /**
      * Registers CMS javascript code
      *
-     * @param      $script
-     * @param bool $once        if true, only registers script with these exact contents once
+     * @param string  $script
+     * @param bool    $once        if true, only registers script with these exact contents once
      * @return $this
      */
-    public function registerScript($script, $once = true);
+    public function registerScript(string $script, bool $once = true): AssetManagerInterface;
 
     /**
      * Returns rendered registered stylesheet asset links.
      *
      * @return string
      */
-    public function renderStyleAssets();
+    public function renderStyleAssets(): string;
 
     /**
      * Returns rendered registered script asset links for the footer.
      *
      * @return string
      */
-    public function renderScriptAssets();
+    public function renderScriptAssets(): string;
 
     /**
      * Returns rendered registered script asset links for the header.
      *
      * @return string
      */
-    public function renderScriptHeadAssets();
+    public function renderScriptHeadAssets(): string;
 
     /**
      * Returns rendered registered scripts.
      *
      * @return string
      */
-    public function renderScripts();
+    public function renderScripts(): string;
 
 }

@@ -15,10 +15,7 @@ class MenuController extends Controller
      */
     protected $menu;
 
-    /**
-     * @param CoreInterface           $core
-     * @param MenuRepositoryInterface $menu
-     */
+
     public function __construct(CoreInterface $core, MenuRepositoryInterface $menu)
     {
         parent::__construct($core);
@@ -48,10 +45,10 @@ class MenuController extends Controller
     /**
      * Transforms menu presence tree for API response.
      *
-     * @param Collection|MenuPresenceInterface[] $presences
+     * @param array|Collection|MenuPresenceInterface[] $presences
      * @return array
      */
-    protected function transformPresencesForApi($presences)
+    protected function transformPresencesForApi($presences): array
     {
         $response = [];
 
@@ -66,7 +63,7 @@ class MenuController extends Controller
      * @param MenuPresenceInterface $presence
      * @return array
      */
-    protected function transformPresenceForApi(MenuPresenceInterface $presence)
+    protected function transformPresenceForApi(MenuPresenceInterface $presence): array
     {
         $response = [
             'id'          => $presence->id(),
@@ -90,7 +87,7 @@ class MenuController extends Controller
      * @param MenuPresenceInterface $presence
      * @return string|null
      */
-    protected function makeLabelForPresence(MenuPresenceInterface $presence)
+    protected function makeLabelForPresence(MenuPresenceInterface $presence): ?string
     {
         return $presence->label();
     }
@@ -99,7 +96,7 @@ class MenuController extends Controller
      * @param MenuPresenceInterface $presence
      * @return string|null
      */
-    protected function makeLinkForPresence(MenuPresenceInterface $presence)
+    protected function makeLinkForPresence(MenuPresenceInterface $presence): ?string
     {
         return $presence->action();
     }

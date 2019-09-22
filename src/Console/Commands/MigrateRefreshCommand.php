@@ -15,7 +15,7 @@ class MigrateRefreshCommand extends RefreshCommand
      *
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         if (! $this->confirmToProceed()) {
             // @codeCoverageIgnoreStart

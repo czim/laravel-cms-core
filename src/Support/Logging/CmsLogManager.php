@@ -26,7 +26,7 @@ class CmsLogManager extends LogManager
      * @param Application|FoundationApplication $app
      * @param string                            $defaultChannel
      */
-    public function __construct($app, $defaultChannel = 'cms')
+    public function __construct($app, string $defaultChannel = 'cms')
     {
         parent::__construct($app);
 
@@ -49,7 +49,7 @@ class CmsLogManager extends LogManager
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver($name): void
     {
         $this->defaultChannel = $name;
     }

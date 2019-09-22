@@ -54,7 +54,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @return string
      */
-    public function id()
+    public function id(): string
     {
         return $this->getAttribute('id');
     }
@@ -63,9 +63,9 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * Returns type of presence.
      *
      * @see \Czim\CmsCore\Support\Enums\MenuPresenceType
-     * @return string
+     * @return string|null
      */
-    public function type()
+    public function type(): ?string
     {
         return $this->getAttribute('type');
     }
@@ -73,7 +73,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     /**
      * Returns child presences of this presence.
      *
-     * @return MenuPresenceInterface[]
+     * @return array|Collection|MenuPresenceInterface[]
      */
     public function children()
     {
@@ -101,7 +101,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @return array
      */
-    public function parameters()
+    public function parameters(): array
     {
         return $this->getAttribute('parameters');
     }
@@ -111,7 +111,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @return string[]
      */
-    public function permissions()
+    public function permissions(): array
     {
         $permissions = $this->getAttribute('permissions') ?: [];
 
@@ -126,9 +126,9 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * Returns label for display.
      *
      * @param bool $translated  return translated label if possible
-     * @return string
+     * @return string|null
      */
-    public function label($translated = true)
+    public function label(bool $translated = true): ?string
     {
         if ($translated && $key = $this->getAttribute('label_translated')) {
             if (($label = cms_trans($key)) !== $key) {
@@ -144,7 +144,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @return string
      */
-    public function translationKey()
+    public function translationKey(): ?string
     {
         return $this->getAttribute('label_translated');
     }
@@ -154,7 +154,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @return string
      */
-    public function icon()
+    public function icon(): ?string
     {
         return $this->getAttribute('icon');
     }
@@ -165,7 +165,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * @return string
      * @see MenuPresenceMode
      */
-    public function mode()
+    public function mode(): string
     {
         return $this->getAttribute('mode') ?: MenuPresenceMode::MODIFY;
     }
@@ -176,7 +176,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * @param string[] $keys
      * @return $this
      */
-    public function setExplicitKeys(array $keys)
+    public function setExplicitKeys(array $keys): MenuPresenceInterface
     {
         // Filter out any keys that don't belong in this object
         $keys = array_intersect($keys, [
@@ -203,7 +203,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @return string[]
      */
-    public function explicitKeys()
+    public function explicitKeys(): array
     {
         return $this->getAttribute('explicit_keys') ?: [];
     }
@@ -215,7 +215,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      * @codeCoverageIgnore
      * @todo
      */
-    public function isActive()
+    public function isActive(): bool
     {
         switch ($this->type) {
 
@@ -239,7 +239,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     /**
      * Removes all children currently on the presence.
      */
-    public function clearChildren()
+    public function clearChildren(): void
     {
         if ($this->children instanceof Collection) {
             $this->children = new Collection;
@@ -252,9 +252,9 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
     /**
      * Sets children for this presence.
      *
-     * @param Collection|MenuPresenceInterface[] $presences
+     * @param array|Collection|MenuPresenceInterface[] $presences
      */
-    public function setChildren($presences)
+    public function setChildren($presences): void
     {
         $this->children = $presences;
     }
@@ -264,7 +264,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @param MenuPresenceInterface $presence
      */
-    public function addChild(MenuPresenceInterface $presence)
+    public function addChild(MenuPresenceInterface $presence): void
     {
         $children = $this->children ?: [];
 
@@ -282,7 +282,7 @@ class MenuPresence extends AbstractDataObject implements MenuPresenceInterface
      *
      * @param MenuPresenceInterface $presence
      */
-    public function shiftChild(MenuPresenceInterface $presence)
+    public function shiftChild(MenuPresenceInterface $presence): void
     {
         $children = $this->children ?: [];
 

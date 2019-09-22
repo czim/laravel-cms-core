@@ -9,7 +9,7 @@ interface UserAuthenticationInterface
      *
      * @return bool
      */
-    public function check();
+    public function check(): bool;
 
     /**
      * Returns currently logged in user, if any.
@@ -23,7 +23,7 @@ interface UserAuthenticationInterface
      *
      * @return bool
      */
-    public function admin();
+    public function admin(): bool;
 
     /**
      * @param string $username
@@ -31,7 +31,7 @@ interface UserAuthenticationInterface
      * @param bool   $remember
      * @return bool
      */
-    public function login($username, $password, $remember = true);
+    public function login(string $username, string $password, bool $remember = true): bool;
 
     /**
      * Performs stateless login.
@@ -40,7 +40,7 @@ interface UserAuthenticationInterface
      * @param string $password
      * @return bool
      */
-    public function stateless($username, $password);
+    public function stateless(string $username, string $password): bool;
 
     /**
      * Forces a user to be logged in without credentials verification.
@@ -49,7 +49,7 @@ interface UserAuthenticationInterface
      * @param bool          $remember
      * @return bool
      */
-    public function forceUser(UserInterface $user, $remember = true);
+    public function forceUser(UserInterface $user, bool $remember = true): bool;
 
     /**
      * Forces a user to be logged in without credentials verification,
@@ -58,12 +58,12 @@ interface UserAuthenticationInterface
      * @param UserInterface $user
      * @return bool
      */
-    public function forceUserStateless(UserInterface $user);
+    public function forceUserStateless(UserInterface $user): bool;
 
     /**
      * @return bool
      */
-    public function logout();
+    public function logout(): bool;
 
     /**
      * Returns whether the current user has the given role.
@@ -71,7 +71,7 @@ interface UserAuthenticationInterface
      * @param string $role
      * @return bool
      */
-    public function hasRole($role);
+    public function hasRole($role): bool;
 
     /**
      * Returns whether the current user has the given permission(s).
@@ -80,7 +80,7 @@ interface UserAuthenticationInterface
      * @param bool            $allowAny     if true, allows if any is permitted
      * @return bool
      */
-    public function can($permission, $allowAny = false);
+    public function can($permission, bool $allowAny = false): bool;
 
     /**
      * Returns whether the current user has any of the given permissions.
@@ -88,6 +88,6 @@ interface UserAuthenticationInterface
      * @param string[] $permissions
      * @return bool
      */
-    public function canAnyOf(array $permissions);
+    public function canAnyOf(array $permissions): bool;
 
 }

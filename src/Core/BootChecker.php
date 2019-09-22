@@ -38,7 +38,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldCmsRegister()
+    public function shouldCmsRegister(): bool
     {
         if (null !== $this->shouldRegister) {
             // @codeCoverageIgnoreStart
@@ -70,7 +70,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldCmsApiRegister()
+    public function shouldCmsApiRegister(): bool
     {
         return $this->shouldCmsRegister()
             && ($this->isCmsApiRequest() || $this->isCmsEnabledArtisanCommand());
@@ -81,26 +81,22 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldCmsBoot()
+    public function shouldCmsBoot(): bool
     {
         return $this->registered;
     }
-
 
     /**
      * Marks the CMS as having fully registered.
      *
      * @param bool $registered
      */
-    public function markCmsRegistered($registered = true)
+    public function markCmsRegistered(bool $registered = true): void
     {
         $this->registered = (bool) $registered;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCmsRegistered()
+    public function isCmsRegistered(): bool
     {
         return $this->registered;
     }
@@ -110,7 +106,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @param bool $booted
      */
-    public function markCmsBooted($booted = true)
+    public function markCmsBooted(bool $booted = true): void
     {
         $this->booted = (bool) $booted;
     }
@@ -118,7 +114,7 @@ class BootChecker implements BootCheckerInterface
     /**
      * @return bool
      */
-    public function isCmsBooted()
+    public function isCmsBooted(): bool
     {
         return $this->booted;
     }
@@ -129,7 +125,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldLoadCmsMiddleware()
+    public function shouldLoadCmsMiddleware(): bool
     {
         return  $this->shouldCmsRegister()
             &&  ! $this->isConsole()
@@ -141,7 +137,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldLoadCmsWebMiddleware()
+    public function shouldLoadCmsWebMiddleware(): bool
     {
         return $this->shouldLoadCmsMiddleware() && $this->isCmsWebRequest();
     }
@@ -151,7 +147,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldLoadCmsApiMiddleware()
+    public function shouldLoadCmsApiMiddleware(): bool
     {
         return $this->shouldLoadCmsMiddleware() && $this->isCmsApiRequest();
     }
@@ -161,7 +157,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldRegisterCmsWebRoutes()
+    public function shouldRegisterCmsWebRoutes(): bool
     {
         return $this->isCmsEnabledArtisanCommand() || $this->isCmsWebRequest();
     }
@@ -171,7 +167,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldRegisterCmsApiRoutes()
+    public function shouldRegisterCmsApiRoutes(): bool
     {
         return $this->isCmsEnabledArtisanCommand() || $this->isCmsApiRequest();
     }
@@ -182,7 +178,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function isCmsWebRequest()
+    public function isCmsWebRequest(): bool
     {
         if (app()->runningInConsole()) {
             return false;
@@ -196,7 +192,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    public function isCmsApiRequest()
+    public function isCmsApiRequest(): bool
     {
         if (app()->runningInConsole() || ! $this->isCmsApiEnabled()) {
             return false;
@@ -211,7 +207,7 @@ class BootChecker implements BootCheckerInterface
      * @param string $prefix
      * @return bool
      */
-    protected function requestRouteMatchesPrefix($prefix)
+    protected function requestRouteMatchesPrefix(string $prefix): bool
     {
         $prefixSegments = $this->splitPrefixSegments($prefix);
         $request = request();
@@ -235,7 +231,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    protected function isConsole()
+    protected function isConsole(): bool
     {
         return app()->runningInConsole() && ! app()->runningUnitTests();
     }
@@ -245,7 +241,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    protected function isCmsEnabledArtisanCommand()
+    protected function isCmsEnabledArtisanCommand(): bool
     {
         if (null !== $this->registeredConsoleCommand) {
             // @codeCoverageIgnoreStart
@@ -287,7 +283,7 @@ class BootChecker implements BootCheckerInterface
      * @return string|null
      * @codeCoverageIgnore
      */
-    protected function getArtisanBaseCommand()
+    protected function getArtisanBaseCommand(): ?string
     {
         return strtolower(
             (new ArgvInput())->getFirstArgument()
@@ -299,7 +295,7 @@ class BootChecker implements BootCheckerInterface
      *
      * @return bool
      */
-    protected function isCmsBeingUnitTested()
+    protected function isCmsBeingUnitTested(): bool
     {
        return (bool) config('cms-core.testing', false);
     }
@@ -309,26 +305,17 @@ class BootChecker implements BootCheckerInterface
     //      Configuration values
     // ------------------------------------------------------------------------------
 
-    /**
-     * @return bool
-     */
-    protected function isCmsEnabled()
+    protected function isCmsEnabled(): bool
     {
         return config('cms-core.enabled', true);
     }
 
-    /**
-     * @return bool
-     */
-    protected function isCmsApiEnabled()
+    protected function isCmsApiEnabled(): bool
     {
         return config('cms-api.enabled', true);
     }
 
-    /**
-     * @return bool
-     */
-    protected function isCmsMiddlewareEnabled()
+    protected function isCmsMiddlewareEnabled(): bool
     {
         return config('cms-core.middleware.enabled', true);
     }
@@ -336,23 +323,17 @@ class BootChecker implements BootCheckerInterface
     /**
      * @return string[]
      */
-    protected function getCmsEnabledArtisanPatterns()
+    protected function getCmsEnabledArtisanPatterns(): array
     {
         return array_map('strtolower', config('cms-core.artisan.patterns', []));
     }
 
-    /**
-     * @return string
-     */
-    protected function getCmsRoutePrefix()
+    protected function getCmsRoutePrefix(): string
     {
         return strtolower(config('cms-core.route.prefix'));
     }
 
-    /**
-     * @return string
-     */
-    protected function getCmsApiRoutePrefix()
+    protected function getCmsApiRoutePrefix(): string
     {
         return strtolower(config('cms-api.route.prefix'));
     }
@@ -363,7 +344,7 @@ class BootChecker implements BootCheckerInterface
      * @param string $prefix
      * @return string[]
      */
-    protected function splitPrefixSegments($prefix)
+    protected function splitPrefixSegments(string $prefix): array
     {
         return array_filter(explode('/', $prefix));
     }

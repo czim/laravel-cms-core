@@ -28,7 +28,7 @@ class ApiCore implements ApiCoreInterface
      * @param int   $statusCode
      * @return mixed
      */
-    public function response($content, $statusCode = 200)
+    public function response($content, int $statusCode = 200)
     {
         return $this->builder->response($content, $statusCode);
     }
@@ -40,7 +40,7 @@ class ApiCore implements ApiCoreInterface
      * @param int   $statusCode
      * @return mixed
      */
-    public function error($content, $statusCode = 500)
+    public function error($content, int $statusCode = 500)
     {
         return $this->builder->error($content, $statusCode);
     }

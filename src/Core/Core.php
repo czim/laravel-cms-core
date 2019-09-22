@@ -14,7 +14,7 @@ use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Contracts\Menu\MenuRepositoryInterface;
 use Czim\CmsCore\Contracts\Modules\ModuleManagerInterface;
 use Czim\CmsCore\Support\Enums\Component;
-use Illuminate\Session\SessionInterface;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
@@ -26,7 +26,7 @@ class Core implements CoreInterface
      *
      * @var string
      */
-    const VERSION = '1.3.15';
+    public const VERSION = '1.3.15';
 
 
     /**
@@ -48,80 +48,52 @@ class Core implements CoreInterface
      *
      * @return string
      */
-    public function version()
+    public function version(): string
     {
         return static::VERSION;
     }
 
-
-    /**
-     * @return BootCheckerInterface
-     */
-    public function bootChecker()
+    public function bootChecker(): BootCheckerInterface
     {
         return $this->app[Component::BOOTCHECKER];
     }
 
-    /**
-     * @return AuthenticatorInterface
-     */
-    public function auth()
+    public function auth(): AuthenticatorInterface
     {
         return $this->app[Component::AUTH];
     }
 
-    /**
-     * @return ApiCoreInterface
-     */
-    public function api()
+    public function api(): ApiCoreInterface
     {
         return $this->app[Component::API];
     }
 
-    /**
-     * @return CacheInterface
-     */
-    public function cache()
+    public function cache(): CacheInterface
     {
         return $this->app[Component::CACHE];
     }
 
-    /**
-     * @return ModuleManagerInterface
-     */
-    public function modules()
+    public function modules(): ModuleManagerInterface
     {
         return $this->app[Component::MODULES];
     }
 
-    /**
-     * @return MenuRepositoryInterface
-     */
-    public function menu()
+    public function menu(): MenuRepositoryInterface
     {
         return $this->app[Component::MENU];
     }
 
-    /**
-     * @return AssetManagerInterface
-     */
-    public function assets()
+    public function assets(): AssetManagerInterface
     {
         return $this->app[Component::ASSETS];
     }
 
-    /**
-     * @return AclRepositoryInterface
-     */
-    public function acl()
+    public function acl(): AclRepositoryInterface
     {
         return $this->app[Component::ACL];
     }
 
-    /**
-     * @return NotifierInterface
-     */
-    public function notifier()
+    public function notifier(): NotifierInterface
     {
         return $this->app[Component::NOTIFIER];
     }
@@ -135,7 +107,7 @@ class Core implements CoreInterface
      * @param null|array        $extra   only used if neither $type nor $message are arrays
      * @return LoggerInterface
      */
-    public function log($level = null, $message = null, $extra = null)
+    public function log($level = null, $message = null, $extra = null): LoggerInterface
     {
         /** @var LoggerInterface $logger */
         $logger = $this->app[Component::LOG];
@@ -143,7 +115,7 @@ class Core implements CoreInterface
         // If parameters are set, enter a log message before returning the logger
         if (null !== $level || null !== $message) {
 
-            list($level, $message, $extra) = $this->normalizeMonologParameters($level, $message, $extra);
+            [$level, $message, $extra] = $this->normalizeMonologParameters($level, $message, $extra);
 
             $logger->log($level, $message, $extra);
         }
@@ -159,7 +131,7 @@ class Core implements CoreInterface
      * @param array             $extra   only used if neither $type nor $message are arrays
      * @return array
      */
-    protected function normalizeMonologParameters($level = null, $message = null, $extra = [])
+    protected function normalizeMonologParameters($level = null, $message = null, $extra = []): array
     {
         // Normalize the parameters so they're translated into sensible categories
         if (null !== $level) {
@@ -211,7 +183,7 @@ class Core implements CoreInterface
     /**
      * Returns the session interface that the CMS uses.
      *
-     * @return SessionInterface
+     * @return Session
      */
     public function session()
     {
@@ -225,7 +197,7 @@ class Core implements CoreInterface
      * @param null|mixed $default
      * @return mixed
      */
-    public function config($key, $default = null)
+    public function config(string $key, $default = null)
     {
         return config('cms-core.' . $key, $default);
     }
@@ -237,7 +209,7 @@ class Core implements CoreInterface
      * @param null|mixed $default
      * @return mixed
      */
-    public function moduleConfig($key, $default = null)
+    public function moduleConfig(string $key, $default = null)
     {
         return config('cms-modules.' . $key, $default);
     }
@@ -249,7 +221,7 @@ class Core implements CoreInterface
      * @param null|mixed $default
      * @return mixed
      */
-    public function apiConfig($key, $default = null)
+    public function apiConfig(string $key, $default = null)
     {
         return config('cms-api.' . $key, $default);
     }
@@ -263,7 +235,7 @@ class Core implements CoreInterface
      * @param bool   $absolute
      * @return string
      */
-    public function route($name, $parameters = [], $absolute = true)
+    public function route(string $name, array $parameters = [], bool $absolute = true): string
     {
         return app('url')->route($this->prefixRoute($name), $parameters, $absolute);
     }
@@ -274,7 +246,7 @@ class Core implements CoreInterface
      * @param string $name
      * @return string
      */
-    public function prefixRoute($name)
+    public function prefixRoute(string $name): string
     {
         $prefix = $this->config('route.name-prefix');
 
@@ -290,7 +262,7 @@ class Core implements CoreInterface
      * @param bool   $absolute
      * @return string
      */
-    public function apiRoute($name, $parameters = [], $absolute = true)
+    public function apiRoute(string $name, array $parameters = [], bool $absolute = true): string
     {
         return app('url')->route($this->prefixApiRoute($name), $parameters, $absolute);
     }
@@ -301,7 +273,7 @@ class Core implements CoreInterface
      * @param string $name
      * @return string
      */
-    public function prefixApiRoute($name)
+    public function prefixApiRoute(string $name): string
     {
         $prefix = $this->apiConfig('route.name-prefix');
 

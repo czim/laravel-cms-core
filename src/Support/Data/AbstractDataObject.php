@@ -119,7 +119,9 @@ abstract class AbstractDataObject extends CzimAbstractDataObject implements Data
     public function offsetGet($offset)
     {
         // let it behave like the magic getter, return null if it doesn't exist
-        if ( ! $this->offsetExists($offset)) return null;
+        if ( ! $this->offsetExists($offset)) {
+            return null;
+        }
 
         return $this->getAttribute($offset);
     }

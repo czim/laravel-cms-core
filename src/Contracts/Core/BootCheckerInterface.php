@@ -9,93 +9,93 @@ interface BootCheckerInterface
      *
      * @return bool
      */
-    public function shouldCmsRegister();
+    public function shouldCmsRegister(): bool;
 
     /**
      * Returns whether the CMS should perform service providing for the API specifically.
      *
      * @return bool
      */
-    public function shouldCmsApiRegister();
+    public function shouldCmsApiRegister(): bool;
 
     /**
      * Returns whether the CMS should commence booting.
      *
      * @return bool
      */
-    public function shouldCmsBoot();
+    public function shouldCmsBoot(): bool;
 
     /**
      * Marks the CMS as having fully registered.
      *
      * @param bool $registered
      */
-    public function markCmsRegistered($registered = true);
+    public function markCmsRegistered(bool $registered = true): void;
 
     /**
      * @return bool
      */
-    public function isCmsRegistered();
+    public function isCmsRegistered(): bool;
 
     /**
      * Marks the CMS as having fully booted.
      *
      * @param bool $booted
      */
-    public function markCmsBooted($booted = true);
+    public function markCmsBooted(bool $booted = true): void;
 
     /**
      * @return bool
      */
-    public function isCmsBooted();
+    public function isCmsBooted(): bool;
 
     /**
      * Returns whether the CMS middleware should be registered.
      *
      * @return bool
      */
-    public function shouldLoadCmsMiddleware();
+    public function shouldLoadCmsMiddleware(): bool;
 
     /**
      * Returns whether non-API CMS middleware should be registered.
      *
      * @return bool
      */
-    public function shouldLoadCmsWebMiddleware();
+    public function shouldLoadCmsWebMiddleware(): bool;
 
     /**
      * Returns whether API CMS middleware should be registered.
      *
      * @return bool
      */
-    public function shouldLoadCmsApiMiddleware();
+    public function shouldLoadCmsApiMiddleware(): bool;
 
     /**
      * Returns whether non-API CMS middleware should be registered.
      *
      * @return bool
      */
-    public function shouldRegisterCmsWebRoutes();
+    public function shouldRegisterCmsWebRoutes(): bool;
 
     /**
      * Returns whether API CMS middleware should be registered.
      *
      * @return bool
      */
-    public function shouldRegisterCmsApiRoutes();
+    public function shouldRegisterCmsApiRoutes(): bool;
 
     /**
      * Returns whether a CMS web request is running.
      *
      * @return bool
      */
-    public function isCmsWebRequest();
+    public function isCmsWebRequest(): bool;
 
     /**
      * Returns whether a CMS API request is running.
      *
      * @return bool
      */
-    public function isCmsApiRequest();
+    public function isCmsApiRequest(): bool;
 
 }

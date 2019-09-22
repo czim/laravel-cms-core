@@ -9,21 +9,21 @@ interface UserInterface
      *
      * @return string
      */
-    public function getUsername();
+    public function getUsername(): string;
 
     /**
      * Returns whether the user is a top-level admin.
      *
      * @return bool
      */
-    public function isAdmin();
+    public function isAdmin(): bool;
 
     /**
      * Returns all roles for the user.
      *
      * @return string[]
      */
-    public function getAllRoles();
+    public function getAllRoles(): array;
 
     /**
      * Returns whether the user has the given role.
@@ -31,14 +31,14 @@ interface UserInterface
      * @param string $role
      * @return bool
      */
-    public function hasRole($role);
+    public function hasRole(string $role): bool;
 
     /**
      * Returns all permissions for the user, whether by role or for the user itself.
      *
      * @return string[]
      */
-    public function getAllPermissions();
+    public function getAllPermissions(): array;
 
     /**
      * Returns whether the user has the given permission.
@@ -47,7 +47,7 @@ interface UserInterface
      * @param bool            $allowAny     if true, allows if any is permitted
      * @return bool
      */
-    public function can($permission, $allowAny = false);
+    public function can(string $permission, bool $allowAny = false): bool;
 
     /**
      * Returns whether the current user has any of the given permissions.
@@ -55,6 +55,6 @@ interface UserInterface
      * @param string[] $permissions
      * @return bool
      */
-    public function canAnyOf(array $permissions);
+    public function canAnyOf(array $permissions): bool;
 
 }

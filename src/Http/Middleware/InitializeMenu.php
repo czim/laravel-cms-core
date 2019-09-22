@@ -18,9 +18,7 @@ class InitializeMenu
      */
     protected $core;
 
-    /**
-     * @param CoreInterface $core
-     */
+
     public function __construct(CoreInterface $core)
     {
         $this->core = $core;

@@ -10,14 +10,14 @@ interface AclRepositoryInterface
     /**
      * Parses available ACL presence data, so it may be retrieved.
      */
-    public function initialize();
+    public function initialize(): void;
 
     /**
      * Retrieves all ACL presences.
      *
      * @return Collection|AclPresenceInterface[]
      */
-    public function getAclPresences();
+    public function getAclPresences(): Collection;
 
     /**
      * Retrieves all ACL presences for a module key.
@@ -25,14 +25,14 @@ interface AclRepositoryInterface
      * @param string $key
      * @return Collection|AclPresenceInterface[]
      */
-    public function getAclPresencesByModule($key);
+    public function getAclPresencesByModule(string $key): ?Collection;
 
     /**
      * Retrieves a flat list of all permissions.
      *
      * @return string[]
      */
-    public function getAllPermissions();
+    public function getAllPermissions(): array;
 
     /**
      * Retrieves a flat list of all permissions for a module.
@@ -40,6 +40,6 @@ interface AclRepositoryInterface
      * @param string $key
      * @return string[]
      */
-    public function getModulePermissions($key);
+    public function getModulePermissions(string $key): array;
 
 }

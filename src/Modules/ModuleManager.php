@@ -20,7 +20,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @var string
      */
-    const VERSION = '0.0.1';
+    public const VERSION = '0.0.1';
 
 
     /**
@@ -62,10 +62,6 @@ class ModuleManager implements ModuleManagerInterface
     protected $initialized = false;
 
 
-    /**
-     * @param CoreInterface          $core
-     * @param AclRepositoryInterface $acl
-     */
     public function __construct(CoreInterface $core, AclRepositoryInterface $acl)
     {
         $this->core = $core;
@@ -78,7 +74,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @return string
      */
-    public function version()
+    public function version(): string
     {
         return static::VERSION;
     }
@@ -91,9 +87,11 @@ class ModuleManager implements ModuleManagerInterface
      * @param string[]|null $modules     optional override of config: list of module FQN's
      * @return $this
      */
-    public function initialize(array $modules = null)
+    public function initialize(array $modules = null): ModuleManagerInterface
     {
-        if ($this->initialized) return $this;
+        if ($this->initialized) {
+            return $this;
+        }
 
         if (is_array($modules)) {
             $this->moduleClasses = $modules;
@@ -115,7 +113,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @return bool
      */
-    public function isInitialized()
+    public function isInitialized(): bool
     {
         return $this->initialized;
     }
@@ -123,7 +121,7 @@ class ModuleManager implements ModuleManagerInterface
     /**
      * Loads the module class FQNs from the core config.
      */
-    protected function loadConfiguredModuleClasses()
+    protected function loadConfiguredModuleClasses(): void
     {
         $this->moduleClasses = $this->core->moduleConfig('modules', []);
     }
@@ -134,7 +132,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @return $this
      */
-    protected function populateModuleCollection()
+    protected function populateModuleCollection(): ModuleManagerInterface
     {
         $this->modules = new Collection;
 
@@ -157,7 +155,7 @@ class ModuleManager implements ModuleManagerInterface
     /**
      * @param ModuleGeneratorInterface $generator
      */
-    protected function storeModulesForGenerator(ModuleGeneratorInterface $generator)
+    protected function storeModulesForGenerator(ModuleGeneratorInterface $generator): void
     {
         foreach ($generator->modules() as $module) {
             $this->storeModule($module);
@@ -167,7 +165,7 @@ class ModuleManager implements ModuleManagerInterface
     /**
      * @param ModuleInterface $module
      */
-    protected function storeModule(ModuleInterface $module)
+    protected function storeModule(ModuleInterface $module): void
     {
         if ($this->modules->has($module->getKey())) {
             throw new \UnexpectedValueException(
@@ -222,7 +220,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @return $this
      */
-    protected function populateAssociatedClassIndex()
+    protected function populateAssociatedClassIndex(): ModuleManagerInterface
     {
         $this->associatedClassIndex = [];
 
@@ -246,7 +244,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @return $this
      */
-    protected function sortModules()
+    protected function sortModules(): ModuleManagerInterface
     {
         $this->modules = $this->modules->sortBy(function (ModuleInterface $module) {
             return $module->getName();
@@ -260,7 +258,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @return Collection|ModuleInterface[]
      */
-    public function getModules()
+    public function getModules(): Collection
     {
         return $this->modules;
     }
@@ -271,7 +269,7 @@ class ModuleManager implements ModuleManagerInterface
      * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->modules->has($key);
     }
@@ -282,7 +280,7 @@ class ModuleManager implements ModuleManagerInterface
      * @param string $key
      * @return ModuleInterface|false
      */
-    public function get($key)
+    public function get(string $key)
     {
         if ( ! $this->has($key)) {
             return false;
@@ -300,7 +298,7 @@ class ModuleManager implements ModuleManagerInterface
      * @param string $modelClass FQN of model
      * @return ModuleInterface|false
      */
-    public function getByAssociatedClass($modelClass)
+    public function getByAssociatedClass(string $modelClass)
     {
         if ( ! array_key_exists($modelClass, $this->associatedClassIndex)) {
             return false;
@@ -316,7 +314,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @param Router $router
      */
-    public function mapWebRoutes(Router $router)
+    public function mapWebRoutes(Router $router): void
     {
         foreach ($this->modules as $module) {
             $module->mapWebRoutes($router);
@@ -328,7 +326,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @param Router $router
      */
-    public function mapApiRoutes(Router $router)
+    public function mapApiRoutes(Router $router): void
     {
         foreach ($this->modules as $module) {
             $module->mapApiRoutes($router);
@@ -340,7 +338,7 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @return string[]
      */
-    public function getAllPermissions()
+    public function getAllPermissions(): array
     {
         $this->acl->initialize();
 
@@ -353,7 +351,7 @@ class ModuleManager implements ModuleManagerInterface
      * @param string $key
      * @return string[]
      */
-    public function getModulePermissions($key)
+    public function getModulePermissions(string $key):array
     {
         $this->acl->initialize();
 

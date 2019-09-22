@@ -11,7 +11,7 @@ class ModuleTransformer extends TransformerAbstract
      * @param ModuleInterface $module
      * @return array
      */
-    public function transform(ModuleInterface $module)
+    public function transform(ModuleInterface $module): array
     {
         return [
             'key'         => $module->getKey(),

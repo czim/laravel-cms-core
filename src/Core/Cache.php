@@ -1,10 +1,10 @@
 <?php
 namespace Czim\CmsCore\Core;
 
-use Closure;
-use Illuminate\Support\Facades\Cache as IlluminateCache;
 use Czim\CmsCore\Contracts\Core\CacheInterface;
 use Czim\CmsCore\Contracts\Core\CoreInterface;
+use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Support\Facades\Cache as IlluminateCache;
 
 class Cache implements CacheInterface
 {
@@ -15,14 +15,11 @@ class Cache implements CacheInterface
     protected $core;
 
     /**
-     * @var \Illuminate\Contracts\Cache\Repository
+     * @var Repository
      */
     protected $cache;
 
 
-    /**
-     * @param CoreInterface $core
-     */
     public function __construct(CoreInterface $core)
     {
         $this->core = $core;
@@ -42,7 +39,7 @@ class Cache implements CacheInterface
      *
      * @return string|null
      */
-    protected function getCacheStore()
+    protected function getCacheStore(): ?string
     {
         return $this->core->config('cache.store');
     }
@@ -69,7 +66,7 @@ class Cache implements CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->cache->has($key);
     }
@@ -81,7 +78,7 @@ class Cache implements CacheInterface
      * @param  mixed  $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         return $this->cache->get($key, $default);
     }
@@ -94,7 +91,7 @@ class Cache implements CacheInterface
      * @param  array $keys
      * @return array
      */
-    public function many(array $keys)
+    public function many(array $keys): array
     {
         return $this->cache->many($keys);
     }
@@ -106,7 +103,7 @@ class Cache implements CacheInterface
      * @param  mixed  $default
      * @return mixed
      */
-    public function pull($key, $default = null)
+    public function pull(string $key, $default = null)
     {
         return $this->cache->pull($key, $default);
     }
@@ -114,11 +111,11 @@ class Cache implements CacheInterface
     /**
      * Store an item in the cache.
      *
-     * @param  string        $key
-     * @param  mixed         $value
-     * @param  \DateTime|int $minutes
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
      */
-    public function put($key, $value, $minutes = null)
+    public function put(string $key, $value, int $minutes = null): void
     {
         $this->cache->put($key, $value, $minutes);
     }
@@ -129,7 +126,7 @@ class Cache implements CacheInterface
      * @param  array $values
      * @param  int   $minutes
      */
-    public function putMany(array $values, $minutes)
+    public function putMany(array $values, int $minutes): void
     {
         $this->cache->putMany($values, $minutes);
     }
@@ -137,12 +134,12 @@ class Cache implements CacheInterface
     /**
      * Store an item in the cache if the key does not exist.
      *
-     * @param  string        $key
-     * @param  mixed         $value
-     * @param  \DateTime|int $minutes
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
      * @return bool
      */
-    public function add($key, $value, $minutes)
+    public function add(string $key, $value, int $minutes): bool
     {
         return $this->cache->add($key, $value, $minutes);
     }
@@ -153,7 +150,7 @@ class Cache implements CacheInterface
      * @param  string $key
      * @param  mixed  $value
      */
-    public function forever($key, $value)
+    public function forever(string $key, $value): void
     {
         $this->cache->forever($key, $value);
     }
@@ -161,12 +158,12 @@ class Cache implements CacheInterface
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  string        $key
-     * @param  \DateTime|int $minutes
-     * @param  \Closure      $callback
+     * @param  string   $key
+     * @param  int      $minutes
+     * @param  callable $callback
      * @return mixed
      */
-    public function remember($key, $minutes, Closure $callback)
+    public function remember(string $key, int $minutes, callable $callback)
     {
         return $this->cache->remember($key, $minutes, $callback);
     }
@@ -175,10 +172,10 @@ class Cache implements CacheInterface
      * Get an item from the cache, or store the default value forever.
      *
      * @param  string   $key
-     * @param  \Closure $callback
+     * @param  callable $callback
      * @return mixed
      */
-    public function rememberForever($key, Closure $callback)
+    public function rememberForever(string $key, callable $callback)
     {
         return $this->cache->rememberForever($key, $callback);
     }
@@ -189,7 +186,7 @@ class Cache implements CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function forget($key)
+    public function forget(string $key): bool
     {
         return $this->cache->forget($key);
     }

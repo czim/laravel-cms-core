@@ -1,14 +1,21 @@
 <?php
 
+use Czim\CmsCore\Contracts\Api\ApiCoreInterface;
+use Czim\CmsCore\Contracts\Auth\AuthenticatorInterface;
+use Czim\CmsCore\Contracts\Core\CoreInterface;
+use Czim\CmsCore\Support\Enums\CmsMiddleware;
+use Czim\CmsCore\Support\Enums\Component;
+use Illuminate\Translation\Translator;
+
 if ( ! function_exists('cms')) {
     /**
      * Get the available CMS core instance.
      *
-     * @return \Czim\CmsCore\Contracts\Core\CoreInterface
+     * @return CoreInterface
      */
-    function cms()
+    function cms(): CoreInterface
     {
-        return app(\Czim\CmsCore\Support\Enums\Component::CORE);
+        return app(Component::CORE);
     }
 }
 
@@ -22,9 +29,9 @@ if ( ! function_exists('cms_route')) {
      * @param  bool    $absolute
      * @return string
      */
-    function cms_route($name, $parameters = [], $absolute = true)
+    function cms_route($name, $parameters = [], $absolute = true): string
     {
-        $name = app(\Czim\CmsCore\Support\Enums\Component::CORE)->prefixRoute($name);
+        $name = app(Component::CORE)->prefixRoute($name);
 
         return app('url')->route($name, $parameters, $absolute);
     }
@@ -34,11 +41,11 @@ if ( ! function_exists('cms_auth')) {
     /**
      * Get the available CMS authenticator instance.
      *
-     * @return \Czim\CmsCore\Contracts\Auth\AuthenticatorInterface
+     * @return AuthenticatorInterface
      */
-    function cms_auth()
+    function cms_auth(): AuthenticatorInterface
     {
-        return app(\Czim\CmsCore\Support\Enums\Component::AUTH);
+        return app(Component::AUTH);
     }
 }
 
@@ -46,11 +53,11 @@ if ( ! function_exists('cms_api')) {
     /**
      * Get the available CMS API Core instance.
      *
-     * @return \Czim\CmsCore\Contracts\Api\ApiCoreInterface
+     * @return ApiCoreInterface
      */
-    function cms_api()
+    function cms_api(): ApiCoreInterface
     {
-        return app(\Czim\CmsCore\Support\Enums\Component::API);
+        return app(Component::API);
     }
 }
 
@@ -66,7 +73,7 @@ if ( ! function_exists('cms_config')) {
      */
     function cms_config($key = null, $default = null)
     {
-        return app(\Czim\CmsCore\Support\Enums\Component::CORE)
+        return app(Component::CORE)
             ->config($key, $default);
     }
 }
@@ -78,9 +85,9 @@ if ( ! function_exists('cms_mw_permission')) {
      * @param string $permission
      * @return string
      */
-    function cms_mw_permission($permission)
+    function cms_mw_permission(string $permission): string
     {
-        return \Czim\CmsCore\Support\Enums\CmsMiddleware::PERMISSION . ':' . $permission;
+        return CmsMiddleware::PERMISSION . ':' . $permission;
     }
 }
 
@@ -91,9 +98,9 @@ if ( ! function_exists('cms_flash')) {
      * @param string      $message
      * @param null|string $level
      */
-    function cms_flash($message, $level = null)
+    function cms_flash(string $message, ?string $level = null): void
     {
-        return app(\Czim\CmsCore\Support\Enums\Component::NOTIFIER)
+        return app(Component::NOTIFIER)
             ->flash($message, $level);
     }
 }
@@ -105,18 +112,23 @@ if ( ! function_exists('cms_trans')) {
      *
      * Falls back to application translations if CMS does not have the key.
      *
-     * @param  string  $id
-     * @param  array   $parameters
-     * @param  string  $domain
-     * @param  string  $locale
+     * @param string      $id
+     * @param array       $parameters
+     * @param string      $domain
+     * @param string|null $locale
      * @return string|null
      */
-    function cms_trans($id = null, $parameters = [], $domain = 'messages', $locale = null)
-    {
-        /** @var \Illuminate\Translation\Translator $translator */
+    function cms_trans(
+        ?string $id = null,
+        array $parameters = [],
+        string $domain = 'messages',
+        ?string $locale = null
+    ): ?string {
+
+        /** @var Translator $translator */
         $translator = app('translator');
 
-        if (is_null($id)) {
+        if ($id === null) {
             return $translator;
         }
 
@@ -138,16 +150,21 @@ if ( ! function_exists('cms_trans_choice')) {
      *
      * Falls back to application translations if CMS does not have the key.
      *
-     * @param  string  $id
-     * @param  int|array|\Countable  $number
-     * @param  array   $parameters
-     * @param  string  $domain
-     * @param  string  $locale
+     * @param  string|null         $id
+     * @param  int|array|Countable $number
+     * @param  array               $parameters
+     * @param  string              $domain
+     * @param  string|null         $locale
      * @return string
      */
-    function cms_trans_choice($id, $number, array $parameters = [], $domain = 'messages', $locale = null)
-    {
-        /** @var \Illuminate\Translation\Translator $translator */
+    function cms_trans_choice(
+        ?string $id,
+        $number,
+        array $parameters = [],
+        string $domain = 'messages',
+        ?string $locale = null
+    ): ?string {
+        /** @var Translator $translator */
         $translator = app('translator');
 
         $key = cms()->config('translation.prefix', 'cms::') . $id;

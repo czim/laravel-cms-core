@@ -11,7 +11,7 @@ interface NotifierInterface
      * @param null|string $level
      * @return $this
      */
-    public function flash($message, $level = null);
+    public function flash(string $message, ?string $level = null): NotifierInterface;
 
     /**
      * Returns any previously flashed messages.
@@ -19,7 +19,7 @@ interface NotifierInterface
      * @param bool $clear   whether to delete the flashed messages from the session
      * @return array set of associative arrays with message, level keys
      */
-    public function getFlashed($clear = true);
+    public function getFlashed(bool $clear = true): array;
 
 
     /**
@@ -29,28 +29,28 @@ interface NotifierInterface
      * @param null|string $level
      * @return $this
      */
-    public function addNotification($message, $level = null);
+    public function addNotification(string $message, ?string $level = null): NotifierInterface;
 
     /**
      * Marks all unread notifications for the current user read.
      *
      * @return $this
      */
-    public function markNotificationsRead();
+    public function markNotificationsRead(): NotifierInterface;
 
     /**
      * Returns all unread notifications for the current user;
      *
      * @return array
      */
-    public function getUnreadNotifications();
+    public function getUnreadNotifications(): array;
 
     /**
      * Returns all notifications set for the current user.
      *
      * @return array
      */
-    public function getAllNotifications();
+    public function getAllNotifications(): array;
 
     /**
      * Returns notifications per page for the current user.
@@ -59,13 +59,13 @@ interface NotifierInterface
      * @param int $pageSize
      * @return array
      */
-    public function getPaginatedNotifications($page = 1, $pageSize = 10);
+    public function getPaginatedNotifications(int $page = 1, int $pageSize = 10): array;
 
     /**
      * Deletes all notifications for the current user.
      *
      * @return $this
      */
-    public function clearNotifications();
+    public function clearNotifications(): NotifierInterface;
 
 }

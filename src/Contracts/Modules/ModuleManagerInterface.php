@@ -14,14 +14,14 @@ interface ModuleManagerInterface
      * @param string[]|null $modules     optional override of config: list of module FQN's
      * @return $this
      */
-    public function initialize(array $modules = null);
+    public function initialize(array $modules = null): ModuleManagerInterface;
 
     /**
      * Returns whether the module manager was initialized.
      *
      * @return bool
      */
-    public function isInitialized();
+    public function isInitialized(): bool;
 
     /**
      * Returns whether a module with the given key is active.
@@ -29,7 +29,7 @@ interface ModuleManagerInterface
      * @param string $key
      * @return bool
      */
-    public function has($key);
+    public function has(string $key): bool;
 
     /**
      * Returns a module by key.
@@ -37,7 +37,7 @@ interface ModuleManagerInterface
      * @param string $key
      * @return ModuleInterface|false
      */
-    public function get($key);
+    public function get(string $key);
 
     /**
      * Returns a module by its associated class. This may be an
@@ -48,35 +48,35 @@ interface ModuleManagerInterface
      * @param string $modelClass    FQN of model
      * @return ModuleInterface|false
      */
-    public function getByAssociatedClass($modelClass);
+    public function getByAssociatedClass(string $modelClass);
 
     /**
      * Returns all active modules.
      *
      * @return Collection|ModuleInterface[]
      */
-    public function getModules();
+    public function getModules(): Collection;
 
     /**
      * Builds web routes for all modules given a router as context.
      *
      * @param Router $router
      */
-    public function mapWebRoutes(Router $router);
+    public function mapWebRoutes(Router $router): void;
 
     /**
      * Builds API routes for all modules given a router as context.
      *
      * @param Router $router
      */
-    public function mapApiRoutes(Router $router);
+    public function mapApiRoutes(Router $router): void;
 
     /**
      * Returns all permissions required by loaded modules.
      *
      * @return string[]
      */
-    public function getAllPermissions();
+    public function getAllPermissions(): array;
 
     /**
      * Returns all permissions required by a single loaded module.
@@ -84,13 +84,13 @@ interface ModuleManagerInterface
      * @param string $key
      * @return string[]
      */
-    public function getModulePermissions($key);
+    public function getModulePermissions(string $key): array;
 
     /**
      * Returns module manager version number.
      *
      * @return string
      */
-    public function version();
+    public function version(): string;
 
 }

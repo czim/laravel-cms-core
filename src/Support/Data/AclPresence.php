@@ -35,7 +35,7 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
      *
      * @return string
      */
-    public function id()
+    public function id(): string
     {
         return $this->getAttribute('id');
     }
@@ -46,7 +46,7 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
      * @see \Czim\CmsCore\Support\Enums\AclPresenceType
      * @return string
      */
-    public function type()
+    public function type(): string
     {
         return $this->getAttribute('type');
     }
@@ -56,7 +56,7 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
      *
      * @return string[]
      */
-    public function permissions()
+    public function permissions(): array
     {
         $permissions = $this->getAttribute('permissions') ?: [];
 
@@ -73,7 +73,7 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
      * @param bool $translated  returns translated label if possible
      * @return string
      */
-    public function label($translated = true)
+    public function label(bool $translated = true): string
     {
         if ($translated && $key = $this->getAttribute('label_translated')) {
             if (($label = cms_trans($key)) !== $key) {
@@ -87,9 +87,9 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
     /**
      * Returns the translation key for the label.
      *
-     * @return string
+     * @return string|null
      */
-    public function translationKey()
+    public function translationKey(): ?string
     {
         return $this->getAttribute('label_translated');
     }
@@ -97,9 +97,9 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
     /**
      * Replace the permissions entirely.
      *
-     * @param mixed $permissions
+     * @param array $permissions
      */
-    public function setPermissions($permissions)
+    public function setPermissions(array $permissions): void
     {
         $this->setAttribute('permissions', $permissions);
     }
@@ -109,7 +109,7 @@ class AclPresence extends AbstractDataObject implements AclPresenceInterface
      *
      * @param string $permission
      */
-    public function removePermission($permission)
+    public function removePermission(string $permission): void
     {
         $permissions = $this->permissions();
 

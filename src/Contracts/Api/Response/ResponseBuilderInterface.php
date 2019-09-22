@@ -11,7 +11,7 @@ interface ResponseBuilderInterface
      * @param int   $statusCode
      * @return mixed
      */
-    public function response($content, $statusCode = 200);
+    public function response($content, int $statusCode = 200);
 
     /**
      * Returns API-formatted error response.
@@ -20,6 +20,6 @@ interface ResponseBuilderInterface
      * @param int   $statusCode
      * @return mixed
      */
-    public function error($content, $statusCode = 500);
+    public function error($content, int $statusCode = 500);
 
 }

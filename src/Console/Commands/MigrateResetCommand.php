@@ -15,7 +15,7 @@ class MigrateResetCommand extends ResetCommand
      *
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         if (! $this->confirmToProceed()) {
             // @codeCoverageIgnoreStart
@@ -26,7 +26,8 @@ class MigrateResetCommand extends ResetCommand
         $this->migrator->setConnection($this->determineConnection());
 
         if (! $this->migrator->repositoryExists()) {
-            return $this->comment('Migration table not found.');
+            $this->comment('Migration table not found.');
+            return;
         }
 
         // First, we'll make sure that the migration table actually exists before we

@@ -11,6 +11,6 @@ interface MenuModulesInterpreterInterface
      *
      * @return MenuConfiguredModulesDataInterface
      */
-    public function interpret();
+    public function interpret(): MenuConfiguredModulesDataInterface;
 
 }

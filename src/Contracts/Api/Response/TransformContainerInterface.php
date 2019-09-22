@@ -26,6 +26,6 @@ interface TransformContainerInterface extends DataObjectInterface
      *
      * @return bool
      */
-    public function isCollection();
+    public function isCollection(): bool;
 
 }

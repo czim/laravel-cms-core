@@ -52,8 +52,13 @@ class AssetManager implements AssetManagerInterface
      * @param string      $rel
      * @return $this
      */
-    public function registerStyleAsset($path, $type = null, $media = null, $rel = 'stylesheet')
-    {
+    public function registerStyleAsset(
+        string $path,
+        ?string $type = null,
+        ?string $media = null,
+        string $rel = 'stylesheet'
+    ): AssetManagerInterface {
+
         if ( ! array_key_exists($path, $this->styleAssets)) {
             $this->styleAssets[ $path ] = [
                 'type'  => $type,
@@ -72,7 +77,7 @@ class AssetManager implements AssetManagerInterface
      * @param bool   $head      whether to add the asset to the head
      * @return $this
      */
-    public function registerScriptAsset($path, $head = false)
+    public function registerScriptAsset(string $path, bool $head = false): AssetManagerInterface
     {
         if ( ! array_key_exists($path, $this->scriptAssets)) {
             $this->scriptAssets[ $path ] = $head;
@@ -84,11 +89,11 @@ class AssetManager implements AssetManagerInterface
     /**
      * Registers CMS javascript code
      *
-     * @param      $script
-     * @param bool $once        if true, only registers script with these exact contents once
+     * @param string $script
+     * @param bool   $once        if true, only registers script with these exact contents once
      * @return $this
      */
-    public function registerScript($script, $once = true)
+    public function registerScript(string $script, bool $once = true): AssetManagerInterface
     {
         if ( ! $once) {
             $this->scripts[] = $script;
@@ -119,7 +124,7 @@ class AssetManager implements AssetManagerInterface
      *
      * @return string
      */
-    public function renderStyleAssets()
+    public function renderStyleAssets(): string
     {
         return implode(
             "\n",
@@ -141,7 +146,7 @@ class AssetManager implements AssetManagerInterface
      *
      * @return string
      */
-    public function renderScriptAssets()
+    public function renderScriptAssets(): string
     {
         return implode(
             "\n",
@@ -161,7 +166,7 @@ class AssetManager implements AssetManagerInterface
      *
      * @return string
      */
-    public function renderScriptHeadAssets()
+    public function renderScriptHeadAssets(): string
     {
         return implode(
             "\n",
@@ -181,7 +186,7 @@ class AssetManager implements AssetManagerInterface
      *
      * @return string
      */
-    public function renderScripts()
+    public function renderScripts(): string
     {
         return implode("\n", $this->scripts);
     }

@@ -16,13 +16,13 @@ class MigrateStatusCommand extends StatusCommand
      *
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         // Set the connection before checking whether the table on it
         // exists! Otherwise, how could the table be found in the correct place?
         $this->migrator->setConnection($this->determineConnection());
 
-        if (! $this->migrator->repositoryExists()) {
+        if ( ! $this->migrator->repositoryExists()) {
             $this->error('No migrations found.');
             return;
         }
@@ -33,7 +33,7 @@ class MigrateStatusCommand extends StatusCommand
 
         $migrations = Collection::make($this->getAllMigrationFiles())
             ->map(function ($migration) use ($ran) {
-                return in_array($this->migrator->getMigrationName($migration), $ran)
+                return in_array($this->migrator->getMigrationName($migration), $ran, true)
                     ? ['<info>Y</info>', $this->migrator->getMigrationName($migration)]
                     : ['<fg=red>N</fg=red>', $this->migrator->getMigrationName($migration)];
             });
@@ -43,8 +43,6 @@ class MigrateStatusCommand extends StatusCommand
         } else {
             $this->error('No CMS migrations found');
         }
-
-        return null;
     }
 
 }

@@ -26,7 +26,7 @@ class MigrateCommand extends LaravelMigrateCommand
      *
      * {@inheritdoc}
      */
-    protected function prepareDatabase()
+    protected function prepareDatabase(): void
     {
         $this->migrator->setConnection($this->determineConnection());
 

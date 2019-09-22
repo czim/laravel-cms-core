@@ -9,21 +9,21 @@ interface LocaleRepositoryInterface
      *
      * @return string
      */
-    public function getDefault();
+    public function getDefault(): string;
 
     /**
      * Determines and returns the available locales for the application.
      *
      * @return string[]
      */
-    public function getAvailable();
+    public function getAvailable(): array;
 
     /**
      * Returns whether the application supports multiple locales.
      *
      * @return bool
      */
-    public function isLocalized();
+    public function isLocalized(): bool;
 
     /**
      * Returns whether a locale is valid & available.
@@ -31,6 +31,6 @@ interface LocaleRepositoryInterface
      * @param string $locale
      * @return bool
      */
-    public function isAvailable($locale);
+    public function isAvailable(string $locale): bool;
 
 }

@@ -1,13 +1,15 @@
 <?php
 namespace Czim\CmsCore\Support\Logging;
 
+use Monolog\Logger;
+
 class CmsCustomizeFormatter
 {
 
     /**
      * Customize the given Monolog instance.
      *
-     * @param \Monolog\Logger $monolog
+     * @param Logger $monolog
      */
     public function __invoke($monolog)
     {
