@@ -17,10 +17,10 @@ So you're looking for a Laravel CMS, and ...
 - and you don't want your CMS configuration to be outside of your project's code repository.
 
 Look no further. This CMS was developed with all this in mind.
- 
+
 ## Version Compatibility
 
- Laravel             | Package 
+ Laravel             | Package
 :--------------------|:--------
  5.3                 | 1.3
  5.4                 | 1.4
@@ -29,7 +29,7 @@ Look no further. This CMS was developed with all this in mind.
  5.7                 | 1.7
  5.8                 | 1.8
  6.0                 | 2.0
- 
+
  Note that version 1.7+ requires `czim/laravel-dataobject` 2.0+.
 
 ## Changelog
@@ -37,26 +37,26 @@ Look no further. This CMS was developed with all this in mind.
 [View the changelog](CHANGELOG.md).
 
 ## A Framework CMS
- 
+
 The core concept behind this CMS: it is a **framework**.
 
-What makes Laravel great? 
+What makes Laravel great?
 The fact that it is *easy* to do simple things with it, and it is *powerful* and *flexible* enough to let you do whatever you want with it.
 
-A framework offers developers a tool that lets them work on *business logic* rather than the boring, repetitive basics. 
+A framework offers developers a tool that lets them work on *business logic* rather than the boring, repetitive basics.
 It is a tool that derives its value from letting programmers write code and take control wherever and however they want.
 
-This CMS is similar to most Laravel CMSes in that it offers a convenient way to quickly set up a user-friendly tool for managing data. 
-Where it differs is in being structured through-and-through as a framework: in a way that lets developers modify its behavior by writing code. 
+This CMS is similar to most Laravel CMSes in that it offers a convenient way to quickly set up a user-friendly tool for managing data.
+Where it differs is in being structured through-and-through as a framework: in a way that lets developers modify its behavior by writing code.
 All parts of this CMS are written under the assumption that someone may want to, and should be able to, change the way things work.
-    
-It does this by using Laravel's service container, abstract bindings that you can replace using configuration files, and strategy classes that may be easily swapped out. 
-At the top level, the CMS is modular and component-based, making it easy to add, remove or fork and replace any part of it.   
+
+It does this by using Laravel's service container, abstract bindings that you can replace using configuration files, and strategy classes that may be easily swapped out.
+At the top level, the CMS is modular and component-based, making it easy to add, remove or fork and replace any part of it.
 
 
 ## Core
 
-This is the Modular CMS Core, which manages the basics of configuring, accessing and deferring to modules.  
+This is the Modular CMS Core, which manages the basics of configuring, accessing and deferring to modules.
 
 The core offers:
 
@@ -70,7 +70,7 @@ The core offers:
 
 ## Heads-up / Disclaimer
 
-This project is currently under heavy development, but it is ready for production environments. It is only recommended for experienced programmers, however.   
+This project is currently under heavy development, but it is ready for production environments. It is only recommended for experienced programmers, however.
 Feedback is welcome, as always.
 
 
@@ -80,19 +80,19 @@ The CMS core is not a stand-alone package. Some components and modules are requi
 
 ### Where Do I Start?
 
-Beyond a very basic setup, this CMS has a bit of a learning curve. 
+Beyond a very basic setup, this CMS has a bit of a learning curve.
 Here are some suggested approaches to getting started; pick any that best suit your needs.
-  
-- Install [a pre-configured demo Laravel application](https://github.com/czim/laravel-cms-example) with the CMS fully installed.  
-    If you're just curious what a basic installation of the CMS can do or what it looks like, 
-    this showcase is a good place to start. 
+
+- Install [a pre-configured demo Laravel application](https://github.com/czim/laravel-cms-example) with the CMS fully installed.
+    If you're just curious what a basic installation of the CMS can do or what it looks like,
+    this showcase is a good place to start.
     Just check out the repository and follow a few simple steps to get the example running locally.
 
-- Follow [a step-by-step installation guide](documentation/StandardInstallation.md) to try the CMS out in your own Laravel application.  
+- Follow [a step-by-step installation guide](documentation/StandardInstallation.md) to try the CMS out in your own Laravel application.
     This can be a freshly installed copy of Laravel, or a pre-existing application in any stage of development.
-    This CMS is designed to be mostly a drop-in solution. 
+    This CMS is designed to be mostly a drop-in solution.
 
-- Explore [available components and modules](documentation/Modules.md).   
+- Explore [available components and modules](documentation/Modules.md).
 
 There is currently no public live example online. The quickest way to get a peek at this CMS is the first approach listed above.
 
@@ -115,7 +115,7 @@ When does not help, posting an issue report is much appreciated.
 
 ## API Documentation
 
-The documentation for the API endpoints provided by the core may be found here:  
+The documentation for the API endpoints provided by the core may be found here:
 [czim.github.io/laravel-cms-core](https://czim.github.io/laravel-cms-core).
 
 
@@ -144,7 +144,7 @@ You do not need this if you have no global middleware defined; group or route mi
 
 ### Database
 
-You can set a database `driver` and/or a `prefix`. 
+You can set a database `driver` and/or a `prefix`.
 If you set a driver, make sure that it exists in your application's `database.php` config file.
 
 Note that if you set a driver that has a prefix and you add a CMS `prefix` aswell, that these will stack.
