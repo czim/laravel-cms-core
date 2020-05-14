@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\CmsCore\Test;
 
 use Illuminate\Contracts\Config\Repository;
@@ -32,7 +33,7 @@ abstract class SimpleDbTestCase extends CmsBootTestCase
     {
         $result = $this->artisan('cms:migrate:install');
 
-        if ($result instanceof \Illuminate\Foundation\Testing\PendingCommand) {
+        if ($result instanceof \Illuminate\Testing\PendingCommand) {
             $result->assertExitCode(0);
         } else {
             static::assertEquals(0, $result);
