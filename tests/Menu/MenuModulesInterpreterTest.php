@@ -374,7 +374,7 @@ class MenuModulesInterpreterTest extends CmsBootTestCase
     function it_throws_an_exception_if_no_key_for_a_module_could_be_determined()
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('#must be string or have a non-numeric key#i');
+        $this->expectExceptionMessageMatches('#must be string or have a non-numeric key#i');
 
         $this->modules = collect([
             'test-a' => $this->getMockModuleWithPresenceInstance(false),

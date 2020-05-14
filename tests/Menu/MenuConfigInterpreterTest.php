@@ -159,7 +159,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
     function it_throws_an_exception_if_a_module_key_is_unknown()
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('#\'test-does-not-exist\'#');
+        $this->expectExceptionMessageMatches('#\'test-does-not-exist\'#');
 
         $this->menuModulesStandard = $this->getMockModulePresences();
 
@@ -183,7 +183,7 @@ class MenuConfigInterpreterTest extends CmsBootTestCase
     function it_throws_an_exception_if_a_module_key_is_assigned_more_than_once_in_a_layout()
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('#\'test-a\'#');
+        $this->expectExceptionMessageMatches('#\'test-a\'#');
 
         $this->menuModulesStandard = $this->getMockModulePresences();
 

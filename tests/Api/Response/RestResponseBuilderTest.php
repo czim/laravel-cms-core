@@ -134,7 +134,7 @@ class RestResponseBuilderTest extends CmsBootTestCase
     function it_throws_an_exception_if_transformer_class_is_invalid()
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('#Czim\\\\CmsCore\\\\Test\\\\Helpers\\\\Support\\\\TestDataObject#');
+        $this->expectExceptionMessageMatches('#Czim\\\\CmsCore\\\\Test\\\\Helpers\\\\Support\\\\TestDataObject#');
 
         $manager = $this->getMockFractalManager();
         $builder = new RestResponseBuilder($this->getMockCore(), $manager);
