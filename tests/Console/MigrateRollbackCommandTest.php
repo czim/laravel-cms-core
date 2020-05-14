@@ -2,7 +2,7 @@
 /** @noinspection ReturnTypeCanBeDeclaredInspection */
 /** @noinspection AccessModifierPresentedInspection */
 
-namespace Czim\CmsCore\Console;
+namespace Czim\CmsCore\Test\Console;
 
 use CreateMoreTestRecordsTable;
 use CreateTestRecordsTable;
