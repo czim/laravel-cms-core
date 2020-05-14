@@ -4,6 +4,20 @@
 [![Build Status](https://travis-ci.org/czim/laravel-cms-core.svg?branch=master)](https://travis-ci.org/czim/laravel-cms-core)
 [![Coverage Status](https://coveralls.io/repos/github/czim/laravel-cms-core/badge.svg?branch=master)](https://coveralls.io/github/czim/laravel-cms-core?branch=master)
 
+# Deprecation warning
+
+Word of warning: I'm not seriously keeping this project up to date.
+This will not affect the core much, but the models module is not likely to keep working for the newest Laravel versions.
+
+The reason for this is that there's no sense in attempting to compete with Nova, Twill, etc.
+- I still believe in the project, but not in its being of enough interest to the community at large.
+
+The things those CMSes should still improve on:
+- Make them 100% decoupled from application logic, data models (no extending package Eloquent model extensions Twill!)
+- Allow the freedom to choose the solutions you want for translations, sluggification, media libraries, etc. (Twill)
+- Work with small strategy classes, not repository & controller spaghetti (Twill)
+- Work with objects, not arrays (looking at myself, and Twill)
+- Quick and simple frontend, allow for easy tweaks (Nova)
 
 # CMS for Laravel - Core
 
@@ -29,6 +43,7 @@ Look no further. This CMS was developed with all this in mind.
  5.7                 | 1.7
  5.8                 | 1.8
  6.0                 | 2.0
+ 7.0                 | 3.0
 
  Note that version 1.7+ requires `czim/laravel-dataobject` 2.0+.
 
