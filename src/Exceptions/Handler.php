@@ -3,7 +3,6 @@ namespace Czim\CmsCore\Exceptions;
 
 use Czim\CmsCore\Contracts\Core\CoreInterface;
 use Czim\CmsCore\Support\Enums\Component;
-use Exception;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
@@ -15,6 +14,7 @@ use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
 
 /**
  * Class Handler
@@ -65,9 +65,9 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Exception $e
+     * @param Throwable $e
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
         if ($this->shouldReport($e)) {
             cms()->log($e);
@@ -77,11 +77,11 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Exception  $e
+     * @param  \Illuminate\Http\Request $request
+     * @param  Throwable                $e
      * @return \Illuminate\Http\Response|Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $e)
     {
         if ($core = $this->getCoreIfBound()) {
 
@@ -99,10 +99,10 @@ class Handler extends ExceptionHandler
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param Exception                $exception
+     * @param Throwable                $exception
      * @return mixed
      */
-    protected function renderCmsWebException($request, Exception $exception)
+    protected function renderCmsWebException($request, Throwable $exception)
     {
         if ($request->wantsJson()) {
             return $this->renderJsonException($exception);
@@ -112,10 +112,10 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @param Exception $exception
+     * @param Throwable $exception
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function renderJsonException(Exception $exception)
+    protected function renderJsonException(Throwable $exception)
     {
         $statusCode = $this->getStatusCodeFromException($exception);
         $message    = $exception->getMessage();
@@ -137,10 +137,10 @@ class Handler extends ExceptionHandler
     /**
      * Returns the status code for a given exception.
      *
-     * @param Exception $exception
+     * @param Throwable $exception
      * @return int
      */
-    protected function getStatusCodeFromException(Exception $exception)
+    protected function getStatusCodeFromException(Throwable $exception)
     {
         if ($exception instanceof OAuthException) {
             return $exception->httpStatusCode;
@@ -163,10 +163,10 @@ class Handler extends ExceptionHandler
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param Exception                $e
+     * @param Throwable                $e
      * @return mixed
      */
-    protected function renderCmsApiException($request, Exception $e)
+    protected function renderCmsApiException($request, Throwable $e)
     {
         $core = $this->getCoreIfBound();
 
@@ -180,7 +180,7 @@ class Handler extends ExceptionHandler
     /**
      * {@inheritdoc}
      */
-    protected function convertExceptionToResponse(Exception $e)
+    protected function convertExceptionToResponse(Throwable $e)
     {
         if ($this->isCmsWebRequest() && view()->exists('cms::errors.500')) {
             $flatException = FlattenException::create($e);

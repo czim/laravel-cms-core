@@ -2,8 +2,8 @@
 namespace Czim\CmsCore\Exceptions;
 
 use App\Exceptions\Handler as LaravelHandler;
-use Exception;
 use Illuminate\Contracts\Container\Container;
+use Throwable;
 
 /**
  * Class ExtendingHandler
@@ -41,7 +41,7 @@ class ExtendingHandler extends LaravelHandler
      *
      * {@inheritdoc}
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
         if ($this->shouldReport($e)) {
             cms()->log($e);
